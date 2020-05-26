@@ -1,6 +1,6 @@
 package mydl.layer;
 
-import mydl.activation.Activation;
+import mydl.tensor.Tensor;
 
 /**
  * The {@code Dense} class defines a dense layer with fully-connected neurons 
