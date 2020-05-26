@@ -1,5 +1,6 @@
 package mydl.utils;
 
+@Deprecated
 public class InvalidNeuronNumber extends IllegalArgumentException{
     /**
      *Incorrect cell number like 0 or negative integer
