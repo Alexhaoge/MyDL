@@ -1,2 +1,3 @@
 # MyDL
-A lightweight deep learning libary written in Java
+A lightweight deep learning libary entirely based on Java  
+![](MyDL_logo.png)

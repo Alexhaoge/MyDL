@@ -3,6 +3,7 @@ package mydl.model;
 import java.util.ArrayList;
 
 import mydl.layer.Layer;
+import mydl.optimizer.Optimizer;
 import mydl.tensor.Tensor;
 
 /**
@@ -14,6 +15,7 @@ public class Sequential extends Model{
      */
     public ArrayList<Layer> layers;
 
+    public Optimizer opt;
     /**
      * Forward propagation of Sequential model.
      * @param inputs
@@ -41,4 +43,6 @@ public class Sequential extends Model{
     public void params_and_grads(){
         
     }
+
+    
 }

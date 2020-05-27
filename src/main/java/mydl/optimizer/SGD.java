@@ -24,8 +24,9 @@ public class SGD extends Optimizer {
         this(0.01);
     }
 
-    public void step(Model model){
+    public void step(){
         //para = para - lr*gradient
+        
     }
 }
 
