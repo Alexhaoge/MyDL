@@ -2,10 +2,14 @@ package mydl.optimizer;
 
 import java.util.Iterator;
 
-import mydl.layer.Layer;
 import mydl.model.Model;
 import mydl.tensor.Tensor;
 
+/**
+ * The {@code SGD} is Gradient descent optimizer. 
+ * <p> The exact optimizer type of the class instance depends on the {@code batch_size} of {@code fit} method in {@link mydl.model.Model}. 
+ * If {@code batch_size > 1} then it is a Stochastic GD optimizer, otherwise it is a Mini-Batch GD optimizer。
+ */
 public class SGD extends Optimizer {
     
     /**

@@ -7,19 +7,23 @@ import java.util.Map;
 import mydl.tensor.Tensor;
 
 /**
- * The {@code Layer} class defines the abstract layer.
+ * The {@code Layer} class defines the abstract of all layer class.
  */
 public abstract class Layer implements Iterable<String>{
+
+    int input_size = -1;
+
+    int output_size = -1;
 
     /**
      * A {@code Map<String, Tensor>} including all parameters of the layer.
      */
-    Map<String, Tensor> paras = new HashMap<String, Tensor>();
+    protected Map<String, Tensor> paras = new HashMap<String, Tensor>();
     
     /**
      * A {@code Map<String, Tensor>} including all gradients of the layer.
      */
-    Map<String, Tensor> grads = new HashMap<String, Tensor>();
+    protected Map<String, Tensor> grads = new HashMap<String, Tensor>();
 
     /**
      * Forward propagation, producre the output tensor corresponding to the input tensor

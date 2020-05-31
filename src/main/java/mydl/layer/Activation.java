@@ -20,8 +20,8 @@ public abstract class Activation extends Layer{
     
     /**
      * intial constructor of activation
-     * @param __f activation function, implementing {@link mydl.utils.func}
-     * @param __df gradient function, implementing {@link mydl.utils.func}
+     * @param __f activation function, implementing {@link java.util.function.Function}
+     * @param __df gradient function, implementing {@link java.util.function.Function}
      */
     Activation(Function<Tensor, Tensor> __f, Function<Tensor, Tensor> __df){
         _f = __f;
@@ -30,8 +30,8 @@ public abstract class Activation extends Layer{
 
     /**
      * forward propagation
-     * @param inputs
-     * @return
+     * @param inputs input tensor
+     * @return output tensor
      */
     public Tensor forward(Tensor inputs){
         return _f.apply(inputs);
@@ -39,7 +39,7 @@ public abstract class Activation extends Layer{
 
     /**
      * Backward propagation.
-     * If y = f(x) and x = g(z) then dy/dz=f'(x)*g'(z)
+     * <p>If y = f(x) and x = g(z) then dy / dz= f'(x) * g'(z)
      * @param grad input gradient
      * @return gradient with activation
      */

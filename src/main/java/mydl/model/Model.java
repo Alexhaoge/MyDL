@@ -9,7 +9,8 @@ import mydl.tensor.Tensor;
 
 /**
  * The {@code Model} class the abstract of all model.
- * Currently only {@link mydl.model.Sequential} is implemented, but we also write this abstract class to declare what needs to be implement for a user-defined model class.
+ * <p> Currently only {@link mydl.model.Sequential} is implemented, 
+ * but we also write this abstract class to declare what needs to be implement for a user-defined model class.
  */
 public abstract class Model{
     
@@ -54,7 +55,7 @@ public abstract class Model{
     
     public void fit(ArrayList<Tensor> features,
             ArrayList<Tensor> tags, int epochs, 
-            int batch_size) throws Exception{
+            int batch_size, boolean shuffle) throws Exception{
         
     }
 

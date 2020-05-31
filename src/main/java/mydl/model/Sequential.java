@@ -1,7 +1,5 @@
 package mydl.model;
 
-import java.util.ArrayList;
-
 import mydl.layer.Layer;
 import mydl.loss.Loss;
 import mydl.optimizer.Optimizer;

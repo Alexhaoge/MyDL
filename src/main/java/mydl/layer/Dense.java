@@ -4,7 +4,7 @@ import mydl.tensor.Tensor;
 
 /**
  * The {@code Dense} class defines a dense layer with fully-connected neurons 
- * @deprecated
+ * @deprecated not sure if used
  */
 public class Dense extends Layer {
     /**

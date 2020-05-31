@@ -1,12 +1,19 @@
 package mydl.tensor;
 
 /**
- * The {@code Tensor} class is the basic datatype for neural network.
- * It is similiar to numpy.ndarray in Python.
+ * The {@code Tensor} class is the basic datatype for neural network. It is
+ * similiar to numpy.ndarray in Python.
+ * @author Q. Wang(LDA111222)
  */
 public abstract class Tensor {
 
     //public abstract Tensor(int x);
+
+    public abstract Tensor reshape(int x, int y);
+    public abstract Tensor reshape(int x);
+
+    // return type undecided
+    public abstract Object size();
 
     public abstract Tensor add(Tensor x);
 
@@ -60,6 +67,4 @@ public abstract class Tensor {
      */
     public abstract double sum();
 
-    public abstract Tensor reshape(int x, int y);
-    public abstract Tensor reshape(int x);
 }
