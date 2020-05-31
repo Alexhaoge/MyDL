@@ -54,6 +54,12 @@ public abstract class Tensor {
 
     public abstract Tensor pow(int x);
 
+    /**
+     * return the sum of every dimension
+     * @return double, sum of every dimesion of this tensor
+     */
+    public abstract double sum();
+
     public abstract Tensor reshape(int x, int y);
     public abstract Tensor reshape(int x);
 }

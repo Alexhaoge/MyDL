@@ -14,18 +14,14 @@ public abstract class Loss {
      * @param predicted the output tensor calculated by the neural network
      * @param actual the actual result
      * @return the loss value
-     * @throws RuntimeException
      */
-    public abstract double loss(Tensor predicted, Tensor actual)
-        throws RuntimeException;
+    public abstract double loss(Tensor predicted, Tensor actual);
 
     /**
      * calculate the gradient for back propagation
      * @param predicted the output tensor calculated by the neural network
      * @param actual the actual result
      * @return the gradient of the loss function
-     * @throws RuntimeException
      */
-    public abstract Tensor grad(Tensor predicted, Tensor actual)
-        throws RuntimeException;
+    public abstract Tensor grad(Tensor predicted, Tensor actual);
 }

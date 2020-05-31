@@ -1,6 +1,8 @@
 package mydl.utils;
 
-@Deprecated
+/**
+ * @Deprecated This is a exception never used. Will be removed soon.
+ */
 public class InvalidNeuronNumber extends IllegalArgumentException{
     /**
      *Incorrect cell number like 0 or negative integer

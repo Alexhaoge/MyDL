@@ -1,11 +1,25 @@
 package mydl.layer;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
 import mydl.tensor.Tensor;
 
 /**
  * The {@code Layer} class defines the abstract layer.
  */
-public abstract class Layer {
+public abstract class Layer implements Iterable<String>{
+
+    /**
+     * A {@code Map<String, Tensor>} including all parameters of the layer.
+     */
+    Map<String, Tensor> paras = new HashMap<String, Tensor>();
+    
+    /**
+     * A {@code Map<String, Tensor>} including all gradients of the layer.
+     */
+    Map<String, Tensor> grads = new HashMap<String, Tensor>();
 
     /**
      * Forward propagation, producre the output tensor corresponding to the input tensor
@@ -21,35 +35,19 @@ public abstract class Layer {
      */
     public abstract Tensor backward(Tensor grad); 
 
-    // /**
-    //  * Creates a new instance of layer with given cell number and activation function
-    //  * @param cells number of Nuerons
-    //  * @param activation activation function
-    //  * @throws IllegalArgumentException if @param cells less than 1
-    //  */
-    // public Layer(int cells, Activation activation) throws IllegalArgumentException{
-    //     if(cells <= 0)
-    //         throw new IllegalArgumentException("Nueron number, expected positive integer");
-    //     this.cells = cells;
-    //     for(int i=0;i<cells;i++)
-    //         neuron[i] = new Neuron();
-    //     this.activation = activation;
-    // }    
-    // /**
-    //  * set the activation function of this layer to the given one
-    //  * @param activation new activation function to be set
-    //  * @throws IllegalArgumentException if @param activation function is incorrect
-    //  */
-    // public void setActivation(Activation activation) throws IllegalArgumentException{
-    //     if (activation != null && activation instanceof Activation) {
-    //         this.activation = activation;
-    //     }
-    //     else throw new IllegalArgumentException("Activation Function");
-    // }
-    // /**
-    //  * get the type of this layer
-    //  * @return a string
-    //  */
-    // public abstract String getLayerType();
+    public Tensor get_para(String name){
+        return paras.get(name);
+    }
 
+    public Tensor get_grad(String name){
+        return grads.get(name);
+    }
+
+    public void set_para(String name, Tensor para){
+        paras.put(name, para);
+    }
+
+    public Iterator<String> iterator(){
+        return paras.keySet().iterator();
+    }
 }
