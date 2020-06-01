@@ -11,10 +11,6 @@ import mydl.tensor.Tensor;
  */
 public abstract class Layer implements Iterable<String>{
 
-    int input_size = -1;
-
-    int output_size = -1;
-
     /**
      * A {@code Map<String, Tensor>} including all parameters of the layer.
      */
@@ -27,10 +23,10 @@ public abstract class Layer implements Iterable<String>{
 
     /**
      * Forward propagation, producre the output tensor corresponding to the input tensor
-     * @param inputs the input tensor
+     * @param input the input tensor
      * @return output Tensor
      */
-    public abstract Tensor forward(Tensor inputs);
+    public abstract Tensor forward(Tensor input);
 
     /**
      * Backward propagation, produce the gradient through this layer

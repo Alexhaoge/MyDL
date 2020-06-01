@@ -15,7 +15,7 @@ public class SGD extends Optimizer {
     /**
      * learning rate, a positive double type, 0.01 on default
      */
-    double learning_rate;
+    protected double learning_rate;
 
     /**
      * initial constructor assigning the learning rate of SGD

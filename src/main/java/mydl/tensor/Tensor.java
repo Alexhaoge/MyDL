@@ -5,22 +5,42 @@ package mydl.tensor;
  * similiar to numpy.ndarray in Python.
  * @author Q. Wang(LDA111222)
  */
-public abstract class Tensor {
+public abstract class Tensor implements Cloneable{
+    /**
+     * size类型你来决定
+     */
+    Object size;
 
-    //public abstract Tensor(int x);
+    /**
+     * 根据size生成一个随机数的tensor
+     * @param _size
+     * @return
+     */
+    public static Tensor random(int x, int... _size){
+        return null;
+    }
 
-    public abstract Tensor reshape(int x, int y);
-    public abstract Tensor reshape(int x);
+    /**
+     * 返回一个当前Tensor的拷贝
+     */
+    public abstract Tensor clone();
+
+    public abstract Tensor reshape(Object new_size);
 
     // return type undecided
     public abstract Object size();
 
+    // 矩阵转置
+    public abstract Tensor transpose();
+
     public abstract Tensor add(Tensor x);
 
     public abstract Tensor subtract(Tensor x);
-
+    
     /**
      * this - x
+     * @param x
+     * @return
      */
     public abstract Tensor subtract(double x);
 
@@ -51,6 +71,32 @@ public abstract class Tensor {
      */
     public abstract Tensor cross_mul(Tensor x);
 
+    /**
+     * this / x 按位被除，请务必和divide区分开
+     * @param x
+     * @return
+     */
+    public abstract Tensor divided(double x);
+
+    public Tensor divided(int x){
+        return divided((double)x);
+    }
+
+    /**
+     * x / this 按位除，请务必和divided区分开
+     * @param x
+     * @return
+     */
+    public abstract Tensor divide(double x);
+
+    public Tensor divide(int x){
+        return divide((double)x);
+    }
+
+    /**
+     * sigmoid函数，按位求
+     * @return
+     */
     public abstract Tensor sigmoid();
 
     public Tensor tanh(){
@@ -62,9 +108,16 @@ public abstract class Tensor {
     public abstract Tensor pow(int x);
 
     /**
-     * return the sum of every dimension
+     * 所有数的和
      * @return double, sum of every dimesion of this tensor
      */
     public abstract double sum();
 
+    /**
+     * 求和，压缩第axis维
+     * @param axis
+     * @return
+     */
+    public abstract Tensor sum(int axis);
+    public abstract Tensor sum(int axis, int... _axis);//压缩某些维，先不用实现
 }

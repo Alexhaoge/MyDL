@@ -30,11 +30,11 @@ public abstract class Activation extends Layer{
 
     /**
      * forward propagation
-     * @param inputs input tensor
+     * @param input input tensor
      * @return output tensor
      */
-    public Tensor forward(Tensor inputs){
-        return _f.apply(inputs);
+    public Tensor forward(Tensor input){
+        return _f.apply(input);
     }
 
     /**

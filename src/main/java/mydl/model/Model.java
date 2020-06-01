@@ -1,11 +1,13 @@
 package mydl.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import mydl.layer.Layer;
 import mydl.loss.Loss;
 import mydl.optimizer.Optimizer;
 import mydl.tensor.Tensor;
+import mydl.utils.Data;
 
 /**
  * The {@code Model} class the abstract of all model.
@@ -44,7 +46,9 @@ public abstract class Model{
     protected abstract Tensor backward(Tensor grad);
 
     /**
-     * Compile this model. Optimizer and loss function will be added while input size and output size of every two adjacent layers will be checked to see if they fit.
+     * Compile this model. 
+     * <p> Optimizer and loss function will be added while input size and 
+     * output size of every two adjacent layers will be checked to see if they fit.
      * @param _opt opimizer to add
      * @param _loss loss function to add
      * @throws Exception if the tensor sizes of two adjacent layers do not fit
@@ -53,10 +57,38 @@ public abstract class Model{
         throws Exception;
 
     
-    public void fit(ArrayList<Tensor> features,
-            ArrayList<Tensor> tags, int epochs, 
-            int batch_size, boolean shuffle) throws Exception{
+    /**
+     * 
+     * @param inputs
+     * @param targets
+     * @param epochs
+     * @param batch_size
+     * @param shuffle
+     * @param verbose
+     * @throws IllegalArgumentException
+     * @throws IndexOutOfBoundsException
+     */
+    public void fit(ArrayList<Tensor> inputs, ArrayList<Tensor> targets, 
+    int epochs, int batch_size, boolean shuffle, boolean verbose)
+    throws IllegalArgumentException, IndexOutOfBoundsException {    
+        if(batch_size < 1 || epochs < 1)
+            throw new IllegalArgumentException("batch size and epoch must be positive integers");
+        if(inputs.size()!=targets.size())
+            throw new IndexOutOfBoundsException("sample size does not match");
         
+        ArrayList<Data> train = Data.to_data(inputs, targets, batch_size);
+        if(shuffle) Collections.shuffle(train);
+        for(int epoch = 1; epoch <= epochs; epoch++){
+            double epoch_loss = 0.0;
+            for(int i=0; i<batch_size ; i++){
+                Tensor predicted = forward(train.get(i).input);
+                epoch_loss += loss.loss(predicted, train.get(i).target);
+                Tensor grad = loss.grad(predicted, train.get(i).target);
+                backward(grad);
+                opt.step(this);
+            }
+            if(verbose) System.out.println("epoch="+epoch+", loss="+epoch_loss);
+        }
     }
 
     /**
