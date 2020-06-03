@@ -8,15 +8,13 @@ public abstract class Tensor {
 
     //public abstract Tensor(int x);
 
-    public abstract Tensor add(Tensor x);
+    public abstract Tensor add(double addtion);
 
-    public abstract Tensor subtract(Tensor x);
+    public abstract Tensor subtract(double minuend);
 
     /**
      * this - x
      */
-    public abstract Tensor subtract(double x);
-
     public Tensor subtract(int x){
         return subtract((double)x);
     }
@@ -24,15 +22,16 @@ public abstract class Tensor {
     /**
      * x - this
      */
-    public abstract Tensor subtracted(double x);
+    public abstract Tensor subtracted(double minuend);
 
     public Tensor subtracted(int x){
         return subtracted((double)x);
     }
 
-    public abstract Tensor dot_mul(Tensor x);
+//    public abstract Tensor element_mul(Tensor x);
 
     public abstract Tensor dot_mul(double x);
+    public abstract Tensor devide(double devidend);
 
     /**
      * 感觉这里单独实现不复用double对效率和精度更好一些
@@ -42,13 +41,11 @@ public abstract class Tensor {
     /**
      * 矩阵乘法
      */
-    public abstract Tensor cross_mul(Tensor x);
+//    public abstract Tensor cross_mul(Tensor x);
 
     public abstract Tensor sigmoid();
 
-    public Tensor tanh(){
-        return sigmoid().dot_mul(2).subtract(1);
-    }
+    public abstract Tensor tanh();
 
     public abstract Tensor pow(double x);
 
@@ -62,4 +59,5 @@ public abstract class Tensor {
 
     public abstract Tensor reshape(int x, int y);
     public abstract Tensor reshape(int x);
+
 }
