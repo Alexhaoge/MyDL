@@ -1,23 +1,56 @@
 package mydl.tensor;
 
+import java.io.Serializable;
+
 /**
- * The {@code Tensor} class is the basic datatype for neural network. It is
- * similiar to numpy.ndarray in Python.
- * @author Q. Wang(LDA111222)
+ * The {@code Tensor} class is the basic datatype for neural network.
+ * It is similiar to numpy.ndarray in Python.
  */
-public abstract class Tensor implements Cloneable{
+public abstract class Tensor implements Serializable, Cloneable {
     /**
      * size类型你来决定
      */
-    Object size;
+    String size;
 
     /**
      * 根据size生成一个随机数的tensor
-     * @param _size
+     * @param size A string like"a12","b12,12","c12,12,12"
+     *             a, b, c means Tensor1D, Tensor2D, Tensor3D
+     *             numbers means rowNum colNum N
      * @return
      */
-    public static Tensor random(int x, int... _size){
-        return null;
+    public static Tensor random(String size){
+        switch (size.charAt( 0 )){
+            case 'a':{
+                int length = Integer.parseInt(size.substring( 2 ));
+                Tensor1D res = new Tensor1D( length );
+                for (int i = 0; i < res.darray.data.length; i++){
+                    res.darray.data[i] = Math.random();
+                }
+                return res;
+                break;
+            }
+            case 'b':{
+                String[] length_in_String = size.substring( 2 ).split( "," );
+                Tensor2D res = new Tensor2D( Integer.parseInt( length_in_String[0] ), Integer.parseInt( length_in_String[1] ) );
+                for (int i = 0; i < res.darray.data.length; i++){
+                    res.darray.data[i] = Math.random();
+                }
+                return res;
+                break;
+            }
+            case 'c':{
+                String[] length_in_String = size.substring( 2 ).split( "," );
+                Tensor3D res = new Tensor3D( Integer.parseInt( length_in_String[0] ), Integer.parseInt( length_in_String[1] ), Integer.parseInt( length_in_String[2] ) );
+                for (int i = 0; i < res.darray.size(); i++){
+                    for (int j = 0; j < res.darray.get( i ).data.length; j++){
+                        res.darray.get( i ).data[j] = Math.random();
+                    }
+                }
+                return res;
+                break;
+            }
+        }
     }
 
     /**
@@ -36,7 +69,7 @@ public abstract class Tensor implements Cloneable{
     public abstract Tensor add(Tensor x);
 
     public abstract Tensor subtract(Tensor x);
-    
+
     /**
      * this - x
      * @param x
