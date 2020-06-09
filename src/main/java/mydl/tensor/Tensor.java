@@ -10,19 +10,18 @@ public abstract class Tensor implements Serializable, Cloneable {
     /**
      * size类型你来决定
      */
-    String size;
-
+    Tensor_size size;
     /**
      * 根据size生成一个随机数的tensor
-     * @param size A string like"a12","b12,12","c12,12,12"
-     *             a, b, c means Tensor1D, Tensor2D, Tensor3D
-     *             numbers means rowNum colNum N
+     * @param size A class contains dim and length[]
+     *             dim 1,2,3 means tensor1d, tensor1d and tensor1d
+     *             length[0],length[1],length[2] means rownum, colnum, N
      * @return
      */
-    public static Tensor random(String size){
-        switch (size.charAt( 0 )){
-            case 'a':{
-                int length = Integer.parseInt(size.substring( 2 ));
+    public static Tensor random(Tensor_size size){
+        switch (size.getDim()){
+            case 1:{
+                int length = size.getTensor_length()[0];
                 Tensor1D res = new Tensor1D( length );
                 for (int i = 0; i < res.darray.data.length; i++){
                     res.darray.data[i] = Math.random();
@@ -30,18 +29,18 @@ public abstract class Tensor implements Serializable, Cloneable {
                 return res;
                 break;
             }
-            case 'b':{
-                String[] length_in_String = size.substring( 2 ).split( "," );
-                Tensor2D res = new Tensor2D( Integer.parseInt( length_in_String[0] ), Integer.parseInt( length_in_String[1] ) );
+            case 2:{
+                int[] length = size.getTensor_length();
+                Tensor2D res = new Tensor2D( length[0], length[1] );
                 for (int i = 0; i < res.darray.data.length; i++){
                     res.darray.data[i] = Math.random();
                 }
                 return res;
                 break;
             }
-            case 'c':{
-                String[] length_in_String = size.substring( 2 ).split( "," );
-                Tensor3D res = new Tensor3D( Integer.parseInt( length_in_String[0] ), Integer.parseInt( length_in_String[1] ), Integer.parseInt( length_in_String[2] ) );
+            case 3:{
+                int[] length = size.getTensor_length();
+                Tensor3D res = new Tensor3D( length[0], length[1], length[2]);
                 for (int i = 0; i < res.darray.size(); i++){
                     for (int j = 0; j < res.darray.get( i ).data.length; j++){
                         res.darray.get( i ).data[j] = Math.random();
@@ -51,6 +50,8 @@ public abstract class Tensor implements Serializable, Cloneable {
                 break;
             }
         }
+        System.err.println("Input errors!");
+        return null;
     }
 
     /**
@@ -58,7 +59,7 @@ public abstract class Tensor implements Serializable, Cloneable {
      */
     public abstract Tensor clone();
 
-    public abstract Tensor reshape(Object new_size);
+    public abstract Tensor reshape(Tensor_size new_size);
 
     // return type undecided
     public abstract Object size();
@@ -109,7 +110,7 @@ public abstract class Tensor implements Serializable, Cloneable {
      * @param x
      * @return
      */
-    public abstract Tensor divided(double x);
+    public Tensor divided(double x){ return dot_mul( 1.0/x ); };
 
     public Tensor divided(int x){
         return divided((double)x);

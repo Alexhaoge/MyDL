@@ -11,10 +11,15 @@ public class Tensor2D extends Tensor {
      * (rownum always rank first).
      */
     public Tensor2D(double[][] data) {
+        int[] length = new int[2];
+        length[0] = data.length/data[0].length;
+        length[1] = data[0].length;
+        this.size = new Tensor_size(2, length);
         this.darray = new DMatrixRMaj(data);
     }
 
     public Tensor2D(double[] data) {
+        this.size = new Tensor_size(2, length);
         this.darray = new DMatrixRMaj(data);
     }
 
@@ -95,15 +100,15 @@ public class Tensor2D extends Tensor {
     }
 
 
-    public Tensor devide(double devidend) {
+    public Tensor divide(double dividend) {
         Tensor2D res = new Tensor2D( this );
-        CommonOps_DDRM.divide( devidend, res.darray );
+        CommonOps_DDRM.divide( dividend, res.darray );
         return res;
     }
 
-    public static Tensor devide(double devidend, Tensor2D t1) {
+    public static Tensor divide(double dividend, Tensor2D t1) {
         Tensor2D res = new Tensor2D( t1);
-        CommonOps_DDRM.divide( devidend, t1.darray, res.darray );
+        CommonOps_DDRM.divide( dividend, t1.darray, res.darray );
         return res;
     }
 
