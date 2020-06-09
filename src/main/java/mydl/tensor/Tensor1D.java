@@ -4,7 +4,7 @@ import org.ejml.data.DMatrixRMaj;
 import org.ejml.dense.row.CommonOps_DDRM;
 
 
-public class Tensor1D extends Tensor{
+public class Tensor1D extends Tensor {
     DMatrixRMaj darray = new DMatrixRMaj();
 
     // The default construction method gives a one-colums matrix(an array).
@@ -32,8 +32,9 @@ public class Tensor1D extends Tensor{
     }
 
     public Tensor add (double addtion) {
-        CommonOps_DDRM.add(this.darray, addtion );
-        return this;
+        Tensor1D res = new Tensor1D( this );
+        CommonOps_DDRM.add(res.darray, addtion );
+        return res;
     }
 
     public static Tensor subtract (Tensor1D t1, double minuend) {
@@ -45,14 +46,14 @@ public class Tensor1D extends Tensor{
     }
 
     public static Tensor substracted (Tensor1D t1, double substract) {
-        Tensor1D res = new Tensor1D( t1 );
-        res.dot_mul( -1 );
-        return (Tensor1D) Tensor1D.add( res , substract );
+        return t1.subtracted( substract );
     }
 
     public Tensor subtracted (double substract) {
-        this.dot_mul( -1 );
-        return this.add(substract);
+        Tensor1D res = new Tensor1D( this );
+        CommonOps_DDRM.scale( -1, res.darray );
+        CommonOps_DDRM.add( res.darray, substract );
+        return res;
     }
 
     public static Tensor dot_mul (Tensor1D t1, double times) {
@@ -62,8 +63,9 @@ public class Tensor1D extends Tensor{
     }
 
     public Tensor dot_mul (double times) {
-        CommonOps_DDRM.scale( times, this.darray );
-        return this;
+        Tensor1D res = new Tensor1D( this );
+        CommonOps_DDRM.scale( times, res.darray );
+        return res;
     }
 
     // 实际上，scale函数只有double 类型传入，所以...单独拿出int并不能优化 除非 调用ejml底层的代码
@@ -75,7 +77,8 @@ public class Tensor1D extends Tensor{
     }
 
     public Tensor dot_mul(int int_times) {
-        CommonOps_DDRM.scale( int_times, this.darray );
+        Tensor1D res = new Tensor1D( this );
+        CommonOps_DDRM.scale( int_times, res.darray );
         return this;
     }
 
@@ -101,7 +104,8 @@ public class Tensor1D extends Tensor{
             System.err.println("Length of two arrays differs.");
             return null;
         }
-        CommonOps_DDRM.elementMult( this.darray, t2.darray, this.darray );
+        Tensor1D res = new Tensor1D( this );
+        CommonOps_DDRM.elementMult( res.darray, t2.darray, res.darray );
         return this;
     }
 
@@ -122,7 +126,7 @@ public class Tensor1D extends Tensor{
         }
     }
 
-    public static Tensor tensor_mul(Tensor1D t1,Tensor1D t2) {
+    public static Tensor tensor_mul(Tensor1D t1, Tensor1D t2) {
         if (t1.darray.getNumElements() != t2.darray.getNumElements()) {
             System.err.println("Length of two arrays differs.");
             return null;
@@ -135,29 +139,37 @@ public class Tensor1D extends Tensor{
     }
 
     public Tensor pow(double pow) {
-        CommonOps_DDRM.elementPower( pow, this.darray, this.darray );
-        return this;
+        Tensor1D res = new Tensor1D( this );
+        CommonOps_DDRM.elementPower( pow, res.darray, res.darray );
+        return res;
     }
 
     public Tensor pow(int pow) {
-        CommonOps_DDRM.elementPower( pow, this.darray, this.darray );
-        return this;
+        Tensor1D res = new Tensor1D( this );
+        CommonOps_DDRM.elementPower( pow, res.darray, res.darray );
+        return res;
     }
 
-    public static Tensor pow(Tensor1D t1 ,double pow) {
+    public static Tensor pow(Tensor1D t1 , double pow) {
         Tensor1D res = new Tensor1D( t1.darray.getNumElements() );
         CommonOps_DDRM.elementPower( pow, t1.darray, res.darray );
         return res;
     }
     public Tensor sigmoid() {
-        this.dot_mul( -1 );
-        this.pow(Math.E);
-        this.add(1);
-        return this.devide( 1 );
+        Tensor1D res = new Tensor1D( this );
+        CommonOps_DDRM.scale( -1, res.darray );
+        CommonOps_DDRM.elementPower( Math.E, res.darray, res.darray );
+        CommonOps_DDRM.add(res.darray, 1);
+        CommonOps_DDRM.divide( 1, res.darray );
+        return res;
     }
 
     public static Tensor sigmoid(Tensor1D t1) {
-        Tensor1D res = new Tensor1D( (Tensor1D) Tensor1D.pow( t1, Math.E ) );
+        Tensor1D res = new Tensor1D( t1 );
+        CommonOps_DDRM.scale( -1, res.darray );
+        CommonOps_DDRM.elementPower( Math.E, res.darray, res.darray );
+        CommonOps_DDRM.add(res.darray, 1);
+        CommonOps_DDRM.divide( 1, res.darray );
         return res;
     }
 
@@ -169,11 +181,11 @@ public class Tensor1D extends Tensor{
         return Tensor1D.sum( this );
     }
 
-    @Override
     public Tensor reshape (int x, int y) {
-        return null;
+        Tensor1D res = new Tensor1D( this );
+        res.darray.reshape( x, y, true);
+        return res;
     }
-
 
     public Tensor reshape (int x) {
         this.darray.reshape( x, 1, true );
@@ -194,14 +206,21 @@ public class Tensor1D extends Tensor{
     }
 
     public Tensor tanh() {
+        Tensor1D res = new Tensor1D( this );
         Tensor1D res1 = new Tensor1D( this );
-        res1.dot_mul( 2 );
-        res1.sigmoid();
+        CommonOps_DDRM.scale(2, res1.darray );
+        CommonOps_DDRM.scale( -1, res1.darray );
+        CommonOps_DDRM.elementPower( Math.E, res1.darray, res1.darray );
+        CommonOps_DDRM.add(res1.darray, 1);
+        CommonOps_DDRM.divide( 1, res1.darray );
         Tensor1D res2 = new Tensor1D( this );
-        res2.dot_mul( -2 );
-        res2.sigmoid();
-        res2.dot_mul( -1 );
-        CommonOps_DDRM.add( res1.darray, res2.darray, this.darray );
-        return this;
+        CommonOps_DDRM.scale(-2, res2.darray );
+        CommonOps_DDRM.scale( -1, res2.darray );
+        CommonOps_DDRM.elementPower( Math.E, res2.darray, res2.darray );
+        CommonOps_DDRM.add(res2.darray, 1);
+        CommonOps_DDRM.divide( 1, res2.darray );
+        CommonOps_DDRM.scale( -1, res2.darray );
+        CommonOps_DDRM.add( res1.darray, res2.darray, res.darray );
+        return res;
     }
 }
