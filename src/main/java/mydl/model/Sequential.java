@@ -36,7 +36,7 @@ public class Sequential extends Model{
         return grad;
     }
 
-    public void compile(Optimizer _opt, Loss _loss) throws Exception{
+    public void compile(Optimizer _opt, Loss _loss){
         opt = _opt;
         loss = _loss;
     }

@@ -1,11 +1,12 @@
 package mydl.layer;
 
 import mydl.tensor.Tensor;
+import mydl.tensor.Tensor_size;
 
 /**
  * Linear or Dense layer, incomplete
  */
-public class Linear extends Layer {
+public class Linear1D extends Layer {
     
     /**
      * Record
@@ -17,9 +18,9 @@ public class Linear extends Layer {
      * @param input_size
      * @param output_size
      */
-    public Linear(int input_size, int output_size){
-        paras.put("W", Tensor.random("b"+Integer.toString(input_size)+","+Integer.toString(output_size)));
-        paras.put("b", Tensor.random("a"+Integer.toString(output_size)));
+    public Linear1D(int input_size, int output_size){
+        paras.put("W", Tensor.random(new Tensor_size(2, input_size, output_size, 1)));
+        paras.put("b", Tensor.random(new Tensor_size(1, output_size, 1, 1)));
     }
 
     public Tensor forward(Tensor input){
@@ -28,8 +29,8 @@ public class Linear extends Layer {
     }
 
     public Tensor backward(Tensor grad){
-        grads.put("W", inputs.transpose().cross_mul(grad));
-        grads.put("b", grad.sum(0));
+        grads.put("W", grads.get("W").add(inputs.transpose().cross_mul(grad)));
+        grads.put("b", grads.get("b").add(grad));
         return grad.cross_mul(paras.get("W").transpose());
     }
 }

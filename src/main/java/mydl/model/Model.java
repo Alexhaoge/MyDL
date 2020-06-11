@@ -1,7 +1,8 @@
 package mydl.model;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 
 import mydl.layer.Layer;
 import mydl.loss.Loss;
@@ -10,8 +11,8 @@ import mydl.tensor.Tensor;
 import mydl.utils.Data;
 
 /**
- * The {@code Model} class the abstract of all model.
- * <p> Currently only {@link mydl.model.Sequential} is implemented, 
+ * The {@code Model} class is the abstract of all model.
+ * <p> Currently only {@link Sequential} model is implemented, 
  * but we also write this abstract class to declare what needs to be implement for a user-defined model class.
  */
 public abstract class Model{
@@ -32,16 +33,52 @@ public abstract class Model{
     protected Loss loss;
     
     /**
-     * Forward propagation
-     * @param inputs input tensor
-     * @return output tensor
+     * Get the optimizer of this model.
+     * @return A {@link Optimizer} instance. 
+     * Note that it is not a copy but a reference.
      */
+    public Optimizer get_optim(){
+        return opt;
+    }
+
+    /**
+     * Get the loss function of this model.
+     * @return A {@link Lost} instance.
+     * Note that it is not a copy but a reference.
+     */
+    public Loss get_loss(){
+        return loss;
+    }
+
+    /**
+     * Get a specific layer of this model according to the index.
+     * @param index Integer.
+     * @return {@link Layer} class.
+     */
+    public Layer get_Layer(int index){
+        return layers.get(index);
+    }
+
+    /**
+     * Modify a specific layer in the model
+     * @param index Integer. The index of layer to modifty.
+     * @param _layer {@link Layer} class. The new layer.
+     */
+    public void set_layer(int index, Layer _layer){
+        layers.set(index, _layer);
+    }
+
+    /**
+     * Forward propagation.
+     * @param inputs Input tensor.
+     * @return Output tensor.
+     */    
     protected abstract Tensor forward(Tensor inputs);
     
     /**
      * Backward propagation.
-     * @param grad gradient tensor calculated by loss function
-     * @return gradient of input tensor
+     * @param grad Gradient tensor calculated by loss function.
+     * @return Gradient of input tensor.
      */
     protected abstract Tensor backward(Tensor grad);
 
@@ -56,9 +93,37 @@ public abstract class Model{
     public abstract void compile(Optimizer _opt, Loss _loss)
         throws Exception;
 
-    //Runs a single gradient update on a single batch of data.
-    public void train_on_batch(ArrayList<Data> inputs, ArrayList<Data> targets){
-        
+    /**
+     * Set all the gradients of layers' parameters to zero.
+     * Called after a mini-batch gradient update.
+     * @see Model#train_on_batch
+     */
+    protected void clean_grad(){
+        for(int i = 0; i < layers.size(); i++){
+            Iterator<String> itname = layers.get(i).iterator();
+            while(itname.hasNext()){
+                String name = itname.next();
+                layers.get(i).set_para(name, layers.get(i).get_para(name).set_zero());
+            }
+        }
+    }
+
+    /**
+     * Runs a single gradient update on a single batch of data.
+     * @param data {@link List} of {@link Data}. The batch sample.
+     * @return The total loss of the batch.
+     */
+    public double train_on_batch(List<Data> data){
+        double batch_loss = 0 ;
+        for(int i = 0; i < data.size(); i++){
+            Tensor predicted = forward(data.get(i).input);
+            batch_loss += loss.loss(predicted, data.get(i).target);
+            Tensor grad = loss.grad(predicted, data.get(i).target);
+            backward(grad);
+        }
+        opt.step(this, data.size());
+        clean_grad();
+        return batch_loss;
     }
     
     /**
@@ -85,18 +150,12 @@ public abstract class Model{
         if(inputs.size()!=targets.size())
             throw new IndexOutOfBoundsException("sample size does not match");
         //load data
-        ArrayList<Data> train = Data.to_data(inputs, targets, batch_size);
-        if(shuffle) Collections.shuffle(train);
+        ArrayList<Data> train = Data.to_data(inputs, targets, shuffle);
         //epoch
         for(int epoch = 1; epoch <= epochs; epoch++){
-            double epoch_loss = 0.0;
-            for(int i=0; i<batch_size ; i++){
-                Tensor predicted = forward(train.get(i).input);
-                epoch_loss += loss.loss(predicted, train.get(i).target);
-                Tensor grad = loss.grad(predicted, train.get(i).target);
-                backward(grad);
-                opt.step(this);
-            }
+            double epoch_loss = 0;
+            for(int i = 0; i < train.size(); i += batch_size)
+                epoch_loss += train_on_batch(train.subList(i, Math.min(i+batch_size, train.size())));
             if(verbose) System.out.println("epoch="+epoch+", loss="+epoch_loss);
         }
     }
@@ -111,23 +170,5 @@ public abstract class Model{
         for(int i = 0; i < inputs.size(); i++)
             results.add(forward(inputs.get(i)));
         return results;
-    }
-
-    /**
-     * Get the optimizer of this model.
-     * @return A {@link Optimizer} instance. 
-     * Note that it is not a copy but a reference.
-     */
-    public Optimizer get_optim(){
-        return opt;
-    }
-
-    /**
-     * Get the loss function of this model.
-     * @return A {@link Lost} instance.
-     * Note that it is not a copy but a reference.
-     */
-    public Loss get_loss(){
-        return loss;
     }
 }

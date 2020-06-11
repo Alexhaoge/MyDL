@@ -11,5 +11,5 @@ public abstract class Optimizer {
      * Update the parameters of every layer in model
      * @param model {@link mydl.model.Model Model} Class
      */
-    public abstract void step(Model model);
+    public abstract void step(Model model, int batch_size);
 }

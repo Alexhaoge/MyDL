@@ -28,7 +28,7 @@ public abstract class Activation extends Layer{
      * @param __f activation function, implementing {@link java.util.function.Function}
      * @param __df gradient function, implementing {@link java.util.function.Function}
      */
-    Activation(Function<Tensor, Tensor> __f, Function<Tensor, Tensor> __df){
+    public Activation(Function<Tensor, Tensor> __f, Function<Tensor, Tensor> __df){
         _f = __f;
         _df = __df;
     }

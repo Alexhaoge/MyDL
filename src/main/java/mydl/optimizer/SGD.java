@@ -47,7 +47,7 @@ public class SGD extends Optimizer {
         return para.subtract(grad.dot_mul(learning_rate));
     }
 
-    public void step(Model model){
+    public void step(Model model, int batch_size){
         for(int i=0;i<model.layers.size();i++){ 
             Iterator<String> itname = model.layers.get(i).iterator();
             while(itname.hasNext()){
@@ -55,7 +55,7 @@ public class SGD extends Optimizer {
                 model.layers.get(i).set_para(name, 
                     model.layers.get(i).get_para(name).subtract(
                         model.layers.get(i).get_grad(name)
-                        .dot_mul(learning_rate)
+                        .dot_mul(learning_rate).divided(batch_size)
                     )
                 );
             }

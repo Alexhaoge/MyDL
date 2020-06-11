@@ -196,6 +196,7 @@ public class Tensor1D extends Tensor {
             Tensor1D res = new Tensor1D( this );
             res.darray.reshape( new_size.Tensor_length[0], 1 );
             res.size = new_size;
+            return res;
         }else{
             System.err.println("Input errors!");
             return null;

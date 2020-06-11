@@ -15,17 +15,18 @@ public abstract class Tensor implements Serializable, Cloneable {
      * size类型你来决定
      */
     Tensor_size size;
+
     /**
      * 根据size生成一个随机数的tensor
-     * @param size A class contains dim and length[]
+     * @param _size A class contains dim and length[]
      *             dim 1,2,3 means tensor1d, tensor1d and tensor1d
      *             length[0],length[1],length[2] means rownum, colnum, N
      * @return
      */
-    public static Tensor random(Tensor_size size){
-        switch (size.getDim()){
+    public static Tensor random(Tensor_size _size){
+        switch (_size.getDim()){
             case 1:{
-                int length = size.getTensor_length()[0];
+                int length = _size.getTensor_length()[0];
                 Tensor1D res = new Tensor1D( length );
                 for (int i = 0; i < res.darray.data.length; i++){
                     res.darray.data[i] = Math.random();
@@ -33,7 +34,7 @@ public abstract class Tensor implements Serializable, Cloneable {
                 return res;
             }
             case 2:{
-                int[] length = size.getTensor_length();
+                int[] length = _size.getTensor_length();
                 Tensor2D res = new Tensor2D( length[0], length[1] );
                 for (int i = 0; i < res.darray.data.length; i++){
                     res.darray.data[i] = Math.random();
@@ -41,7 +42,7 @@ public abstract class Tensor implements Serializable, Cloneable {
                 return res;
             }
             case 3:{
-                int[] length = size.getTensor_length();
+                int[] length = _size.getTensor_length();
                 Tensor3D res = new Tensor3D( length[0], length[1], length[2]);
                 for (int i = 0; i < res.darray.size(); i++){
                     for (int j = 0; j < res.darray.get( i ).data.length; j++){
@@ -54,6 +55,17 @@ public abstract class Tensor implements Serializable, Cloneable {
         System.err.println("Input errors!");
         return null;
     }
+
+    //返回一个新的0张量
+    public static Tensor zero(Tensor_size _size){
+        return null;
+    }
+
+    /**
+     * 把一个tensor清零，且不新建tensor直接返回当前的
+     * @return this tensor
+     */
+    public abstract Tensor set_zero();
 
     /**
      * 返回一个当前Tensor的拷贝
@@ -155,4 +167,5 @@ public abstract class Tensor implements Serializable, Cloneable {
      */
     public abstract Tensor sum(int axis);
     public abstract Tensor sum(int axis, int... _axis);//压缩某些维，先不用实现
+
 }
