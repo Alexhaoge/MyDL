@@ -8,6 +8,10 @@ import java.io.Serializable;
  */
 public abstract class Tensor implements Serializable, Cloneable {
     /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
+    /**
      * size类型你来决定
      */
     String size;
@@ -28,7 +32,6 @@ public abstract class Tensor implements Serializable, Cloneable {
                     res.darray.data[i] = Math.random();
                 }
                 return res;
-                break;
             }
             case 'b':{
                 String[] length_in_String = size.substring( 2 ).split( "," );
@@ -37,7 +40,6 @@ public abstract class Tensor implements Serializable, Cloneable {
                     res.darray.data[i] = Math.random();
                 }
                 return res;
-                break;
             }
             case 'c':{
                 String[] length_in_String = size.substring( 2 ).split( "," );
@@ -48,7 +50,6 @@ public abstract class Tensor implements Serializable, Cloneable {
                     }
                 }
                 return res;
-                break;
             }
         }
     }

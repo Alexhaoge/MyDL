@@ -19,6 +19,11 @@ public abstract class Activation extends Layer{
     protected Function<Tensor, Tensor> _df;
     
     /**
+     * record the input of this 
+     */
+    protected Tensor input;
+
+    /**
      * intial constructor of activation
      * @param __f activation function, implementing {@link java.util.function.Function}
      * @param __df gradient function, implementing {@link java.util.function.Function}
@@ -33,8 +38,9 @@ public abstract class Activation extends Layer{
      * @param input input tensor
      * @return output tensor
      */
-    public Tensor forward(Tensor input){
-        return _f.apply(input);
+    public Tensor forward(Tensor inputs){
+        input  = inputs;
+        return _f.apply(inputs);
     }
 
     /**
@@ -44,7 +50,7 @@ public abstract class Activation extends Layer{
      * @return gradient with activation
      */
     public Tensor backward(Tensor grad){
-        return (_df.apply(grad)).cross_mul(grad);
+        return (_df.apply(input)).cross_mul(grad);
     }
 }
 

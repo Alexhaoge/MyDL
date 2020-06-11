@@ -7,6 +7,9 @@ import mydl.tensor.Tensor;
  */
 public class Linear extends Layer {
     
+    /**
+     * Record
+     */
     protected Tensor inputs;
 
     /**
@@ -15,8 +18,8 @@ public class Linear extends Layer {
      * @param output_size
      */
     public Linear(int input_size, int output_size){
-        paras.put("W", Tensor.random(input_size, output_size));//incorrect
-        paras.put("b", Tensor.random(output_size));
+        paras.put("W", Tensor.random("b"+Integer.toString(input_size)+","+Integer.toString(output_size)));
+        paras.put("b", Tensor.random("a"+Integer.toString(output_size)));
     }
 
     public Tensor forward(Tensor input){
