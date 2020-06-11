@@ -9,19 +9,29 @@ public class Tensor1D extends Tensor {
 
     // The default construction method gives a one-colums matrix(an array).
     public Tensor1D(double[] data) {
+        int[] length = new int[1];
+        length[0] = data.length;
+        this.size = new Tensor_size( 1, length );
         this.darray = new DMatrixRMaj(data);
     }
 
     //Cations! If the input is not an array, the result may be strange.
     public Tensor1D(DMatrixRMaj darray) {
+        int[] length = new int[1];
+        length[0] = darray.data.length;
+        this.size = new Tensor_size( 1, length );
         this.darray = new DMatrixRMaj(darray.data);
     }
 
     public Tensor1D(int length) {
+        int[]len = new int[1];
+        len[0] = length;
+        this.size = new Tensor_size( 1, len);
         this.darray = new DMatrixRMaj(length);
     }
 
     public Tensor1D(Tensor1D t1) {
+        this.size = t1.size;
         this.darray = new DMatrixRMaj(t1.darray);
     }
 
@@ -79,7 +89,7 @@ public class Tensor1D extends Tensor {
     public Tensor dot_mul(int int_times) {
         Tensor1D res = new Tensor1D( this );
         CommonOps_DDRM.scale( int_times, res.darray );
-        return this;
+        return res;
     }
 
     /**
@@ -106,7 +116,7 @@ public class Tensor1D extends Tensor {
         }
         Tensor1D res = new Tensor1D( this );
         CommonOps_DDRM.elementMult( res.darray, t2.darray, res.darray );
-        return this;
+        return res;
     }
 
     /**
@@ -181,27 +191,31 @@ public class Tensor1D extends Tensor {
         return Tensor1D.sum( this );
     }
 
-    public Tensor reshape (int x, int y) {
-        Tensor1D res = new Tensor1D( this );
-        res.darray.reshape( x, y, true);
-        return res;
+    public Tensor reshape (Tensor_size new_size) {
+        if (size.dim == 1){
+            Tensor1D res = new Tensor1D( this );
+            res.darray.reshape( new_size.Tensor_length[0], 1 );
+            res.size = new_size;
+        }else{
+            System.err.println("Input errors!");
+            return null;
+        }
+
     }
 
-    public Tensor reshape (int x) {
-        this.darray.reshape( x, 1, true );
-        return this;
-    }
     public DMatrixRMaj getData() {
         return this.darray;
     }
 
-    public Tensor devide(double devidend) {
-        CommonOps_DDRM.divide( devidend, this.darray );
-        return this;
+    public Tensor divide(double dividend) {
+        Tensor1D res = new Tensor1D( this );
+        CommonOps_DDRM.divide( dividend, res.darray );
+        return res;
     }
-    public static Tensor devide(double devidend, Tensor1D t1) {
+
+    public static Tensor divide(double dividend, Tensor1D t1) {
         Tensor1D res = new Tensor1D( t1);
-        CommonOps_DDRM.divide( devidend, t1.darray, res.darray );
+        CommonOps_DDRM.divide( dividend, t1.darray, res.darray );
         return res;
     }
 
@@ -218,6 +232,7 @@ public class Tensor1D extends Tensor {
         CommonOps_DDRM.scale( -1, res2.darray );
         CommonOps_DDRM.elementPower( Math.E, res2.darray, res2.darray );
         CommonOps_DDRM.add(res2.darray, 1);
+        CommonOps_DDRM.divide( 1, res2.darray );
         CommonOps_DDRM.divide( 1, res2.darray );
         CommonOps_DDRM.scale( -1, res2.darray );
         CommonOps_DDRM.add( res1.darray, res2.darray, res.darray );
