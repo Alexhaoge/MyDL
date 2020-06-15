@@ -1,33 +1,36 @@
 package mydl.tensor;
+import java.util.ArrayList;
 
 public class Tensor_size {
-    int dim = 1;
-    int[] Tensor_length = new int[3];
-    public Tensor_size (int dim, int rownum, int colnum, int N) {
-        this.dim = dim;
-        this.Tensor_length[0] = rownum;
-        this.Tensor_length[1] = colnum;
-        this.Tensor_length[2] = N;
-    }
-    public Tensor_size (int dim, int[] size) {
-        this.dim = dim;
-        for (int i = 0; i < size.length; i++) {
-            this.Tensor_length[i] = size[i];
+    ArrayList<Integer> Tensor_length = new ArrayList<Integer>();
+    public int size = Tensor_length.size();
+    public Tensor_size (int... Tensor_length) {
+        this.size = Tensor_length.length;
+        if (size > 3 || size <= 0) {
+            System.err.println("Input error");
+        }
+        for (int i : Tensor_length){
+            this.Tensor_length.add(i);
         }
     }
+
     public Tensor_size (int dim){
-        this.dim = dim;
+        this.size = Tensor_length.size();
         if (dim > 3 || dim <= 0) {
             System.err.println("Input error");
         }
         for (int i = 0; i < dim; i++) {
-            this.Tensor_length[i] = 1;
+            this.Tensor_length.add( 1 );
         }
     }
-    public int getDim(){
-        return this.dim;
-    }
     public int[] getTensor_length(){
-        return this.Tensor_length;
+        int[] res = new int[size];
+        for (int i = 0; i < size; i++){
+            res[i] = Tensor_length.get( i );
+        }
+        return res;
+    }
+    public int getSize(){
+        return size;
     }
 }

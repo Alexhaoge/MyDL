@@ -1,4 +1,5 @@
 package mydl.tensor;
+import org.ejml.MatrixDimensionException;
 
 import java.io.Serializable;
 
@@ -24,7 +25,7 @@ public abstract class Tensor implements Serializable, Cloneable {
      * @return
      */
     public static Tensor random(Tensor_size _size){
-        switch (_size.getDim()){
+        switch (_size.getSize()){
             case 1:{
                 int length = _size.getTensor_length()[0];
                 Tensor1D res = new Tensor1D( length );
@@ -51,14 +52,38 @@ public abstract class Tensor implements Serializable, Cloneable {
                 }
                 return res;
             }
+            default:
+                throw new MatrixDimensionException("Input tensor length error.");
         }
-        System.err.println("Input errors!");
-        return null;
     }
 
     //返回一个新的0张量
     public static Tensor zero(Tensor_size _size){
-        return null;
+        switch (_size.getSize()){
+            case 1:{
+                int length = _size.getTensor_length()[0];
+                Tensor1D res = new Tensor1D( length );
+                res.darray.zero();
+                return res;
+            }
+            case 2:{
+                int[] length = _size.getTensor_length();
+                Tensor2D res = new Tensor2D( length[0], length[1] );
+                res.darray.zero();
+                return res;
+            }
+            case 3:{
+                int[] length = _size.getTensor_length();
+                Tensor3D res = new Tensor3D( length[0], length[1], length[2]);
+                for (int i = 0; i < res.darray.size(); i++){
+                    res.darray.get(i).zero();
+                }
+                return res;
+            }
+            default:
+                throw new MatrixDimensionException("Input tensor length error.");
+        }
+
     }
 
     /**

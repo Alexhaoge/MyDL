@@ -1,6 +1,9 @@
 package mydl.tensor;
+import org.ejml.MatrixDimensionException;
 import org.ejml.data.DMatrixRMaj;
 import org.ejml.dense.row.CommonOps_DDRM;
+
+import java.util.ArrayList;
 
 
 public class Tensor2D extends Tensor {
@@ -14,12 +17,12 @@ public class Tensor2D extends Tensor {
         int[] length = new int[2];
         length[0] = data.length/data[0].length;
         length[1] = data[0].length;
-        this.size = new Tensor_size(2, length);
+        this.size = new Tensor_size(length[0], length[1]);
         this.darray = new DMatrixRMaj(data);
     }
 
     public Tensor2D(double[] data) {
-        this.size = new Tensor_size(2, length);
+        this.size = new Tensor_size(data.length, 1);
         this.darray = new DMatrixRMaj(data);
     }
 
@@ -58,6 +61,61 @@ public class Tensor2D extends Tensor {
         return Tensor2D.add( t1, (-1)*minuend );
     }
 
+    public Tensor set_zero () {
+        Tensor2D res = new Tensor2D( this );
+        res.darray.zero();
+        return res;
+    }
+
+    public Tensor clone () {
+        return new Tensor2D( this );
+    }
+
+    public Tensor reshape (Tensor_size new_size) {
+        Tensor2D res = new Tensor2D( this );
+        res.darray.reshape( new_size.getTensor_length()[0],new_size.getTensor_length()[1],true );
+        return res;
+    }
+
+    public Tensor_size size () {
+        Tensor_size res = new Tensor_size( this.darray.getNumRows(), this.darray.getNumCols() );
+        return res;
+    }
+
+    public Tensor transpose () {
+        DMatrixRMaj d1 = new DMatrixRMaj(this.darray );
+        CommonOps_DDRM.transpose( d1 );
+        Tensor2D res = new Tensor2D( d1 );
+        return res;
+    }
+
+    public Tensor add (Tensor t2) {
+        if (t2 instanceof Tensor1D) {
+            DMatrixRMaj d1 = new DMatrixRMaj(this.darray );
+            CommonOps_DDRM.add(d1, ((Tensor1D) t2).darray, d1);
+            return new Tensor2D( d1 );
+        }
+        else if(t2 instanceof Tensor2D) {
+            DMatrixRMaj d1 = new DMatrixRMaj(this.darray );
+            CommonOps_DDRM.add(d1, ((Tensor1D) t2).darray, d1);
+            return new Tensor2D( d1 );
+        }
+        else if(t2 instanceof Tensor3D) {
+            ArrayList<DMatrixRMaj> d1 = ((Tensor3D)t2).darray;
+            for (int i = 0; i < ((Tensor3D)t2).darray.size() ; i++){
+                CommonOps_DDRM.add(d1.get( i ), darray, d1.get( i ));
+            }
+            return new Tensor3D( d1 );
+        }
+        else{
+            throw new MatrixDimensionException("Tensor size error.");
+        }
+    }
+
+    public Tensor subtract (Tensor x) {
+        return null;
+    }
+
     public Tensor subtract (double minuend) {
         return this.add( (-1)*minuend );
     }
@@ -75,6 +133,11 @@ public class Tensor2D extends Tensor {
         return res;
     }
 
+    @Override
+    public Tensor dot_mul (Tensor x) {
+        return null;
+    }
+
     public static Tensor dot_mul (Tensor2D t1, double times) {
         Tensor2D res = new Tensor2D( t1 );
         CommonOps_DDRM.scale( times, res.darray );
@@ -86,19 +149,6 @@ public class Tensor2D extends Tensor {
         CommonOps_DDRM.scale( times, res.darray );
         return res;
     }
-
-    public Tensor tensor_mul(Tensor2D t2) {
-        Tensor2D res = new Tensor2D( this );
-        CommonOps_DDRM.mult(res.darray, t2.darray, res.darray);
-        return res;
-    }
-
-    public static Tensor tensor_mul(Tensor2D t1, Tensor2D t2) {
-        Tensor2D res = new Tensor2D( t1.darray.getNumRows(), t2.darray.getNumCols() );
-        CommonOps_DDRM.mult(t1.darray, t2.darray, res.darray);
-        return res;
-    }
-
 
     public Tensor divide(double dividend) {
         Tensor2D res = new Tensor2D( this );
@@ -134,10 +184,24 @@ public class Tensor2D extends Tensor {
         return res;
     }
 
-    public Tensor cross_mul(Tensor2D t2) {
-        Tensor2D res = new Tensor2D( this );
-        CommonOps_DDRM.mult( res.darray, t2.darray, res.darray );
-        return res;
+    public Tensor cross_mul(Tensor t2) {
+        if(t2 instanceof Tensor2D){
+            Tensor2D res = new Tensor2D( this );
+            CommonOps_DDRM.mult( res.darray, ((Tensor2D) t2).darray, res.darray );
+            return res;
+        }else if(t2 instanceof Tensor1D){
+            Tensor2D res = new Tensor2D( this );
+            CommonOps_DDRM.mult( res.darray, ((Tensor2D) t2).darray, res.darray );
+            return res;
+        }else if(t2 instanceof Tensor3D){
+            Tensor3D res = new Tensor3D( (Tensor3D) t2 );
+            for (int i = 0; i < res.darray.size(); i++) {
+                CommonOps_DDRM.mult(this.darray, res.darray.get( i ), res.darray.get( i ));
+            }
+            return res;
+        }else {
+            throw new MatrixDimensionException("Tensor size error.");
+        }
     }
 
     public Tensor pow(double pow) {
@@ -190,7 +254,7 @@ public class Tensor2D extends Tensor {
                 break;
             }
             default:{
-                System.err.println("Input error, i = 1 or i = 2.");
+                throw new MatrixDimensionException("Input error, i = 1 or i = 2.");
             }
         }
         return res;
@@ -208,10 +272,15 @@ public class Tensor2D extends Tensor {
                 break;
             }
             default:{
-                System.err.println("Input error, i = 1 or i = 2.");
+                throw new MatrixDimensionException("Input error, i = 1 or i = 2.");
             }
         }
         return res;
+    }
+
+    @Override
+    public Tensor sum (int axis, int... _axis) {
+        return null;
     }
 
     public double sum() {

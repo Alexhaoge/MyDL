@@ -73,21 +73,122 @@ public class Tensor3D extends Tensor {
         return Tensor3D.add( t1, (-1)*minuend );
     }
 
+    public Tensor set_zero () {
+        Tensor3D res = new Tensor3D( this );
+        for (int i = 0; i < res.darray.size(); i++){
+            res.darray.get( i ).zero();
+        }
+        return res;
+    }
+
+    public Tensor clone () {
+        return new Tensor3D( this );
+    }
+
+    public Tensor reshape (Tensor_size new_size) {
+        Tensor3D res = new Tensor3D( this );
+        for (int i = 0; i < new_size.getTensor_length()[2]; i++){
+            res.darray.get( i ).reshape( new_size.getTensor_length()[0], new_size.getTensor_length()[1], true );
+        }
+        return res;
+    }
+
+    public Tensor_size size () {
+        Tensor_size res = new Tensor_size( this.darray.get( 0 ).getNumRows(), this.darray.get( 0 ).getNumCols(), this.darray.size() );
+        return res;
+    }
+
+    public Tensor transpose () {
+        Tensor3D res = new Tensor3D( this.darray.get( 0 ).getNumCols(), this.darray.get( 0 ).getNumRows(), this.darray.size());
+        for (int i = 0; i < this.darray.size(); i++) {
+            DMatrixRMaj d1;
+            d1 = new DMatrixRMaj(this.darray.get( i ));
+            res.darray.add( d1 );
+        }
+        return res;
+    }
+
+    public Tensor add (Tensor t2) {
+        if (t2 instanceof Tensor3D) {
+            if (((Tensor3D) t2).darray.size() != this.darray.size()) {
+                throw new MatrixDimensionException("Tensor sizes differ.");
+            }
+            Tensor3D res = new Tensor3D( this );
+            for (int i = 0; i < this.darray.size(); i++){
+                CommonOps_DDRM.add( res.darray.get( i ), ((Tensor3D) t2).darray.get( i ), res.darray.get( i ) );
+            }
+            return res;
+        }
+        else if (t2 instanceof Tensor2D) {
+            Tensor3D res = new Tensor3D( this );
+            for (int i = 0; i < this.darray.size(); i++){
+                CommonOps_DDRM.add( res.darray.get( i ), ((Tensor2D) t2).darray, res.darray.get( i ) );
+            }
+            return res;
+        }
+        else if (t2 instanceof Tensor1D) {
+            Tensor3D res = new Tensor3D( this );
+            for (int i = 0; i < this.darray.size(); i++){
+                CommonOps_DDRM.add( res.darray.get( i ), ((Tensor1D) t2).darray, res.darray.get( i ) );
+            }
+            return res;
+        }
+        else {
+            throw new MatrixDimensionException("Tensor input error.");
+        }
+    }
+
+    public Tensor subtract (Tensor x) {
+        return this.add( x );
+    }
+
     public Tensor subtract (double minuend) {
         return this.add( (-1)*minuend );
     }
 
-    public static Tensor substracted (Tensor3D t1, double substract) {
-        return t1.subtracted( substract );
+    public static Tensor subtracted (Tensor3D t1, double subtract) {
+        return t1.subtracted( subtract );
     }
 
-    public Tensor subtracted (double substract) {
+    public Tensor subtracted (double subtract) {
         Tensor3D res = new Tensor3D( this );
         for (int i = 0; i < res.darray.size(); i++) {
             CommonOps_DDRM.scale( -1, res.darray.get( i ) );
-            CommonOps_DDRM.add( res.darray.get( i ), substract );
+            CommonOps_DDRM.add( res.darray.get( i ), subtract );
         }
         return res;
+    }
+
+    public Tensor dot_mul (Tensor t2) {
+        if (t2 instanceof Tensor3D){
+            if (((Tensor3D) t2).darray.size() != this.darray.size()) {
+                throw new MatrixDimensionException("Tensor sizes differ.");
+            }else {
+                Tensor3D res = new Tensor3D( this );
+                for (int i = 0; i<this.darray.size(); i++) {
+                    CommonOps_DDRM.elementMult(res.darray.get( i ), ((Tensor3D) t2).darray.get(i), res.darray.get( i ));
+                }
+                return res;
+            }
+        }
+        else if(t2 instanceof Tensor2D){
+            Tensor3D res = new Tensor3D( this );
+            for (int i = 0; i<this.darray.size(); i++) {
+                CommonOps_DDRM.elementMult(res.darray.get( i ), ((Tensor2D) t2).darray, res.darray.get( i ));
+            }
+            return res;
+        }
+        else if(t2 instanceof Tensor1D){
+            Tensor3D res = new Tensor3D( this );
+            for (int i = 0; i<this.darray.size(); i++) {
+                CommonOps_DDRM.elementMult(res.darray.get( i ), ((Tensor1D) t2).darray, res.darray.get( i ));
+            }
+            return res;
+        }
+        else{
+            throw new MatrixDimensionException("dot_mul Tensor input error.");
+        }
+
     }
 
     public static Tensor dot_mul (Tensor3D t1, double times) {
@@ -123,37 +224,6 @@ public class Tensor3D extends Tensor {
             CommonOps_DDRM.scale( int_times, res.darray.get( i ) );
         }
         return res;
-    }
-
-
-
-    public static Tensor cross_mul(Tensor3D t1, Tensor3D t2) throws MatrixDimensionException {
-        if (t1.darray.size() != t2.darray.size()) {
-            System.err.println("The N of 3D tensors differ.");
-            return null;
-        }
-        else {
-            Tensor3D res = new Tensor3D( t1 );
-            for (int i = 0; i < res.darray.size(); i++) {
-                CommonOps_DDRM.mult( t1.darray.get( i ), t2.darray.get( i ), res.darray.get( i ) );
-            }
-            return res;
-        }
-    }
-
-    public Tensor cross_mul(Tensor3D t2) {
-        if (this.darray.size() != t2.darray.size()) {
-            System.err.println("The N of 3D tensors differ.");
-            return null;
-        }
-        else {
-            Tensor3D res = new Tensor3D( this );
-            for (int i = 0; i < this.darray.size(); i++) {
-                CommonOps_DDRM.mult( res.darray.get( i ), t2.darray.get( i ), res.darray.get( i ) );
-            }
-            return res;
-        }
-
     }
 
     public Tensor pow(double pow) {
@@ -197,49 +267,50 @@ public class Tensor3D extends Tensor {
     public Tensor2D sum(int i) {
         switch (i){
             case 1:{
-                DMatrixRMaj res = new DMatrixRMaj( this.darray.get( 0 ).getNumRows(), this.darray.size() );
-                res.zero();
+                DMatrixRMaj d1 = new DMatrixRMaj( this.darray.get( 0 ).getNumRows(), this.darray.size() );
+                d1.zero();
                 for (int j = 0; j < this.darray.size(); j++){
                     DMatrixRMaj temp = new DMatrixRMaj(this.darray.get( i ).getNumRows(), 1);
                     CommonOps_DDRM.sumRows( this.darray.get( i ), temp );
                     for (int k = 0; k < temp.data.length; k++){
-                        res.data[j*this.darray.get( 0 ).getNumRows()+k] = temp.data[k];
+                        d1.data[j*this.darray.get( 0 ).getNumRows()+k] = temp.data[k];
                     }
                 }
-                Tensor2D res = new Tensor2D( res );
+                Tensor2D res = new Tensor2D( d1 );
                 return res;
-                break;
             }
             case 2:{
-                DMatrixRMaj res = new DMatrixRMaj( this.darray.get( 0 ).getNumCols(), this.darray.size() );
-                res.zero();
+                DMatrixRMaj d1 = new DMatrixRMaj( this.darray.get( 0 ).getNumCols(), this.darray.size() );
+                d1.zero();
                 for (int j = 0; j < this.darray.size(); j++){
                     DMatrixRMaj temp = new DMatrixRMaj(this.darray.get( i ).getNumCols(), 1);
                     CommonOps_DDRM.sumCols( this.darray.get( i ), temp );
                     for (int k = 0; k < temp.data.length; k++){
-                        res.data[j*this.darray.get( 0 ).getNumCols()+k] = temp.data[k];
+                        d1.data[j*this.darray.get( 0 ).getNumCols()+k] = temp.data[k];
                     }
                 }
-                Tensor2D res = new Tensor2D( res );
+                Tensor2D res = new Tensor2D( d1 );
                 return res;
-                break;
             }
             case 3:{
-                DMatrixRMaj res = new DMatrixRMaj(this.darray.get( 0 ).getNumRows(), this.darray.get( 0 ).getNumCols());
-                res.zero();
+                DMatrixRMaj d1 = new DMatrixRMaj(this.darray.get( 0 ).getNumRows(), this.darray.get( 0 ).getNumCols());
+                d1.zero();
                 for (int j = 0; j < this.darray.size(); j++ ){
-                    res.data[j] += this.darray.get( i ).data[j];
+                    d1.data[j] += this.darray.get( i ).data[j];
                 }
-                Tensor2D res = new Tensor2D( res );
+                Tensor2D res = new Tensor2D( d1 );
                 return res;
-                break;
             }
             default:{
-                System.err.println("input errors. i = 1, 2, 3");
-                return null;
+                throw new MatrixDimensionException("Tensor size input error.");
             }
         }
 
+    }
+
+    @Override
+    public Tensor sum (int axis, int... _axis) {
+        return null;
     }
 
     public static double sum(Tensor3D t1) {
@@ -268,7 +339,12 @@ public class Tensor3D extends Tensor {
     }
 
     public Tensor reshape (int x, int y) {
-        return null;
+        Tensor3D res = new Tensor3D( this );
+        for (int i = 0; i < this.darray.size(); i++) {
+            this.darray.get( i ).reshape( x, y, true );
+            res.darray.add(this.darray.get( i ).copy());
+        }
+        return res;
     }
 
     public Tensor reshape (int x) {
@@ -316,22 +392,44 @@ public class Tensor3D extends Tensor {
 
         return res2;
     }
-    public Tensor tensor_mul(Tensor3D t2) {
-        if (t2.darray.size() != this.darray.size()) {
-            System.err.println("Length of two 3D-Tensor differs.");
-            return null;
-        }else {
+    public Tensor cross_mul(Tensor t2) {
+        if (t2 instanceof Tensor3D){
+            if (((Tensor3D) t2).darray.size() != this.darray.size()) {
+                throw new MatrixDimensionException("Tensor sizes differ.");
+            }else {
+                Tensor3D res = new Tensor3D( this );
+                for (int i = 0; i<this.darray.size(); i++) {
+                    CommonOps_DDRM.mult(res.darray.get( i ), ((Tensor3D) t2).darray.get(i), res.darray.get( i ));
+                }
+                return res;
+            }
+        }
+        else if(t2 instanceof Tensor2D){
             Tensor3D res = new Tensor3D( this );
             for (int i = 0; i<this.darray.size(); i++) {
-                CommonOps_DDRM.mult(res.darray.get( i ), t2.darray.get(i), res.darray.get( i ));
+                CommonOps_DDRM.mult(res.darray.get( i ), ((Tensor2D) t2).darray, res.darray.get( i ));
             }
             return res;
         }
+        else if(t2 instanceof Tensor1D){
+            Tensor3D res = new Tensor3D( this );
+            for (int i = 0; i<this.darray.size(); i++) {
+                CommonOps_DDRM.mult(res.darray.get( i ), ((Tensor1D) t2).darray, res.darray.get( i ));
+            }
+            return res;
+        }
+        else{
+            throw new MatrixDimensionException("cross_mul Tensor input error.");
+        }
     }
-    public static Tensor tensor_mul(Tensor3D t1, Tensor3D t2) {
+
+    public Tensor divide (double x) {
+        return this.dot_mul( 1.0/x );
+    }
+
+    public static Tensor cross_mul(Tensor3D t1, Tensor3D t2) {
         if (t2.darray.size() != t1.darray.size()) {
-            System.err.println("Length of two 3D-Tensor differs.");
-            return null;
+            throw new MatrixDimensionException("Tensor sizes differ.");
         }else {
             Tensor3D res = new Tensor3D( t1 );
             for (int i = 0; i<t1.darray.size(); i++) {
