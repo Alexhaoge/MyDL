@@ -84,14 +84,16 @@ public abstract class Model{
 
     /**
      * Compile this model. 
-     * <p> Optimizer and loss function will be added while input size and 
-     * output size of every two adjacent layers will be checked to see if they fit.
+     * <p> Optimizer and loss function will be added.
      * @param _opt opimizer to add
      * @param _loss loss function to add
-     * @throws Exception if the tensor sizes of two adjacent layers do not fit
+     * @throws RuntimeException if the tensor sizes of two adjacent layers do not fit.
+     * @apiNote Tensor size check is not implemented in {@link Model} but in {@link Sequential}.
      */
-    public abstract void compile(Optimizer _opt, Loss _loss)
-        throws Exception;
+    public void compile(Optimizer _opt, Loss _loss) throws RuntimeException{
+        opt = _opt;
+        loss = _loss;
+    }
 
     /**
      * Set all the gradients of layers' parameters to zero.

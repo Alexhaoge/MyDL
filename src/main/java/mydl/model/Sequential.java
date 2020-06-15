@@ -4,6 +4,7 @@ import mydl.layer.Layer;
 import mydl.loss.Loss;
 import mydl.optimizer.Optimizer;
 import mydl.tensor.Tensor;
+import mydl.tensor.Tensor_size;
 
 /**
  * The {@code Sequetial} class is a model where all the layers stack linearly.
@@ -36,9 +37,25 @@ public class Sequential extends Model{
         return grad;
     }
 
-    public void compile(Optimizer _opt, Loss _loss){
-        opt = _opt;
-        loss = _loss;
+    /**
+     * Compile this sequential model.
+     * <p>Optimizer and loss function will be added while input size and output size of
+     * every two adjacent layers will be checked to see if they fit.
+     * @param _opt {@link Optimizer} to add.
+     * @param _loss {@link Loss} function to add.
+     * @throws RuntimeException if the tensor sizes of two adjacent layers do not fit.
+     */
+    public void compile(Optimizer _opt, Loss _loss) throws RuntimeException {
+        super.compile(_opt, _loss);
+        //check size
+        Tensor_size lastsize = null;
+        for(int i=0; i < layers.size() - 1; i++){
+            if(layers.get(i).getInputSize() == null) continue;
+            if(lastsize != null && lastsize.equals(layers.get(i+1).getInputSize()) != true)
+                throw new RuntimeException("The output size of Layer-"+Integer.toString(i)
+                    +" does not match with the input size of Layer-"+Integer.toString(i+1));
+            lastsize = layers.get(i).getOutputSize();
+        }
     }
 
     /**
