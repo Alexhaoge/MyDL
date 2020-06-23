@@ -7,15 +7,27 @@ import java.util.ArrayList;
 
 
 public class Tensor1D extends Tensor {
+
+    private static final long serialVersionUID = 743000385145097795L;
+
+    /**
+     * DMatrixRMaj for storing data.
+     * @see {@link org.ejml.data.DMatrixRMaj}
+     */
     DMatrixRMaj darray = new DMatrixRMaj();
 
-    // The default construction method gives a one-colums matrix(an array).
+    /**
+     * The default construction method gives a one-colums matrix(an array).
+     */
     public Tensor1D(double[] data) {
         this.size = new Tensor_size( data.length );
         this.darray = new DMatrixRMaj(data);
     }
 
-    //Cations! If the input is not an array, the result may be strange.
+    /**
+     * Cations! If the input is not an array, the result may be strange.
+     * @see {@link Tensor}
+     */
     public Tensor1D(DMatrixRMaj darray) {
         this.size = new Tensor_size( darray.data.length );
         this.darray = new DMatrixRMaj(darray.data);

@@ -8,6 +8,13 @@ import java.util.ArrayList;
 
 
 public class Tensor3D extends Tensor {
+
+    private static final long serialVersionUID = -4968352852257997738L;
+
+    /**
+     * ArrayList of DMatrixRMaj for storing data.
+     * @see {@link org.ejml.data.DMatrixRMaj}, {@link ArrayList}
+     */
     ArrayList<DMatrixRMaj> darray = new ArrayList<DMatrixRMaj>();
     // The default construction method gives a one-colums matrix(an array).
 //    public Tensor3D(double[][] data) {

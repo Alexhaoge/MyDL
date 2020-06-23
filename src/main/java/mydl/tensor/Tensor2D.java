@@ -7,6 +7,13 @@ import java.util.ArrayList;
 
 
 public class Tensor2D extends Tensor {
+
+    private static final long serialVersionUID = 2602694190691785623L;
+
+    /**
+     * DMatrixRMaj for storing data.
+     * @see {@link org.ejml.data.DMatrixRMaj}
+     */
     DMatrixRMaj darray = new DMatrixRMaj();
 
     /**

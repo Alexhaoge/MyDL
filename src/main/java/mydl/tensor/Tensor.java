@@ -99,8 +99,17 @@ public abstract class Tensor implements Serializable, Cloneable {
 
     public abstract Tensor reshape(Tensor_size new_size);
 
-    // return type undecided
-    public abstract Object size();
+    /**
+     * Get the shape of this tensor.
+     * @return A {@link Tensor_size} object indicating the shape of tensor.
+     */
+    public abstract Tensor_size size();
+
+    public int total_size(){
+        int _total = 1;
+        for(int i = 0; i < this.size.getSize(); i++)
+            _total *= this.size[i];
+    }
 
     // 矩阵转置
     public abstract Tensor transpose();
@@ -178,6 +187,9 @@ public abstract class Tensor implements Serializable, Cloneable {
     public abstract Tensor pow(double x);
 
     public abstract Tensor pow(int x);
+
+    //ln(this),自然对数
+    public abstract Tensor ln();
 
     /**
      * 所有数的和

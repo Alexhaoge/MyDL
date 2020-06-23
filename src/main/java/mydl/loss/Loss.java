@@ -23,7 +23,8 @@ public abstract class Loss {
      * @param predicted the output tensor calculated by the neural network
      * @param actual the actual result
      * @return the gradient of the loss function
+     * @exception IndexOutOfBoundsException if the output size of model does not match with the target size.
      */
-    public abstract Tensor grad(Tensor predicted, Tensor actual);
+    public abstract Tensor grad(Tensor predicted, Tensor actual) throws IndexOutOfBoundsException;
 
 }
