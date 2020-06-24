@@ -1,5 +1,6 @@
 package mydl.layer;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -10,7 +11,9 @@ import mydl.tensor.Tensor_size;
 /**
  * The {@code Layer} class defines the abstract of all layer class.
  */
-public abstract class Layer implements Iterable<String>{
+public abstract class Layer implements Iterable<String>, Serializable{
+
+    private static final long serialVersionUID = 1649087768762844258L;
 
     /**
      * A {@code Map<String, Tensor>} including all parameters of the layer.

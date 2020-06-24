@@ -9,8 +9,11 @@ import mydl.tensor.Tensor;
  * <p>All activation function should implement forward and backward propagation with the {@link Function} interface of Tensor.
  */
 public abstract class Activation extends Layer{
+    
+    private static final long serialVersionUID = -7903859352154021415L;
+    
     /**
-     * _f is the exact function 
+     * _f is the exact function
      */
     protected Function<Tensor, Tensor> _f;
     /**

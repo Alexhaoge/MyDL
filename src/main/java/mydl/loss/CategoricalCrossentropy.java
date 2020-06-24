@@ -8,12 +8,16 @@ import mydl.tensor.Tensor;
  */
 public class CategoricalCrossentropy extends Loss{
 
+    private static final long serialVersionUID = 1289447773346730453L;
+
     /**
      * Forward propagation.
+     * 
      * @param predicted the output tensor calculated by the neural network
-     * @param actual the actual target tensor
+     * @param actual    the actual target tensor
      * @return the loss value
-     * @exception IndexOutOfBoundsException if the output size of model does not match with the target size.
+     * @exception IndexOutOfBoundsException if the output size of model does not
+     *                                      match with the target size.
      * @exception IndexOutOfBoundsException if the output is Tensor of size 1.
      * @see {@link Loss#loss}
      */

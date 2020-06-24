@@ -8,7 +8,9 @@ import mydl.tensor.Tensor;
  */
 public class SSE extends Loss{
 
-    public double loss(Tensor predicted, Tensor actual){
+    private static final long serialVersionUID = 1514844558738854974L;
+
+    public double loss(Tensor predicted, Tensor actual) {
         if(predicted.size().equals(actual.size()))
             return (predicted.subtract(actual).pow(2)).sum();
         else

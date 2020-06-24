@@ -8,13 +8,17 @@ import mydl.tensor.Tensor1D;
  * <p>{@code Loss = - Σactual·ln(predicted)}
  */
 public class BinaryCrossentropy extends Loss {
-    
+
+    private static final long serialVersionUID = 4575604140988685172L;
+
     /**
      * Forward propagation.
+     * 
      * @param predicted the output tensor calculated by the neural network
-     * @param actual the actual target tensor
+     * @param actual    the actual target tensor
      * @return the loss value
-     * @exception IndexOutOfBoundsException if the output size of model does not match with the target size.
+     * @exception IndexOutOfBoundsException if the output size of model does not
+     *                                      match with the target size.
      * @exception IndexOutOfBoundsException if the output is not Tensor1D of size 2.
      * @see {@link Loss#loss}
      */

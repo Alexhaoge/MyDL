@@ -8,10 +8,9 @@ import java.io.Serializable;
  * It is similiar to numpy.ndarray in Python.
  */
 public abstract class Tensor implements Serializable, Cloneable {
-    /**
-     *
-     */
-    private static final long serialVersionUID = 1L;
+
+    private static final long serialVersionUID = -5694231439125166069L;
+
     /**
      * size类型你来决定
      */

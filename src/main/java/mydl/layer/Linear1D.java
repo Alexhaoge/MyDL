@@ -8,8 +8,11 @@ import mydl.tensor.Tensor_size;
  */
 public class Linear1D extends Layer {
     
+    private static final long serialVersionUID = -7154260811890566511L;
+
     /**
-     * Record
+     * Record the input of forward propagation to calculate 
+     * the gradients in the backward propagation
      */
     protected Tensor inputs;
 
