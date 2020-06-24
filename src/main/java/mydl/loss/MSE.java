@@ -4,8 +4,7 @@ import mydl.tensor.Tensor;
 
 /**
  * The {@code MSE} is the mean squared error.
- * <p>
- * {@code Loss = sum((predict - actual)^2) / size}
+ * <p>{@code Loss = sum((predict - actual)^2) / size}
  */
 public class MSE {
     

@@ -15,7 +15,7 @@ public abstract class Tensor implements Serializable, Cloneable {
     /**
      * size类型你来决定
      */
-    Tensor_size size;
+    public Tensor_size size;
 
     /**
      * 根据size生成一个随机数的tensor
@@ -108,7 +108,8 @@ public abstract class Tensor implements Serializable, Cloneable {
     public int total_size(){
         int _total = 1;
         for(int i = 0; i < this.size.getSize(); i++)
-            _total *= this.size[i];
+            _total *= this.size.Tensor_length[i];
+        return _total;
     }
 
     // 矩阵转置
@@ -164,6 +165,13 @@ public abstract class Tensor implements Serializable, Cloneable {
     }
 
     /**
+     * this / x 按位除法，注意是两个tensor每一位做除法，请务必和divide区分开
+     * @param x
+     * @return
+     */
+    public abstract Tensor divided(Tensor x);
+
+    /**
      * x / this 按位除，请务必和divided区分开
      * @param x
      * @return
@@ -182,6 +190,15 @@ public abstract class Tensor implements Serializable, Cloneable {
 
     public Tensor tanh(){
         return sigmoid().dot_mul(2).subtract(1);
+    }
+
+    /**
+     * relu 我activation里没法写甩锅了,t是ReLU推广形式里>0的那个lambda
+     * @return
+     */
+    public abstract Tensor relu(double t);
+    public Tensor relu(){
+        return this.relu(1.0);
     }
 
     public abstract Tensor pow(double x);

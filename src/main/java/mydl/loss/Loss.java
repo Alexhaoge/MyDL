@@ -8,9 +8,9 @@ import mydl.tensor.Tensor;
  * and a grad method to calculate the gradient of loss function.
  */
 public abstract class Loss {
-    
+
     /**
-     * calculate the loss value, must be implemented
+     * Calculate the loss value for forward propagation.
      * @param predicted the output tensor calculated by the neural network
      * @param actual the actual result
      * @return the loss value
@@ -19,7 +19,7 @@ public abstract class Loss {
     public abstract double loss(Tensor predicted, Tensor actual) throws IndexOutOfBoundsException;
 
     /**
-     * calculate the gradient for back propagation
+     * Calculate the gradient for backward propagation.
      * @param predicted the output tensor calculated by the neural network
      * @param actual the actual result
      * @return the gradient of the loss function

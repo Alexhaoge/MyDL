@@ -3,8 +3,8 @@ package mydl.loss;
 import mydl.tensor.Tensor;
 
 /**
- * The {@code SSE} is the sum of the squared error.<p>
- * {@code Loss = sum((predict - actual)^2)}
+ * The {@code SSE} is the sum of the squared error.
+ * <p>{@code Loss = sum((predict - actual)^2)}
  */
 public class SSE extends Loss{
 
