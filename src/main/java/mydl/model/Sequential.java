@@ -13,8 +13,11 @@ import mydl.tensor.Tensor_size;
  */
 public class Sequential extends Model{
 
+    private static final long serialVersionUID = 7590736785691222057L;
+
     /**
      * Forward propagation of Sequential model.
+     * 
      * @param inputs
      * @return output of sequential model
      */

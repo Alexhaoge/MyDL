@@ -12,6 +12,8 @@ import mydl.tensor.Tensor;
  */
 public class SGD extends Optimizer {
     
+    private static final long serialVersionUID = 261476408177584524L;
+    
     /**
      * learning rate, a positive double type, 0.01 on default
      */

@@ -2,15 +2,18 @@ package mydl.layer;
 
 import java.util.function.Function;
 
-import mydl.layer.Layer;
 import mydl.tensor.Tensor;
 
 /**
- * The {@code Activation} class is the abstract of all activation function 
+ * The {@code Activation} class is the abstract of all activation function.
+ * <p>All activation function should implement forward and backward propagation with the {@link Function} interface of Tensor.
  */
 public abstract class Activation extends Layer{
+    
+    private static final long serialVersionUID = -7903859352154021415L;
+    
     /**
-     * _f is the exact function 
+     * _f is the exact function
      */
     protected Function<Tensor, Tensor> _f;
     /**

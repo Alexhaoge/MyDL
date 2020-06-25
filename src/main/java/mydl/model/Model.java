@@ -1,5 +1,11 @@
 package mydl.model;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -15,8 +21,10 @@ import mydl.utils.Data;
  * <p> Currently only {@link Sequential} model is implemented, 
  * but we also write this abstract class to declare what needs to be implement for a user-defined model class.
  */
-public abstract class Model{
+public abstract class Model implements Serializable{
     
+    private static final long serialVersionUID = -4595657931755877646L;
+
     /**
      * ArrayList of layers
      */
@@ -172,5 +180,24 @@ public abstract class Model{
         for(int i = 0; i < inputs.size(); i++)
             results.add(forward(inputs.get(i)));
         return results;
+    }
+
+    /**
+     * Save a model by {@link Serializable} interface.
+     * @param filepath String. Relative or absolute path of the model file.
+     */
+    public void saveModel(String filepath){
+        try(ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(filepath))){
+            out.writeObject(this);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static Model loadModel(String filepath) throws ClassNotFoundException, IOException {
+        ObjectInputStream in = new ObjectInputStream(new FileInputStream(filepath));
+        Model model = (Model) in.readObject();
+        in.close();
+        return model;
     }
 }

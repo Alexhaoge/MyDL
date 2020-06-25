@@ -1,12 +1,15 @@
 package mydl.tensor;
+import java.io.Serializable;
+
 import org.ejml.MatrixDimensionException;
 
-public class Tensor_size {
-    int[] Tensor_length = new int[3];
+public class Tensor_size implements Serializable{
+    private static final long serialVersionUID = 523720096098957559L;
+    public int[] Tensor_length = new int[3];
     public int size = 0;
-    public Tensor_size (int... Tensor_length) {
+    public Tensor_size (int... _Tensor_length) {
         size = 0;
-        for (int i : Tensor_length) {
+        for (int i : _Tensor_length) {
             if (i > 0){
                 this.Tensor_length[size] = i;
                 size ++;

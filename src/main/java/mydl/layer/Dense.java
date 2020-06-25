@@ -7,6 +7,7 @@ import mydl.tensor.Tensor;
  * @deprecated not sure if used
  */
 public class Dense extends Layer {
+
     /**
      * Creates a new instance of Dense with given cell number and activation function
      * @param cells number of Nuerons
@@ -17,8 +18,12 @@ public class Dense extends Layer {
     //     super(cells, activation);
     // }    
 
+    private static final long serialVersionUID = -6743542431764008614L;
+
     /**
-     * Create a new instance of layer with given Nueron number and default linear activation function
+     * Create a new instance of layer with given Nueron number and default linear
+     * activation function
+     * 
      * @param cells number of Nuerons
      * @throws IllegalArgumentException if @param cells less than 1
      */
