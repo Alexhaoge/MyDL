@@ -42,7 +42,7 @@ public abstract class Activation extends Layer{
      * @return output tensor
      */
     public Tensor forward(Tensor inputs){
-        input  = inputs;
+        input = inputs;
         return _f.apply(inputs);
     }
 

@@ -448,15 +448,15 @@ public class Tensor3D extends Tensor {
             return res;
         }
     }
-    public Tensor ReLU() {
+    public Tensor relu(double t) {
         Tensor3D res = new Tensor3D( this );
         for (int i = 0; i < res.darray.size(); i++) {
             CommonOps_DDRM.abs(this.darray.get( i ), res.darray.get( i ));
-            CommonOps_DDRM.add( 0.5, this.darray.get( i ), 0.5, res.darray.get( i ), res.darray.get( i ) );
+            CommonOps_DDRM.add( 0.5*t, this.darray.get( i ), 0.5*t, res.darray.get( i ), res.darray.get( i ) );
         }
         return res;
     }
-    public Tensor DiffReLU() {
+    public Tensor DiffReLU(double t) {
         Tensor3D res = new Tensor3D( this );
         for (int i = 0; i < res.darray.size(); i++) {
             CommonOps_DDRM.abs( this.darray.get( i ), res.darray.get( i ) );

@@ -328,13 +328,13 @@ public class Tensor2D extends Tensor {
         CommonOps_DDRM.add( res1.darray, res2.darray, res.darray );
         return res;
     }
-    public Tensor ReLU() {
+    public Tensor relu(double t) {
         Tensor2D res = new Tensor2D( this );
         CommonOps_DDRM.abs(this.darray, res.darray);
-        CommonOps_DDRM.add( 0.5, this.darray, 0.5, res.darray, res.darray );
+        CommonOps_DDRM.add( 0.5*t, this.darray, 0.5*t, res.darray, res.darray );
         return res;
     }
-    public Tensor DiffReLU() {
+    public Tensor DiffReLU(double t) {
         Tensor2D res = new Tensor2D( this );
         CommonOps_DDRM.abs( this.darray, res.darray );
         CommonOps_DDRM.add( this.darray, res.darray, res.darray );
