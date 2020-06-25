@@ -34,14 +34,17 @@ public class Tensor2D extends Tensor {
      */
 
     public Tensor2D(DMatrixRMaj darray) {
+        this.size = new Tensor_size( darray.getNumRows(), darray.getNumCols() );
         this.darray = darray.copy();
     }
 
     public Tensor2D(int rownum, int colnum) {
+        this.size = new Tensor_size( rownum, colnum );
         this.darray = new DMatrixRMaj(rownum, colnum);
     }
 
     public Tensor2D(Tensor2D t1) {
+        this.size = new Tensor_size( t1.size.getTensor_length() );
         this.darray = new DMatrixRMaj(t1.darray);
     }
 
@@ -317,5 +320,34 @@ public class Tensor2D extends Tensor {
         CommonOps_DDRM.scale( -1, res2.darray );
         CommonOps_DDRM.add( res1.darray, res2.darray, res.darray );
         return res;
+    }
+    public Tensor ReLU() {
+        Tensor2D res = new Tensor2D( this );
+        CommonOps_DDRM.abs(this.darray, res.darray);
+        CommonOps_DDRM.add( 0.5, this.darray, 0.5, res.darray, res.darray );
+        return res;
+    }
+    public Tensor DiffReLU() {
+        Tensor2D res = new Tensor2D( this );
+        CommonOps_DDRM.abs( this.darray, res.darray );
+        CommonOps_DDRM.add( this.darray, res.darray, res.darray );
+        CommonOps_DDRM.elementDiv( this.darray, res.darray, res.darray );
+        for (int i = 0; i < res.darray.getData().length; i++) {
+            if (Double.isNaN( res.darray.getData()[i] )) {
+                res.darray.getData()[i] = 0;
+            }
+        }
+        return res;
+    }
+    public Tensor sgn() {
+        Tensor2D res = new Tensor2D( this );
+        CommonOps_DDRM.abs(this.darray, res.darray);
+        CommonOps_DDRM.elementDiv( this.darray, res.darray, res.darray );
+        for (int i = 0; i < res.darray.getData().length; i++) {
+            if (Double.isNaN( res.darray.getData()[i] )) {
+                res.darray.getData()[i] = 0;
+            }
+        }
+        return  res;
     }
 }

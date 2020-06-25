@@ -27,7 +27,7 @@ public class Tensor1D extends Tensor {
     }
 
     public Tensor1D(Tensor1D t1) {
-        this.size = t1.size;
+        this.size = new Tensor_size( t1.size.getTensor_length() );
         this.darray = new DMatrixRMaj(t1.darray);
     }
 
@@ -293,5 +293,34 @@ public class Tensor1D extends Tensor {
         CommonOps_DDRM.scale( -1, res2.darray );
         CommonOps_DDRM.add( res1.darray, res2.darray, res.darray );
         return res;
+    }
+    public Tensor ReLU() {
+        Tensor1D res = new Tensor1D( this );
+        CommonOps_DDRM.abs(this.darray, res.darray);
+        CommonOps_DDRM.add( 0.5, this.darray, 0.5, res.darray, res.darray );
+        return res;
+    }
+    public Tensor DiffReLU() {
+        Tensor1D res = new Tensor1D( this );
+        CommonOps_DDRM.abs(this.darray, res.darray);
+        CommonOps_DDRM.add( this.darray, res.darray, res.darray);
+        CommonOps_DDRM.elementDiv( this.darray, res.darray, res.darray );
+        for (int i = 0; i < res.darray.getData().length; i++) {
+            if (Double.isNaN( res.darray.getData()[i] )) {
+                res.darray.getData()[i] = 0;
+            }
+        }
+        return res;
+    }
+    public Tensor sgn() {
+        Tensor1D res = new Tensor1D( this );
+        CommonOps_DDRM.abs( this.darray, res.darray );
+        CommonOps_DDRM.elementDiv( this.darray, res.darray, res.darray );
+        for (int i = 0; i < res.darray.getData().length; i++) {
+            if (Double.isNaN( res.darray.getData()[i] )) {
+                res.darray.getData()[i] = 0;
+            }
+        }
+        return  res;
     }
 }

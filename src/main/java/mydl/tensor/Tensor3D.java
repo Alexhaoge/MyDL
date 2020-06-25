@@ -14,11 +14,13 @@ public class Tensor3D extends Tensor {
 //        this.darray = new DMatrixRMaj(data);
 //    }
 
-    public Tensor3D(ArrayList<double[][]> a, double N) {
+    public Tensor3D(ArrayList<double[][]> a, int N) {
         for (int i = 0; i < N; i++) {
             DMatrixRMaj temp = new DMatrixRMaj(a.get( i ));
             this.darray.add( temp );
         }
+        this.size = new Tensor_size( a.get( 0 ).length,1, N);
+
     }
 
     //Cations! If the input is not an array, the result may be strange.
@@ -313,6 +315,7 @@ public class Tensor3D extends Tensor {
         return null;
     }
 
+
     public static double sum(Tensor3D t1) {
         double tempsum = 0;
         for (int i = 0; i < t1.darray.size(); i++) {
@@ -437,6 +440,43 @@ public class Tensor3D extends Tensor {
             }
             return res;
         }
+    }
+    public Tensor ReLU() {
+        Tensor3D res = new Tensor3D( this );
+        for (int i = 0; i < res.darray.size(); i++) {
+            CommonOps_DDRM.abs(this.darray.get( i ), res.darray.get( i ));
+            CommonOps_DDRM.add( 0.5, this.darray.get( i ), 0.5, res.darray.get( i ), res.darray.get( i ) );
+        }
+        return res;
+    }
+    public Tensor DiffReLU() {
+        Tensor3D res = new Tensor3D( this );
+        for (int i = 0; i < res.darray.size(); i++) {
+            CommonOps_DDRM.abs( this.darray.get( i ), res.darray.get( i ) );
+            CommonOps_DDRM.add( this.darray.get( i ), res.darray.get( i ), res.darray.get( i ) );
+            CommonOps_DDRM.elementDiv( this.darray.get( i ), res.darray.get( i ), res.darray.get( i ) );
+        }
+        for (int i = 0; i < res.darray.size(); i++) {
+            for (int j = 0; j < res.darray.get(i).getData().length; j++) {
+                if (Double.isNaN( res.darray.get(i).getData()[j] )) {
+                    res.darray.get(i).getData()[j] = 0;
+                }
+            }
+        }
+        return res;
+    }
+    public Tensor sgn() {
+        Tensor3D res = new Tensor3D( this );
+        for (int i = 0; i < res.darray.size(); i++) {
+            CommonOps_DDRM.abs(this.darray.get( i ), res.darray.get( i ));
+            CommonOps_DDRM.elementDiv( this.darray.get( i ), res.darray.get( i ), res.darray.get( i ) );
+            for (int j = 0; j < res.darray.get( i ).getData().length; j++) {
+                if (Double.isNaN( res.darray.get( i ).getData()[j] )) {
+                    res.darray.get( i ).getData()[j] = 0;
+                }
+            }
+        }
+        return  res;
     }
 
 }

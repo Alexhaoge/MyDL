@@ -192,5 +192,8 @@ public abstract class Tensor implements Serializable, Cloneable {
      */
     public abstract Tensor sum(int axis);
     public abstract Tensor sum(int axis, int... _axis);//压缩某些维，先不用实现
+    public abstract Tensor ReLU();
+    public abstract Tensor sgn();
+    public abstract Tensor DiffReLU();
 
 }
