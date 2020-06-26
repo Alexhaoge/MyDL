@@ -55,43 +55,81 @@ public class Tensor2D extends Tensor {
         this.darray = new DMatrixRMaj(t1.darray);
     }
 
+    /**
+     * Res_{i, j} = t1_{i, j} + addtion
+     * @param t1
+     * @param addtion
+     * @return
+     */
     public static Tensor add (Tensor2D t1, double addtion) {
         Tensor2D res = new Tensor2D(t1);
         CommonOps_DDRM.add( res.darray, addtion );
         return res;
     }
 
+    /**
+     * Res_{i, j} = this_{i, j} + addtion
+     * @param addtion
+     * @return
+     */
     public Tensor add (double addtion) {
         Tensor2D res = new Tensor2D(this);
         CommonOps_DDRM.add(res.darray, addtion );
         return res;
     }
 
+    /**
+     * Res_{i, j} = t1_{i, j} - minuend
+     * @param t1
+     * @param minuend
+     * @return
+     */
     public static Tensor subtract (Tensor2D t1, double minuend) {
         return Tensor2D.add( t1, (-1)*minuend );
     }
 
+    /**
+     * this_{i, j} = 0
+     * @return
+     */
     public Tensor set_zero () {
         Tensor2D res = new Tensor2D( this );
         res.darray.zero();
         return res;
     }
 
+    /**
+     * Deep clone: Res = this
+     * @return
+     */
     public Tensor clone () {
         return new Tensor2D( this );
     }
 
+    /**
+     * Res: rownum, colnum, N: new_size.Tensor_length[0], [1], [2]
+     * @param new_size
+     * @return
+     */
     public Tensor reshape (Tensor_size new_size) {
         Tensor2D res = new Tensor2D( this );
         res.darray.reshape( new_size.getTensor_length()[0],new_size.getTensor_length()[1],true );
         return res;
     }
 
+    /**
+     * Res = {rownum of this, colnum}
+     * @return
+     */
     public Tensor_size size () {
         Tensor_size res = new Tensor_size( this.darray.getNumRows(), this.darray.getNumCols() );
         return res;
     }
 
+    /**
+     * Res = this^T
+     * @return
+     */
     public Tensor transpose () {
         DMatrixRMaj d1 = new DMatrixRMaj(this.darray );
         CommonOps_DDRM.transpose( d1 );
@@ -99,6 +137,11 @@ public class Tensor2D extends Tensor {
         return res;
     }
 
+    /**
+     * Res_{i, j} = this_{i, j} + t2_{i, j}
+     * @param t2
+     * @return
+     */
     public Tensor add (Tensor t2) {
         if (t2 instanceof Tensor1D) {
             DMatrixRMaj d1 = new DMatrixRMaj(this.darray );
@@ -122,20 +165,48 @@ public class Tensor2D extends Tensor {
         }
     }
 
-    public Tensor subtract (Tensor x) {
-        return null;
+    /**
+     * Res_{i, j} = this_{i, j}-t2_{i, j}
+     * @param t2
+     * @return
+     */
+    public Tensor subtract (Tensor t2) {
+        if (t2 instanceof Tensor2D){
+            Tensor2D res = new Tensor2D( this );
+            CommonOps_DDRM.subtract(res.darray, ((Tensor1D) t2).darray, res.darray);
+            return res;
+        }
+        else {
+            throw new MatrixDimensionException("Tensor sizes differ.");
+        }
     }
 
+    /**
+     * Res_{i, j} = this_{i, j}-minuend
+     * @param minuend
+     * @return
+     */
     public Tensor subtract (double minuend) {
         return this.add( (-1)*minuend );
     }
 
+    /**
+     * Res_{i, j} = substract - t1_{i, j}
+     * @param t1
+     * @param substract
+     * @return
+     */
     public static Tensor substracted (Tensor2D t1, double substract) {
         Tensor2D res = new Tensor2D( t1 );
         res.dot_mul( -1 );
         return (Tensor2D) Tensor2D.add( res , substract );
     }
 
+    /**
+     * Res_{i, j} = substract - this_{i, j}
+     * @param substract
+     * @return
+     */
     public Tensor subtracted (double substract) {
         Tensor2D res = new Tensor2D( this );
         CommonOps_DDRM.scale( -1, res.darray );
@@ -143,29 +214,62 @@ public class Tensor2D extends Tensor {
         return res;
     }
 
-    @Override
-    public Tensor dot_mul (Tensor x) {
-        return null;
+    /**
+     * Res_{i, j} = this_{i, j}*t2_{i, j}
+     * @param t2
+     * @return
+     */
+    public Tensor dot_mul (Tensor t2) {
+        if(t2 instanceof Tensor2D){
+            Tensor2D res = new Tensor2D( this );
+            CommonOps_DDRM.elementMult( res.darray, ((Tensor1D) t2).darray, res.darray );
+            return res;
+        }
+        else {
+            throw new MatrixDimensionException("Tensor sizes differ.");
+        }
     }
 
+    /**
+     * Res_{i, j} = t1_{i, j}*times
+     * @param t1
+     * @param times
+     * @return
+     */
     public static Tensor dot_mul (Tensor2D t1, double times) {
         Tensor2D res = new Tensor2D( t1 );
         CommonOps_DDRM.scale( times, res.darray );
         return res;
     }
 
+    /**
+     * Res_{i, j} = this_{i, j}*times
+     * @param times
+     * @return
+     */
     public Tensor dot_mul (double times) {
         Tensor2D res = new Tensor2D( this );
         CommonOps_DDRM.scale( times, res.darray );
         return res;
     }
 
+    /**
+     * Res_{i, j} = dividend/this_{i, j}
+     * @param dividend
+     * @return
+     */
     public Tensor divide(double dividend) {
         Tensor2D res = new Tensor2D( this );
         CommonOps_DDRM.divide( dividend, res.darray );
         return res;
     }
 
+    /**
+     * Res_{i, j} = dividend/t2_{i, j}
+     * @param dividend
+     * @param t1
+     * @return
+     */
     public static Tensor divide(double dividend, Tensor2D t1) {
         Tensor2D res = new Tensor2D( t1);
         CommonOps_DDRM.divide( dividend, t1.darray, res.darray );
@@ -174,26 +278,46 @@ public class Tensor2D extends Tensor {
 
     // 实际上，scale函数只有double 类型传入，所以...单独拿出int并不能优化 除非 调用ejml底层的代码
 
+    /**
+     * Res_{i, j} = t1_{i, j}*int_times
+     * @param t1
+     * @param int_times
+     * @return
+     */
     public static Tensor dot_mul(Tensor2D t1, int int_times) {
         Tensor2D res = new Tensor2D( t1 );
         CommonOps_DDRM.scale( int_times, res.darray );
         return res;
     }
 
+    /**
+     * Res_{i, j} = this_{i, j}*int_times
+     * @param int_times
+     * @return
+     */
     public Tensor dot_mul(int int_times) {
         Tensor2D res = new Tensor2D( this );
         CommonOps_DDRM.scale( int_times, res.darray );
         return res;
     }
 
-
-
+    /**
+     * Res_{rownum1 x colnum2} = t1_{rownum1 x colnum1}*t2_{colnum1 x colnum2}
+     * @param t1
+     * @param t2
+     * @return
+     */
     public static Tensor cross_mul(Tensor2D t1, Tensor2D t2) {
         Tensor2D res = new Tensor2D( t1.darray.getNumRows(), t2.darray.getNumCols() );
         CommonOps_DDRM.mult( t1.darray, t2.darray, res.darray );
         return res;
     }
 
+    /**
+     * Res_{i, j} = this_{i, j}*t2_{i, j}
+     * @param t2
+     * @return
+     */
     public Tensor cross_mul(Tensor t2) {
         if(t2 instanceof Tensor2D){
             Tensor2D res = new Tensor2D( this );
@@ -214,35 +338,65 @@ public class Tensor2D extends Tensor {
         }
     }
 
-    public Tensor divided (Tensor x) {
+    /**
+     * Res_{i, j} = this_{i, j}/t2_{i, j}
+     * @param t2
+     * @return
+     */
+    public Tensor divided (Tensor t2) {
         Tensor2D res = new Tensor2D(this);
-        CommonOps_DDRM.elementDiv( res.darray, ((Tensor2D)x).darray );
+        CommonOps_DDRM.elementDiv( res.darray, ((Tensor2D)t2).darray );
         return res;
     }
 
+    /**
+     * Res_{i, j} = this_{i, j}^pow
+     * @param pow
+     * @return
+     */
     public Tensor pow(double pow) {
         Tensor2D res = new Tensor2D( this );
         CommonOps_DDRM.elementPower( pow, res.darray, res.darray );
         return res;
     }
 
+    /**
+     * Res_{i, j} = this_{i, j}^pow
+     * @param pow
+     * @return
+     */
     public Tensor pow(int pow) {
         Tensor2D res = new Tensor2D( this );
         CommonOps_DDRM.elementPower( pow, res.darray, res.darray );
         return res;
     }
 
+    /**
+     * Res_{i, j} = ln(this_{i, j})
+     * @return
+     */
     public Tensor ln () {
         Tensor2D res = new Tensor2D( this );
         CommonOps_DDRM.elementLog( res.darray, res.darray );
         return res;
     }
 
+    /**
+     * Res_{i, j} = t1_{i, j}^pow
+     * @param t1
+     * @param pow
+     * @return
+     */
     public static Tensor pow(Tensor2D t1 , double pow) {
         Tensor2D res = new Tensor2D( t1.darray.getNumRows(), t1.darray.getNumCols() );
         CommonOps_DDRM.elementPower( pow, t1.darray, res.darray );
         return res;
     }
+
+    /**
+     * Res_{i, j} = sigmoid(this_{i, j})
+     * @return
+     */
     public Tensor sigmoid() {
         CommonOps_DDRM.scale( -1, this.darray );
         CommonOps_DDRM.elementPower( Math.E, this.darray, this.darray );
@@ -252,6 +406,11 @@ public class Tensor2D extends Tensor {
         return res;
     }
 
+    /**
+     * Res_{i, j} = sigmoid(t1_{i, j})
+     * @param t1
+     * @return
+     */
     public static Tensor sigmoid(Tensor2D t1) {
         CommonOps_DDRM.scale( -1, t1.darray );
         CommonOps_DDRM.elementPower( Math.E, t1.darray, t1.darray );
@@ -260,10 +419,14 @@ public class Tensor2D extends Tensor {
         CommonOps_DDRM.divide( 1, res.darray );
         return res;
     }
-/**
- *@param t1 , input matrix
- *@param i , i = 1 means sum by row, i = 2 means sum by column.
- */
+
+    /**
+     * Res{rownum x 1}(i = 1)
+     * Res{1 x colnum}(i = 2)
+     * @param t1 , input matrix
+     * @param i , i = 1 means sum by row, i = 2 means sum by column.
+     * @return
+     */
     public static Tensor sum(Tensor2D t1, int i) {
         Tensor2D res = new Tensor2D( t1 );
         switch (i){
@@ -282,6 +445,11 @@ public class Tensor2D extends Tensor {
         return res;
     }
 
+    /**
+     * Res{rownum x 1}(i = 1)
+     * Res{1 x colnum}(i = 2)
+     * @param i , i = 1 means sum by row, i = 2 means sum by column.
+     */
     public Tensor sum(int i) {
         Tensor2D res = new Tensor2D( this );
         switch (i){
@@ -300,11 +468,14 @@ public class Tensor2D extends Tensor {
         return res;
     }
 
-    @Override
     public Tensor sum (int axis, int... _axis) {
         return null;
     }
 
+    /**
+     * Res = \sum{this_{i, j}}
+     * @return
+     */
     public double sum() {
         return CommonOps_DDRM.elementSum( this.darray );
     }
@@ -312,16 +483,30 @@ public class Tensor2D extends Tensor {
         return CommonOps_DDRM.elementSum( t1.darray );
     }
 
-    public Tensor reshape (int x, int y) {
+    /**
+     * Res = this{rownum x colnum}
+     * @param rownum
+     * @param colnum
+     * @return
+     */
+    public Tensor reshape (int rownum, int colnum) {
         Tensor2D res = new Tensor2D( this );
-        res.darray.reshape( x, y, true );
+        res.darray.reshape( rownum, colnum, true );
         return res;
     }
 
-
+    /**
+     * Res = (DMatrixRMaj) this
+     * @return
+     */
     public DMatrixRMaj getData() {
         return this.darray;
     }
+
+    /**
+     * Res_{i, j} = tanh(this_{i, j})
+     * @return
+     */
     public Tensor tanh() {
         Tensor2D res = new Tensor2D( this );
         Tensor2D res1 = new Tensor2D( this );
@@ -341,12 +526,25 @@ public class Tensor2D extends Tensor {
         return res;
     }
 
+    /**
+     * Res_{i} = t*this_{i} (this_{i} > 0)
+     * Res_{i} = 0 (this_{i} <= 0)
+     * @param t
+     * @return
+     */
     public Tensor relu(double t) {
         Tensor2D res = new Tensor2D( this );
         CommonOps_DDRM.abs(this.darray, res.darray);
         CommonOps_DDRM.add( 0.5*t, this.darray, 0.5*t, res.darray, res.darray );
         return res;
     }
+
+    /**
+     * Res_{i} = t (this_{i} > 0)
+     * Res_{i} = 0 (this_{i} <= 0)
+     * @param t
+     * @return
+     */
     public Tensor DiffReLU(double t) {
         Tensor2D res = new Tensor2D( this );
         CommonOps_DDRM.abs( this.darray, res.darray );
@@ -359,6 +557,13 @@ public class Tensor2D extends Tensor {
         }
         return res;
     }
+
+    /**
+     * Res_{i} = 1 (this_{i} > 0)
+     * Res_{i} = 0 (this_{i} = 0)
+     * Res_{i} = -1 (this_{i} < 0)
+     * @return
+     */
     public Tensor sgn() {
         Tensor2D res = new Tensor2D( this );
         CommonOps_DDRM.abs(this.darray, res.darray);
