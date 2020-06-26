@@ -21,11 +21,13 @@ public class Tensor2D extends Tensor {
      * (rownum always rank first).
      */
     public Tensor2D(double[][] data) {
-        int[] length = new int[2];
-        length[0] = data.length/data[0].length;
-        length[1] = data[0].length;
-        this.size = new Tensor_size(length[0], length[1]);
-        this.darray = new DMatrixRMaj(data);
+        this.size = new Tensor_size(data[0].length, data.length);
+        this.darray = new DMatrixRMaj(data[0].length, data.length);
+        for (int i = 0; i < data.length; i++) {
+            for (int j = 0; j < data[0].length; j++) {
+                this.darray.set( j, i, data[i][j]);
+            }
+        }
     }
 
     public Tensor2D(double[] data) {

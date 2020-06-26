@@ -17,10 +17,6 @@ public class Tensor3D extends Tensor {
      * @see {@link org.ejml.data.DMatrixRMaj}, {@link ArrayList}
      */
     ArrayList<DMatrixRMaj> darray = new ArrayList<DMatrixRMaj>();
-    // The default construction method gives a one-colums matrix(an array).
-//    public Tensor3D(double[][] data) {
-//        this.darray = new DMatrixRMaj(data);
-//    }
 
     public Tensor3D(ArrayList<double[][]> a, int N) {
         for (int i = 0; i < N; i++) {
@@ -42,6 +38,7 @@ public class Tensor3D extends Tensor {
         for (int i = 0; i < d.size(); i++) {
             this.darray.add( d.get( i ).copy() );
         }
+        this.size = new Tensor_size(d.get( 0 ).getNumRows(), d.get( 0 ).getNumCols());
     }
 
     /**
@@ -54,15 +51,31 @@ public class Tensor3D extends Tensor {
         for (int i = 0; i < N; i++) {
             this.darray.add(new DMatrixRMaj(rowNum, colNum));
         }
+        this.size = new Tensor_size( rowNum, colNum, N );
     }
-
 
     public Tensor3D(Tensor3D t1) {
         for (int i = 0; i < t1.darray.size(); i++) {
             this.darray.add(t1.darray.get( i ).copy());
         }
+        this.size = new Tensor_size( t1.size.Tensor_length );
     }
 
+    public Tensor3D(double[][][]data) {
+        int N = data.length;
+        int colnum = data[0].length;
+        int rownum = data[0][0].length;
+        for (int i = 0; i < N; i++) {
+            DMatrixRMaj d_temp = new DMatrixRMaj(rownum, colnum);
+            for (int j = 0; j < colnum; j++) {
+                for (int k = 0; k < rownum; k++) {
+                    d_temp.set( k, j, data[i][j][k] );
+                }
+            }
+            this.darray.add(d_temp);
+        }
+        this.size = new Tensor_size( rownum, colnum, N );
+    }
     /**
      * Res_{i, j, k} = t1_{i, j, k} + addtion
      * @param t1
