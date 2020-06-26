@@ -547,11 +547,10 @@ public class Tensor2D extends Tensor {
      */
     public Tensor DiffReLU(double t) {
         Tensor2D res = new Tensor2D( this );
-        CommonOps_DDRM.abs( this.darray, res.darray );
-        CommonOps_DDRM.add( 0.5/t, this.darray, 0.5/t, res.darray, res.darray );
-        CommonOps_DDRM.elementDiv(  this.darray, res.darray, res.darray );
         for (int i = 0; i < res.darray.getData().length; i++) {
-            if (Double.isNaN( res.darray.getData()[i] ) || Double.isInfinite( res.darray.getData()[i] )) {
+            if (res.darray.getData()[i] > 0) {
+                res.darray.getData()[i] = t;
+            }else{
                 res.darray.getData()[i] = 0;
             }
         }
@@ -566,11 +565,11 @@ public class Tensor2D extends Tensor {
      */
     public Tensor sgn() {
         Tensor2D res = new Tensor2D( this );
-        CommonOps_DDRM.abs(this.darray, res.darray);
-        CommonOps_DDRM.elementDiv( this.darray, res.darray, res.darray );
         for (int i = 0; i < res.darray.getData().length; i++) {
-            if (Double.isNaN( res.darray.getData()[i] )) {
-                res.darray.getData()[i] = 0;
+            if ( res.darray.getData()[i] > 0) {
+                res.darray.getData()[i] = 1;
+            }else if ( res.darray.getData()[i] < 0) {
+                res.darray.getData()[i] = -1;
             }
         }
         return  res;

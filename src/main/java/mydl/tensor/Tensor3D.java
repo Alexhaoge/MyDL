@@ -760,14 +760,11 @@ public class Tensor3D extends Tensor {
     public Tensor DiffReLU(double t) {
         Tensor3D res = new Tensor3D( this );
         for (int i = 0; i < res.darray.size(); i++) {
-            CommonOps_DDRM.abs( this.darray.get( i ), res.darray.get( i ) );
-            CommonOps_DDRM.add( 0.5/t, this.darray.get( i ), 0.5/t, res.darray.get( i ), res.darray.get( i ) );
-            CommonOps_DDRM.elementDiv( this.darray.get( i ), res.darray.get( i ), res.darray.get( i ) );
-        }
-        for (int i = 0; i < res.darray.size(); i++) {
             for (int j = 0; j < res.darray.get(i).getData().length; j++) {
-                if (Double.isNaN( res.darray.get(i).getData()[j]) || Double.isInfinite( res.darray.get(i).getData()[j] )) {
-                    res.darray.get(i).getData()[j] = 0;
+                if (res.darray.get(i).getData()[i] > 0) {
+                    res.darray.get(i).getData()[i] = t;
+                }else{
+                    res.darray.get(i).getData()[i] = 0;
                 }
             }
         }
@@ -783,11 +780,11 @@ public class Tensor3D extends Tensor {
     public Tensor sgn() {
         Tensor3D res = new Tensor3D( this );
         for (int i = 0; i < res.darray.size(); i++) {
-            CommonOps_DDRM.abs(this.darray.get( i ), res.darray.get( i ));
-            CommonOps_DDRM.elementDiv( this.darray.get( i ), res.darray.get( i ), res.darray.get( i ) );
             for (int j = 0; j < res.darray.get( i ).getData().length; j++) {
-                if (Double.isNaN( res.darray.get( i ).getData()[j] )) {
-                    res.darray.get( i ).getData()[j] = 0;
+                if (res.darray.get( i ).getData()[i] > 0) {
+                    res.darray.get( i ).getData()[i] = 1;
+                }else if ( res.darray.get( i ).getData()[i] < 0) {
+                    res.darray.get( i ).getData()[i] = -1;
                 }
             }
         }
