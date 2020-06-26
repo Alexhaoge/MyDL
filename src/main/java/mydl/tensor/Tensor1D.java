@@ -143,6 +143,12 @@ public class Tensor1D extends Tensor {
         }
     }
 
+    public Tensor divided (Tensor x) {
+        Tensor1D res = new Tensor1D(this);
+        CommonOps_DDRM.elementDiv( res.darray, ((Tensor1D)x).darray );
+        return res;
+    }
+
     public static Tensor cross_mul(Tensor1D t1, Tensor1D t2) {
         Tensor2D res = new Tensor2D( t1.darray.getNumElements(), t2.darray.getNumElements() );
         CommonOps_DDRM.multTransB(t1.darray, t2.darray, res.darray);
@@ -158,6 +164,12 @@ public class Tensor1D extends Tensor {
     public Tensor pow(int pow) {
         Tensor1D res = new Tensor1D( this );
         CommonOps_DDRM.elementPower( pow, res.darray, res.darray );
+        return res;
+    }
+
+    public Tensor ln () {
+        Tensor1D res = new Tensor1D( this );
+        CommonOps_DDRM.elementLog( res.darray, res.darray );
         return res;
     }
 
@@ -306,19 +318,20 @@ public class Tensor1D extends Tensor {
         CommonOps_DDRM.add( res1.darray, res2.darray, res.darray );
         return res;
     }
-    public Tensor ReLU() {
+
+    public Tensor relu(double t) {
         Tensor1D res = new Tensor1D( this );
         CommonOps_DDRM.abs(this.darray, res.darray);
-        CommonOps_DDRM.add( 0.5, this.darray, 0.5, res.darray, res.darray );
+        CommonOps_DDRM.add( 0.5*t, this.darray, 0.5*t, res.darray, res.darray );
         return res;
     }
-    public Tensor DiffReLU() {
+    public Tensor Diffrelu(double t) {
         Tensor1D res = new Tensor1D( this );
         CommonOps_DDRM.abs(this.darray, res.darray);
-        CommonOps_DDRM.add( this.darray, res.darray, res.darray);
+        CommonOps_DDRM.add( 0.5/t, this.darray, 0.5/t, res.darray, res.darray);
         CommonOps_DDRM.elementDiv( this.darray, res.darray, res.darray );
         for (int i = 0; i < res.darray.getData().length; i++) {
-            if (Double.isNaN( res.darray.getData()[i] )) {
+            if (Double.isInfinite( res.darray.getData()[i] ) || Double.isNaN( res.darray.getData()[i] )) {
                 res.darray.getData()[i] = 0;
             }
         }

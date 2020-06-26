@@ -251,6 +251,14 @@ public class Tensor3D extends Tensor {
         return res;
     }
 
+    public Tensor ln () {
+        Tensor3D res = new Tensor3D( this );
+        for (int i = 0; i < res.darray.size(); i++) {
+            CommonOps_DDRM.elementLog( res.darray.get( i ), res.darray.get( i ) );
+        }
+        return res;
+    }
+
     public static Tensor pow(Tensor3D t1 , double pow) {
         Tensor3D res = new Tensor3D( t1 );
         for (int i = 0; i < res.darray.size(); i++) {
@@ -402,6 +410,7 @@ public class Tensor3D extends Tensor {
 
         return res2;
     }
+
     public Tensor cross_mul(Tensor t2) {
         if (t2 instanceof Tensor3D){
             if (((Tensor3D) t2).darray.size() != this.darray.size()) {
@@ -433,6 +442,14 @@ public class Tensor3D extends Tensor {
         }
     }
 
+    public Tensor divided (Tensor x) {
+        Tensor3D res = new Tensor3D(this);
+        for (int i = 0; i < res.darray.size(); i++)  {
+            CommonOps_DDRM.elementDiv( res.darray.get(i), ((Tensor3D)x).darray.get(i) );
+        }
+        return res;
+    }
+
     public Tensor divide (double x) {
         return this.dot_mul( 1.0/x );
     }
@@ -448,24 +465,24 @@ public class Tensor3D extends Tensor {
             return res;
         }
     }
-    public Tensor ReLU() {
+    public Tensor relu(double t) {
         Tensor3D res = new Tensor3D( this );
         for (int i = 0; i < res.darray.size(); i++) {
             CommonOps_DDRM.abs(this.darray.get( i ), res.darray.get( i ));
-            CommonOps_DDRM.add( 0.5, this.darray.get( i ), 0.5, res.darray.get( i ), res.darray.get( i ) );
+            CommonOps_DDRM.add( 0.5*t, this.darray.get( i ), 0.5*t, res.darray.get( i ), res.darray.get( i ) );
         }
         return res;
     }
-    public Tensor DiffReLU() {
+    public Tensor Diffrelu(double t) {
         Tensor3D res = new Tensor3D( this );
         for (int i = 0; i < res.darray.size(); i++) {
             CommonOps_DDRM.abs( this.darray.get( i ), res.darray.get( i ) );
-            CommonOps_DDRM.add( this.darray.get( i ), res.darray.get( i ), res.darray.get( i ) );
+            CommonOps_DDRM.add( 0.5/t, this.darray.get( i ), 0.5/t, res.darray.get( i ), res.darray.get( i ) );
             CommonOps_DDRM.elementDiv( this.darray.get( i ), res.darray.get( i ), res.darray.get( i ) );
         }
         for (int i = 0; i < res.darray.size(); i++) {
             for (int j = 0; j < res.darray.get(i).getData().length; j++) {
-                if (Double.isNaN( res.darray.get(i).getData()[j] )) {
+                if (Double.isNaN( res.darray.get(i).getData()[j]) || Double.isInfinite( res.darray.get(i).getData()[j] )) {
                     res.darray.get(i).getData()[j] = 0;
                 }
             }
