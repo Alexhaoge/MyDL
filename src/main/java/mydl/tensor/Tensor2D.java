@@ -347,7 +347,7 @@ public class Tensor2D extends Tensor {
         CommonOps_DDRM.add( 0.5*t, this.darray, 0.5*t, res.darray, res.darray );
         return res;
     }
-    public Tensor Diffrelu(double t) {
+    public Tensor DiffReLU(double t) {
         Tensor2D res = new Tensor2D( this );
         CommonOps_DDRM.abs( this.darray, res.darray );
         CommonOps_DDRM.add( 0.5/t, this.darray, 0.5/t, res.darray, res.darray );

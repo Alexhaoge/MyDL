@@ -12,13 +12,13 @@ public class ReLU extends Activation{
     public ReLU() {
         super(
             (Tensor x) -> x.relu(), 
-            (Tensor x) -> x.relu()
+            (Tensor x) -> x.DiffReLU()
         );
     }
     public ReLU(double t){
         super(
             (Tensor x) -> x.relu(t), 
-            (Tensor x) -> x.relu(t)
+            (Tensor x) -> x.DiffReLU(t)
         );
     }
 }

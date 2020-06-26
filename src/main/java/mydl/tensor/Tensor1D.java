@@ -325,10 +325,11 @@ public class Tensor1D extends Tensor {
         CommonOps_DDRM.add( 0.5*t, this.darray, 0.5*t, res.darray, res.darray );
         return res;
     }
-    public Tensor Diffrelu(double t) {
+
+    public Tensor DiffReLU(double t) {
         Tensor1D res = new Tensor1D( this );
         CommonOps_DDRM.abs(this.darray, res.darray);
-        CommonOps_DDRM.add( 0.5/t, this.darray, 0.5/t, res.darray, res.darray);
+        CommonOps_DDRM.add(t, this.darray, t, res.darray, res.darray);
         CommonOps_DDRM.elementDiv( this.darray, res.darray, res.darray );
         for (int i = 0; i < res.darray.getData().length; i++) {
             if (Double.isInfinite( res.darray.getData()[i] ) || Double.isNaN( res.darray.getData()[i] )) {
@@ -337,6 +338,7 @@ public class Tensor1D extends Tensor {
         }
         return res;
     }
+
     public Tensor sgn() {
         Tensor1D res = new Tensor1D( this );
         CommonOps_DDRM.abs( this.darray, res.darray );

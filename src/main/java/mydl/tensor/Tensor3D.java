@@ -473,7 +473,8 @@ public class Tensor3D extends Tensor {
         }
         return res;
     }
-    public Tensor Diffrelu(double t) {
+
+    public Tensor DiffReLU(double t) {
         Tensor3D res = new Tensor3D( this );
         for (int i = 0; i < res.darray.size(); i++) {
             CommonOps_DDRM.abs( this.darray.get( i ), res.darray.get( i ) );
