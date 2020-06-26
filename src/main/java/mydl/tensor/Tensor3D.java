@@ -4,7 +4,6 @@ import org.ejml.MatrixDimensionException;
 import org.ejml.data.DMatrixRMaj;
 import org.ejml.dense.row.CommonOps_DDRM;
 
-import java.lang.Character.UnicodeBlock;
 import java.util.ArrayList;
 
 

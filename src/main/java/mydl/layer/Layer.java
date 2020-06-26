@@ -25,6 +25,8 @@ public abstract class Layer implements Iterable<String>, Serializable{
      */
     protected Map<String, Tensor> grads = new HashMap<String, Tensor>();
 
+    
+
     /**
      * Input tensor size, if the layer has parameters.
      */

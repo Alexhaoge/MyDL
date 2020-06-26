@@ -225,5 +225,5 @@ public abstract class Tensor implements Serializable, Cloneable {
     public Tensor DiffReLU(){
         return this.DiffReLU(1.0);
     }
-
+    public abstract Tensor softmax();
 }
