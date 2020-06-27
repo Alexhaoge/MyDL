@@ -33,6 +33,11 @@ public class Tensor1D extends Tensor {
         this.darray = new DMatrixRMaj(darray.data);
     }
 
+    /**
+     * Contructor with the length of Tensor1D.
+     * @param length Positive integer.
+     * @apiNote This contructor produce a Tensor1D with no initial values.
+     */
     public Tensor1D(int length) {
         this.size = new Tensor_size( length );
         this.darray = new DMatrixRMaj(length);
