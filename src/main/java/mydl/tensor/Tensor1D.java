@@ -4,6 +4,7 @@ import org.ejml.data.DMatrixRMaj;
 import org.ejml.dense.row.CommonOps_DDRM;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 
 public class Tensor1D extends Tensor {
@@ -329,9 +330,9 @@ public class Tensor1D extends Tensor {
 
     /**
      * Deep clone: Res = this
-     * @return Tensor1D
+     * @return
      */
-    public Tensor clone (){
+    public Tensor clone () {
         return new Tensor1D( this );
     }
 
@@ -519,7 +520,7 @@ public class Tensor1D extends Tensor {
                 res.darray.getData()[i] = -1;
             }
         }
-        return res;
+        return  res;
     }
 
     public Tensor softmax() {
@@ -528,5 +529,12 @@ public class Tensor1D extends Tensor {
         double sum = CommonOps_DDRM.elementSum( res.darray );
         CommonOps_DDRM.divide( 1.0/sum, res.darray );
         return res;
+    }
+
+    public boolean equals(Tensor t2) {
+        if (t2 instanceof Tensor1D) {
+            return (this.darray.equals( ((Tensor1D) t2).darray ));
+        }
+        return false;
     }
 }

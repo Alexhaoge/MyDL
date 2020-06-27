@@ -4,7 +4,9 @@ import org.ejml.MatrixDimensionException;
 import org.ejml.data.DMatrixRMaj;
 import org.ejml.dense.row.CommonOps_DDRM;
 
+import java.sql.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 
 public class Tensor3D extends Tensor {
@@ -810,5 +812,18 @@ public class Tensor3D extends Tensor {
             CommonOps_DDRM.scale( 1.0/sum, res.darray.get( i ) );
         }
         return res;
+    }
+
+    public boolean equals(Tensor t2) {
+        if(t2 instanceof Tensor3D) {
+            if (this.size().equals( t2.size() )) {
+                boolean temp = true;
+                for (int i = 0; i < this.darray.size() && temp == true; i++) {
+                    temp = temp && (this.darray.get( i ).equals( ((Tensor3D) t2).darray.get( i ) ));
+                }
+                return temp;
+            }
+        }
+        return false;
     }
 }
