@@ -4,6 +4,7 @@ import org.ejml.data.DMatrixRMaj;
 import org.ejml.dense.row.CommonOps_DDRM;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 
 public class Tensor2D extends Tensor {
@@ -583,5 +584,12 @@ public class Tensor2D extends Tensor {
         double sum = CommonOps_DDRM.elementSum( res.darray );
         CommonOps_DDRM.scale( 1.0/sum, res.darray );
         return res;
+    }
+
+    public boolean equals(Tensor t2) {
+        if (t2 instanceof Tensor2D) {
+            return (this.darray.equals( ((Tensor2D) t2).darray ));
+        }
+        return false;
     }
 }

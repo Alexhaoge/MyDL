@@ -226,4 +226,5 @@ public abstract class Tensor implements Serializable{
         return this.DiffReLU(1.0);
     }
     public abstract Tensor softmax();
+    public abstract boolean equals(Tensor t2);
 }
