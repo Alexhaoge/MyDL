@@ -18,9 +18,9 @@ public class ActivationTest {
         zt[1]=Math.tanh(0);
         zt[2]=Math.tanh(-1);
         double[] gt = new double[3];
-        gt[0]=1-Math.pow(Math.tanh(1),2)*1;
-        gt[1]=1-Math.pow(Math.tanh(0),2)*0;
-        gt[2]=1-Math.pow(Math.tanh(-1),2)*(-1);
+        gt[0]=(1-Math.pow(Math.tanh(1),2))*1;
+        gt[1]=(1-Math.pow(Math.tanh(0),2))*0;
+        gt[2]=(1-Math.pow(Math.tanh(-1),2))*(-1);
         Tensor1D y = new Tensor1D(yt);
         Tensor1D z = new Tensor1D(zt);
         Tensor1D g = new Tensor1D(gt);
