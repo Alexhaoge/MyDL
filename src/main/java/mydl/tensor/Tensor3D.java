@@ -4,11 +4,11 @@ import org.ejml.MatrixDimensionException;
 import org.ejml.data.DMatrixRMaj;
 import org.ejml.dense.row.CommonOps_DDRM;
 
-import java.sql.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 
-
+/**
+ * 3D tensor, based on {@code ArrayList<DMatrixRMaj>}.
+ */
 public class Tensor3D extends Tensor {
 
     private static final long serialVersionUID = -4968352852257997738L;
@@ -19,11 +19,6 @@ public class Tensor3D extends Tensor {
      */
     ArrayList<DMatrixRMaj> darray = new ArrayList<DMatrixRMaj>();
 
-    /**
-     * Construct a Tensor3D by Arraylist<double[][]>, N = a.size().
-     * @param a
-     * @param N
-     */
     public Tensor3D(ArrayList<double[][]> a, int N) {
         for (int i = 0; i < N; i++) {
             DMatrixRMaj temp = new DMatrixRMaj(a.get( i ));
@@ -34,12 +29,6 @@ public class Tensor3D extends Tensor {
     }
 
     //Cations! If the input is not an array, the result may be strange.
-    /**
-     * The origin code of DMatrixRMaj.copy() which means deep clone.
-     * public DMatrixRMaj copy() {
-     * return new DMatrixRMaj(this);
-     *    }
-     */
     public Tensor3D(ArrayList<DMatrixRMaj> d) {
         for (int i = 0; i < d.size(); i++) {
             this.darray.add( d.get( i ).copy() );
@@ -60,10 +49,6 @@ public class Tensor3D extends Tensor {
         this.size = new Tensor_size( rowNum, colNum, N );
     }
 
-    /**
-     * Construct a same Tensor3D(Deep clone)
-     * @param t1
-     */
     public Tensor3D(Tensor3D t1) {
         for (int i = 0; i < t1.darray.size(); i++) {
             this.darray.add(t1.darray.get( i ).copy());
@@ -71,10 +56,6 @@ public class Tensor3D extends Tensor {
         this.size = new Tensor_size( t1.size.Tensor_length );
     }
 
-    /**
-     * Construct a Tensor3D matched with data.
-     * @param data
-     */
     public Tensor3D(double[][][]data) {
         int N = data.length;
         int colnum = data[0].length;
@@ -410,7 +391,7 @@ public class Tensor3D extends Tensor {
     public Tensor pow(double pow) {
         Tensor3D res = new Tensor3D( this );
         for (int i = 0; i < this.darray.size(); i++) {
-            CommonOps_DDRM.elementPower( pow, res.darray.get( i ), res.darray.get( i ) );
+            CommonOps_DDRM.elementPower( res.darray.get( i ), pow, res.darray.get( i ) );
         }
         return res;
     }
@@ -423,7 +404,7 @@ public class Tensor3D extends Tensor {
     public Tensor pow(int pow) {
         Tensor3D res = new Tensor3D( this );
         for (int i = 0; i < this.darray.size(); i++) {
-            CommonOps_DDRM.elementPower( pow, res.darray.get( i ), res.darray.get( i ) );
+            CommonOps_DDRM.elementPower( res.darray.get( i ), pow, res.darray.get( i ) );
         }
         return res;
     }
@@ -436,20 +417,6 @@ public class Tensor3D extends Tensor {
         Tensor3D res = new Tensor3D( this );
         for (int i = 0; i < res.darray.size(); i++) {
             CommonOps_DDRM.elementLog( res.darray.get( i ), res.darray.get( i ) );
-        }
-        return res;
-    }
-
-    /**
-     * Res_{i, j, k} = this_{i, j, k}^pow
-     * @param t1
-     * @param pow
-     * @return
-     */
-    public static Tensor pow(Tensor3D t1 , double pow) {
-        Tensor3D res = new Tensor3D( t1 );
-        for (int i = 0; i < res.darray.size(); i++) {
-            CommonOps_DDRM.elementPower( pow, t1.darray.get( i ), res.darray.get(i) );
         }
         return res;
     }
@@ -817,4 +784,5 @@ public class Tensor3D extends Tensor {
         }
         return res;
     }
+
 }

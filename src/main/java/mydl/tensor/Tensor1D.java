@@ -4,10 +4,16 @@ import org.ejml.data.DMatrixRMaj;
 import org.ejml.dense.row.CommonOps_DDRM;
 
 import java.util.ArrayList;
+<<<<<<< HEAD
 import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
 
+=======
+>>>>>>> ae1c5090df41899357d6e78335ff18e90d4d8ee8
 
+/**
+ * One-dimension Tensor.
+ */
 public class Tensor1D extends Tensor {
 
     private static final long serialVersionUID = 743000385145097795L;
@@ -45,10 +51,6 @@ public class Tensor1D extends Tensor {
         this.darray = new DMatrixRMaj(length);
     }
 
-    /**
-     * Construct a same array(Deep clone)
-     * @param t1
-     */
     public Tensor1D(Tensor1D t1) {
         this.size = new Tensor_size( t1.size.getTensor_length() );
         this.darray = new DMatrixRMaj(t1.darray);
@@ -239,7 +241,7 @@ public class Tensor1D extends Tensor {
      */
     public Tensor pow(double pow) {
         Tensor1D res = new Tensor1D( this );
-        CommonOps_DDRM.elementPower( pow, res.darray, res.darray );
+        CommonOps_DDRM.elementPower( res.darray, pow, res.darray );
         return res;
     }
 
@@ -250,10 +252,10 @@ public class Tensor1D extends Tensor {
      */
     public Tensor pow(int pow) {
         Tensor1D res = new Tensor1D( this );
-        CommonOps_DDRM.elementPower( pow, res.darray, res.darray );
+        CommonOps_DDRM.elementPower( res.darray, pow, res.darray );
         return res;
     }
-
+    
     /**
      * Res_{i} = ln(this_{i})
      * @return
@@ -261,18 +263,6 @@ public class Tensor1D extends Tensor {
     public Tensor ln () {
         Tensor1D res = new Tensor1D( this );
         CommonOps_DDRM.elementLog( res.darray, res.darray );
-        return res;
-    }
-
-    /**
-     * Res_{i} = t1_{i}^pow
-     * @param t1
-     * @param pow
-     * @return
-     */
-    public static Tensor pow(Tensor1D t1 , double pow) {
-        Tensor1D res = new Tensor1D( t1.darray.getNumElements() );
-        CommonOps_DDRM.elementPower( pow, t1.darray, res.darray );
         return res;
     }
 
@@ -531,4 +521,5 @@ public class Tensor1D extends Tensor {
         CommonOps_DDRM.divide( 1.0/sum, res.darray );
         return res;
     }
+
 }

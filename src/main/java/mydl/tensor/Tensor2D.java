@@ -524,7 +524,7 @@ public class Tensor2D extends Tensor {
      * @return
      */
     public Tensor tanh() {
-        Tensor1D res1 = new Tensor1D( this );
+        Tensor2D res1 = new Tensor2D ( this );
         CommonOps_DDRM.scale(2, res1.darray );
         CommonOps_DDRM.elementPower( Math.E, res1.darray, res1.darray );
         DMatrixRMaj d2 = new DMatrixRMaj(res1.darray);
