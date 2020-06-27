@@ -34,11 +34,20 @@ public class Tensor1D extends Tensor {
         this.darray = new DMatrixRMaj(darray.data);
     }
 
+    /**
+     * Construct an empty Tensor1D, rownum = length.
+     * @param length
+     */
+
     public Tensor1D(int length) {
         this.size = new Tensor_size( length );
         this.darray = new DMatrixRMaj(length);
     }
 
+    /**
+     * Construct a same array(Deep clone)
+     * @param t1
+     */
     public Tensor1D(Tensor1D t1) {
         this.size = new Tensor_size( t1.size.getTensor_length() );
         this.darray = new DMatrixRMaj(t1.darray);
@@ -529,12 +538,5 @@ public class Tensor1D extends Tensor {
         double sum = CommonOps_DDRM.elementSum( res.darray );
         CommonOps_DDRM.divide( 1.0/sum, res.darray );
         return res;
-    }
-
-    public boolean equals(Tensor t2) {
-        if (t2 instanceof Tensor1D) {
-            return (this.darray.equals( ((Tensor1D) t2).darray ));
-        }
-        return false;
     }
 }

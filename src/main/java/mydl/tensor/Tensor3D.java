@@ -19,6 +19,11 @@ public class Tensor3D extends Tensor {
      */
     ArrayList<DMatrixRMaj> darray = new ArrayList<DMatrixRMaj>();
 
+    /**
+     * Construct a Tensor3D by Arraylist<double[][]>, N = a.size().
+     * @param a
+     * @param N
+     */
     public Tensor3D(ArrayList<double[][]> a, int N) {
         for (int i = 0; i < N; i++) {
             DMatrixRMaj temp = new DMatrixRMaj(a.get( i ));
@@ -55,6 +60,10 @@ public class Tensor3D extends Tensor {
         this.size = new Tensor_size( rowNum, colNum, N );
     }
 
+    /**
+     * Construct a same Tensor3D(Deep clone)
+     * @param t1
+     */
     public Tensor3D(Tensor3D t1) {
         for (int i = 0; i < t1.darray.size(); i++) {
             this.darray.add(t1.darray.get( i ).copy());
@@ -62,6 +71,10 @@ public class Tensor3D extends Tensor {
         this.size = new Tensor_size( t1.size.Tensor_length );
     }
 
+    /**
+     * Construct a Tensor3D matched with data.
+     * @param data
+     */
     public Tensor3D(double[][][]data) {
         int N = data.length;
         int colnum = data[0].length;
@@ -812,18 +825,5 @@ public class Tensor3D extends Tensor {
             CommonOps_DDRM.scale( 1.0/sum, res.darray.get( i ) );
         }
         return res;
-    }
-
-    public boolean equals(Tensor t2) {
-        if(t2 instanceof Tensor3D) {
-            if (this.size().equals( t2.size() )) {
-                boolean temp = true;
-                for (int i = 0; i < this.darray.size() && temp == true; i++) {
-                    temp = temp && (this.darray.get( i ).equals( ((Tensor3D) t2).darray.get( i ) ));
-                }
-                return temp;
-            }
-        }
-        return false;
     }
 }

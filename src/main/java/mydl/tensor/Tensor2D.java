@@ -31,6 +31,10 @@ public class Tensor2D extends Tensor {
         }
     }
 
+    /**
+     * Construct a Tensor2D, rownum = data.length and colnum = 1.
+     * @param data
+     */
     public Tensor2D(double[] data) {
         this.size = new Tensor_size(data.length, 1);
         this.darray = new DMatrixRMaj(data);
@@ -48,11 +52,20 @@ public class Tensor2D extends Tensor {
         this.darray = darray.copy();
     }
 
+    /**
+     * The default construction method gives a rownum*colnum matrix.
+     * @param rownum
+     * @param colnum
+     */
     public Tensor2D(int rownum, int colnum) {
         this.size = new Tensor_size( rownum, colnum );
         this.darray = new DMatrixRMaj(rownum, colnum);
     }
 
+    /**
+     * Construct a same Tensor2D(Deep clone).
+     * @param t1
+     */
     public Tensor2D(Tensor2D t1) {
         this.size = new Tensor_size( t1.size.getTensor_length() );
         this.darray = new DMatrixRMaj(t1.darray);
@@ -586,10 +599,4 @@ public class Tensor2D extends Tensor {
         return res;
     }
 
-    public boolean equals(Tensor t2) {
-        if (t2 instanceof Tensor2D) {
-            return (this.darray.equals( ((Tensor2D) t2).darray ));
-        }
-        return false;
-    }
 }
