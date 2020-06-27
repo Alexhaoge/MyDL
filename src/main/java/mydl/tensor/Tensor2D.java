@@ -524,22 +524,14 @@ public class Tensor2D extends Tensor {
      * @return
      */
     public Tensor tanh() {
-        Tensor2D res = new Tensor2D( this );
-        Tensor2D res1 = new Tensor2D( this );
+        Tensor1D res1 = new Tensor1D( this );
         CommonOps_DDRM.scale(2, res1.darray );
-        CommonOps_DDRM.scale( -1, res1.darray );
         CommonOps_DDRM.elementPower( Math.E, res1.darray, res1.darray );
+        DMatrixRMaj d2 = new DMatrixRMaj(res1.darray);
         CommonOps_DDRM.add(res1.darray, 1);
-        CommonOps_DDRM.divide( 1, res1.darray );
-        Tensor2D res2 = new Tensor2D( this );
-        CommonOps_DDRM.scale(-2, res2.darray );
-        CommonOps_DDRM.scale( -1, res2.darray );
-        CommonOps_DDRM.elementPower( Math.E, res2.darray, res2.darray );
-        CommonOps_DDRM.add(res2.darray, 1);
-        CommonOps_DDRM.divide( 1, res2.darray );
-        CommonOps_DDRM.scale( -1, res2.darray );
-        CommonOps_DDRM.add( res1.darray, res2.darray, res.darray );
-        return res;
+        CommonOps_DDRM.add(d2, -1);
+        CommonOps_DDRM.elementDiv( d2, res1.darray, res1.darray );
+        return res1;
     }
 
     /**
