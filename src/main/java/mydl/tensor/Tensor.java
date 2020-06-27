@@ -2,6 +2,8 @@ package mydl.tensor;
 import org.ejml.MatrixDimensionException;
 
 import java.io.Serializable;
+import java.lang.reflect.Array;
+import java.util.Arrays;
 
 /**
  * The {@code Tensor} class is the basic datatype for neural network.
@@ -187,7 +189,9 @@ public abstract class Tensor implements Serializable{
      */
     public abstract Tensor sigmoid();
 
-    public abstract Tensor tanh();
+    public Tensor tanh(){
+        return sigmoid().dot_mul(2).subtract(1);
+    }
 
     /**
      * relu 我activation里没法写甩锅了,t是ReLU推广形式里>0的那个lambda
@@ -224,9 +228,26 @@ public abstract class Tensor implements Serializable{
         return this.DiffReLU(1.0);
     }
     public abstract Tensor softmax();
-    
-    
-    public boolean equal(Object obj){
+    public boolean equals(Object obj) {
+        if (obj instanceof Tensor) {
+            if (obj instanceof Tensor1D && this instanceof Tensor1D) {
+                if (((Tensor1D) obj).size() == this.size()) {
+                    return (Arrays.equals(((Tensor1D) this).getData().data, ((Tensor1D) obj).getData().data));
+                }
+            }else if (obj instanceof Tensor2D && this instanceof Tensor2D) {
+                if (((Tensor2D) obj).size() == this.size()) {
+                    return (Arrays.equals(((Tensor2D) this).getData().data, ((Tensor2D) obj).getData().data));
+                }
+            }else if (obj instanceof Tensor3D && this instanceof Tensor3D) {
+                if (((Tensor3D) obj).size() == this.size()) {
+                    boolean temp = true;
+                    for (int i = 0; i < ((Tensor3D) this).darray.size() && temp == true; i++) {
+                        temp = (temp && Arrays.equals( ((Tensor3D) this).darray.get(i).data , ((Tensor3D) obj).darray.get( i ).data ));
+                    }
+                    return temp;
+                }
+            }
+        }
         return false;
     }
 }
