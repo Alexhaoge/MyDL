@@ -1,50 +1,41 @@
 package mydl.layer;
 
 import mydl.tensor.Tensor;
+import mydl.tensor.Tensor_size;
 
 /**
- * The {@code Dense} class defines a dense layer with fully-connected neurons 
- * @deprecated not sure if used
+ * The {@code Dense} class defines a regular densely-connected NN layer,
+ *  similar to Dense in Keras.
+ * @see <a href="https://keras.io/api/layers/core_layers/dense/">https://keras.io/api/layers/core_layers/dense/</a>
  */
 public class Dense extends Layer {
 
     /**
-     * Creates a new instance of Dense with given cell number and activation function
-     * @param cells number of Nuerons
-     * @param activation activation function
-     * @throws IllegalArgumentException if @param cells less than 1
+     * A tensor record the last input.
      */
-    // public Dense(int cells, Activation activation) throws IllegalArgumentException{
-    //     super(cells, activation);
-    // }    
-
-    private static final long serialVersionUID = -6743542431764008614L;
+    protected Tensor inputs;
 
     /**
-     * Create a new instance of layer with given Nueron number and default linear
-     * activation function
-     * 
-     * @param cells number of Nuerons
-     * @throws IllegalArgumentException if @param cells less than 1
+     * Constructor of Dense class.
+     * @param input_size A Tensor_size object. The input tensor size.
+     * @param units Positive integer. The number of units in the dense layer.
      */
-    // public Dense(int cells) throws IllegalArgumentException {
-    //     super(cells);
-    // }
+    public Dense(Tensor_size input_size, int units){
+        this.inSize = input_size;
+        this.outSize = input_size.clone();
+        outSize.Tensor_length[outSize.size-1] = units;
+        paras.put("kernel", Tensor.random(new Tensor_size(inSize.Tensor_length[inSize.size-1],units)));
+        paras.put("bias", Tensor.random(new Tensor_size(units)));
+    }
 
-    
-    public Tensor forward(Tensor inputs){
-        return inputs;
+    public Tensor forward(Tensor input){
+        inputs = input;//not necessary to be clone
+        return input.cross_mul(paras.get("kernel")).add(paras.get("bias"));
     }
 
     public Tensor backward(Tensor grad){
-        return grad;
-    }
-
-    /**
-     * get the type of this layer
-     * @return a string
-     */
-    public String getLayerType(){
-        return "Dense";
+        grads.put("kernel", grads.get("kernel").add(inputs.transpose().cross_mul(grad)));
+        grads.put("bias", grads.get("bias").add(grad));
+        return grad.cross_mul(paras.get("kernel").transpose());
     }
 }

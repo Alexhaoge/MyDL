@@ -329,9 +329,9 @@ public class Tensor1D extends Tensor {
 
     /**
      * Deep clone: Res = this
-     * @return
+     * @return Tensor1D
      */
-    public Tensor clone () {
+    public Tensor clone (){
         return new Tensor1D( this );
     }
 

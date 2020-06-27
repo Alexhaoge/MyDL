@@ -4,7 +4,9 @@ import mydl.tensor.Tensor;
 import mydl.tensor.Tensor_size;
 
 /**
- * Linear or Dense layer, incomplete
+ * One dimension linear densely-connected layer. 
+ * Input of this layer is one dimension and output is {@link mydl.tensor.Tensor1D}.
+ * <p> output = dot(input, W) + b
  */
 public class Linear1D extends Layer {
     
@@ -22,8 +24,8 @@ public class Linear1D extends Layer {
      * @param output_size
      */
     public Linear1D(int input_size, int output_size){
-        paras.put("W", Tensor.random(new Tensor_size(2, input_size, output_size, 1)));
-        paras.put("b", Tensor.random(new Tensor_size(1, output_size, 1, 1)));
+        paras.put("W", Tensor.random(new Tensor_size(input_size, output_size)));
+        paras.put("b", Tensor.random(new Tensor_size(output_size)));
     }
 
     public Tensor forward(Tensor input){

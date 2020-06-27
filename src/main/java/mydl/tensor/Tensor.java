@@ -7,7 +7,7 @@ import java.io.Serializable;
  * The {@code Tensor} class is the basic datatype for neural network.
  * It is similiar to numpy.ndarray in Python.
  */
-public abstract class Tensor implements Serializable, Cloneable {
+public abstract class Tensor implements Serializable{
 
     private static final long serialVersionUID = -5694231439125166069L;
 
@@ -92,7 +92,7 @@ public abstract class Tensor implements Serializable, Cloneable {
     public abstract Tensor set_zero();
 
     /**
-     * 返回一个当前Tensor的拷贝
+     * Clone. Return a deep copy of the current Tensor.
      */
     public abstract Tensor clone();
 
