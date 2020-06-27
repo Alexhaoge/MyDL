@@ -4,9 +4,10 @@ import org.ejml.data.DMatrixRMaj;
 import org.ejml.dense.row.CommonOps_DDRM;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
-
+/**
+ * One-dimension Tensor.
+ */
 public class Tensor1D extends Tensor {
 
     private static final long serialVersionUID = 743000385145097795L;
@@ -234,7 +235,7 @@ public class Tensor1D extends Tensor {
      */
     public Tensor pow(double pow) {
         Tensor1D res = new Tensor1D( this );
-        CommonOps_DDRM.elementPower( pow, res.darray, res.darray );
+        CommonOps_DDRM.elementPower( res.darray, pow, res.darray );
         return res;
     }
 
@@ -245,10 +246,10 @@ public class Tensor1D extends Tensor {
      */
     public Tensor pow(int pow) {
         Tensor1D res = new Tensor1D( this );
-        CommonOps_DDRM.elementPower( pow, res.darray, res.darray );
+        CommonOps_DDRM.elementPower( res.darray, pow, res.darray );
         return res;
     }
-
+    
     /**
      * Res_{i} = ln(this_{i})
      * @return
@@ -256,18 +257,6 @@ public class Tensor1D extends Tensor {
     public Tensor ln () {
         Tensor1D res = new Tensor1D( this );
         CommonOps_DDRM.elementLog( res.darray, res.darray );
-        return res;
-    }
-
-    /**
-     * Res_{i} = t1_{i}^pow
-     * @param t1
-     * @param pow
-     * @return
-     */
-    public static Tensor pow(Tensor1D t1 , double pow) {
-        Tensor1D res = new Tensor1D( t1.darray.getNumElements() );
-        CommonOps_DDRM.elementPower( pow, t1.darray, res.darray );
         return res;
     }
 
@@ -536,10 +525,4 @@ public class Tensor1D extends Tensor {
         return res;
     }
 
-    public boolean equals(Tensor t2) {
-        if (t2 instanceof Tensor1D) {
-            return (this.darray.equals( ((Tensor1D) t2).darray ));
-        }
-        return false;
-    }
 }

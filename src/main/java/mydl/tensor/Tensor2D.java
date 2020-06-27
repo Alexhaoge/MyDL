@@ -4,9 +4,10 @@ import org.ejml.data.DMatrixRMaj;
 import org.ejml.dense.row.CommonOps_DDRM;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
-
+/**
+ * 2D tensor.
+ */
 public class Tensor2D extends Tensor {
 
     private static final long serialVersionUID = 2602694190691785623L;
@@ -35,13 +36,6 @@ public class Tensor2D extends Tensor {
         this.size = new Tensor_size(data.length, 1);
         this.darray = new DMatrixRMaj(data);
     }
-
-    /**
-     * The origin code of DMatrixRMaj.copy() which means deep clone.
-     * public DMatrixRMaj copy() {
-     * return new DMatrixRMaj(this);
-     *    }
-     */
 
     public Tensor2D(DMatrixRMaj darray) {
         this.size = new Tensor_size( darray.getNumRows(), darray.getNumCols() );
@@ -359,7 +353,7 @@ public class Tensor2D extends Tensor {
      */
     public Tensor pow(double pow) {
         Tensor2D res = new Tensor2D( this );
-        CommonOps_DDRM.elementPower( pow, res.darray, res.darray );
+        CommonOps_DDRM.elementPower( res.darray, pow, res.darray );
         return res;
     }
 
@@ -370,7 +364,7 @@ public class Tensor2D extends Tensor {
      */
     public Tensor pow(int pow) {
         Tensor2D res = new Tensor2D( this );
-        CommonOps_DDRM.elementPower( pow, res.darray, res.darray );
+        CommonOps_DDRM.elementPower( res.darray, pow, res.darray );
         return res;
     }
 
@@ -381,18 +375,6 @@ public class Tensor2D extends Tensor {
     public Tensor ln () {
         Tensor2D res = new Tensor2D( this );
         CommonOps_DDRM.elementLog( res.darray, res.darray );
-        return res;
-    }
-
-    /**
-     * Res_{i, j} = t1_{i, j}^pow
-     * @param t1
-     * @param pow
-     * @return
-     */
-    public static Tensor pow(Tensor2D t1 , double pow) {
-        Tensor2D res = new Tensor2D( t1.darray.getNumRows(), t1.darray.getNumCols() );
-        CommonOps_DDRM.elementPower( pow, t1.darray, res.darray );
         return res;
     }
 
@@ -586,10 +568,4 @@ public class Tensor2D extends Tensor {
         return res;
     }
 
-    public boolean equals(Tensor t2) {
-        if (t2 instanceof Tensor2D) {
-            return (this.darray.equals( ((Tensor2D) t2).darray ));
-        }
-        return false;
-    }
 }

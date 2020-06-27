@@ -187,9 +187,7 @@ public abstract class Tensor implements Serializable{
      */
     public abstract Tensor sigmoid();
 
-    public Tensor tanh(){
-        return sigmoid().dot_mul(2).subtract(1);
-    }
+    public abstract Tensor tanh();
 
     /**
      * relu 我activation里没法写甩锅了,t是ReLU推广形式里>0的那个lambda
@@ -226,5 +224,9 @@ public abstract class Tensor implements Serializable{
         return this.DiffReLU(1.0);
     }
     public abstract Tensor softmax();
-    public abstract boolean equals(Tensor t2);
+    
+    
+    public boolean equal(Object obj){
+        return false;
+    }
 }

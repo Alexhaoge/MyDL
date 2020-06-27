@@ -1,6 +1,6 @@
 package mydl;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
@@ -14,8 +14,9 @@ public class AppTest
      */
     @Test
     public void shouldAnswerWithTrue()
-    {
-        
-        assertTrue( true );
+    {   
+        String s1="a";
+        String s2="a";
+        assertEquals(s1, s2);
     }
 }
