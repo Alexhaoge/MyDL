@@ -4,10 +4,9 @@ import org.ejml.data.DMatrixRMaj;
 import org.ejml.dense.row.CommonOps_DDRM;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
-/**
- * 2D tensor.
- */
+
 public class Tensor2D extends Tensor {
 
     private static final long serialVersionUID = 2602694190691785623L;
@@ -40,6 +39,13 @@ public class Tensor2D extends Tensor {
         this.size = new Tensor_size(data.length, 1);
         this.darray = new DMatrixRMaj(data);
     }
+
+    /**
+     * The origin code of DMatrixRMaj.copy() which means deep clone.
+     * public DMatrixRMaj copy() {
+     * return new DMatrixRMaj(this);
+     *    }
+     */
 
     public Tensor2D(DMatrixRMaj darray) {
         this.size = new Tensor_size( darray.getNumRows(), darray.getNumCols() );
@@ -354,7 +360,7 @@ public class Tensor2D extends Tensor {
      */
     public Tensor pow(double pow) {
         Tensor2D res = new Tensor2D( this );
-        CommonOps_DDRM.elementPower( res.darray, pow, res.darray );
+        CommonOps_DDRM.elementPower( pow, res.darray, res.darray );
         return res;
     }
 
@@ -365,7 +371,7 @@ public class Tensor2D extends Tensor {
      */
     public Tensor pow(int pow) {
         Tensor2D res = new Tensor2D( this );
-        CommonOps_DDRM.elementPower( res.darray, pow, res.darray );
+        CommonOps_DDRM.elementPower( pow, res.darray, res.darray );
         return res;
     }
 
@@ -376,6 +382,18 @@ public class Tensor2D extends Tensor {
     public Tensor ln () {
         Tensor2D res = new Tensor2D( this );
         CommonOps_DDRM.elementLog( res.darray, res.darray );
+        return res;
+    }
+
+    /**
+     * Res_{i, j} = t1_{i, j}^pow
+     * @param t1
+     * @param pow
+     * @return
+     */
+    public static Tensor pow(Tensor2D t1 , double pow) {
+        Tensor2D res = new Tensor2D( t1.darray.getNumRows(), t1.darray.getNumCols() );
+        CommonOps_DDRM.elementPower( pow, t1.darray, res.darray );
         return res;
     }
 
@@ -494,22 +512,14 @@ public class Tensor2D extends Tensor {
      * @return
      */
     public Tensor tanh() {
-        Tensor2D res = new Tensor2D( this );
-        Tensor2D res1 = new Tensor2D( this );
+        Tensor2D res1 = new Tensor2D ( this );
         CommonOps_DDRM.scale(2, res1.darray );
-        CommonOps_DDRM.scale( -1, res1.darray );
         CommonOps_DDRM.elementPower( Math.E, res1.darray, res1.darray );
+        DMatrixRMaj d2 = new DMatrixRMaj(res1.darray);
         CommonOps_DDRM.add(res1.darray, 1);
-        CommonOps_DDRM.divide( 1, res1.darray );
-        Tensor2D res2 = new Tensor2D( this );
-        CommonOps_DDRM.scale(-2, res2.darray );
-        CommonOps_DDRM.scale( -1, res2.darray );
-        CommonOps_DDRM.elementPower( Math.E, res2.darray, res2.darray );
-        CommonOps_DDRM.add(res2.darray, 1);
-        CommonOps_DDRM.divide( 1, res2.darray );
-        CommonOps_DDRM.scale( -1, res2.darray );
-        CommonOps_DDRM.add( res1.darray, res2.darray, res.darray );
-        return res;
+        CommonOps_DDRM.add(d2, -1);
+        CommonOps_DDRM.elementDiv( d2, res1.darray, res1.darray );
+        return res1;
     }
 
     /**

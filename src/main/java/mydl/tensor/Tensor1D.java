@@ -4,6 +4,12 @@ import org.ejml.data.DMatrixRMaj;
 import org.ejml.dense.row.CommonOps_DDRM;
 
 import java.util.ArrayList;
+<<<<<<< HEAD
+import java.util.Arrays;
+import java.util.concurrent.CompletableFuture;
+
+=======
+>>>>>>> ae1c5090df41899357d6e78335ff18e90d4d8ee8
 
 /**
  * One-dimension Tensor.
@@ -439,23 +445,14 @@ public class Tensor1D extends Tensor {
      * @return
      */
     public Tensor tanh() {
-        Tensor1D res = new Tensor1D( this );
         Tensor1D res1 = new Tensor1D( this );
         CommonOps_DDRM.scale(2, res1.darray );
-        CommonOps_DDRM.scale( -1, res1.darray );
         CommonOps_DDRM.elementPower( Math.E, res1.darray, res1.darray );
+        DMatrixRMaj d2 = new DMatrixRMaj(res1.darray);
         CommonOps_DDRM.add(res1.darray, 1);
-        CommonOps_DDRM.divide( 1, res1.darray );
-        Tensor1D res2 = new Tensor1D( this );
-        CommonOps_DDRM.scale(-2, res2.darray );
-        CommonOps_DDRM.scale( -1, res2.darray );
-        CommonOps_DDRM.elementPower( Math.E, res2.darray, res2.darray );
-        CommonOps_DDRM.add(res2.darray, 1);
-        CommonOps_DDRM.divide( 1, res2.darray );
-        CommonOps_DDRM.divide( 1, res2.darray );
-        CommonOps_DDRM.scale( -1, res2.darray );
-        CommonOps_DDRM.add( res1.darray, res2.darray, res.darray );
-        return res;
+        CommonOps_DDRM.add(d2, -1);
+        CommonOps_DDRM.elementDiv( d2, res1.darray, res1.darray );
+        return res1;
     }
 
     /**
