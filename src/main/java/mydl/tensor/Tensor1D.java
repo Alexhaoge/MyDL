@@ -4,12 +4,6 @@ import org.ejml.data.DMatrixRMaj;
 import org.ejml.dense.row.CommonOps_DDRM;
 
 import java.util.ArrayList;
-<<<<<<< HEAD
-import java.util.Arrays;
-import java.util.concurrent.CompletableFuture;
-
-=======
->>>>>>> ae1c5090df41899357d6e78335ff18e90d4d8ee8
 
 /**
  * One-dimension Tensor.

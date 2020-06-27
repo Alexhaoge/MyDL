@@ -4,8 +4,6 @@ import org.ejml.data.DMatrixRMaj;
 import org.ejml.dense.row.CommonOps_DDRM;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-
 
 public class Tensor2D extends Tensor {
 
