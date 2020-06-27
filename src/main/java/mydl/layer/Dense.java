@@ -6,14 +6,20 @@ import mydl.tensor.Tensor_size;
 /**
  * The {@code Dense} class defines a regular densely-connected NN layer,
  *  similar to Dense in Keras.
+ * <p>{@code  output = dot(input, kernel) + bias}
+ * <p>If the input to the layer has a rank greater than 2, 
+ * then Dense computes the dot product between the input 
+ * and the kernel along the last axis of the input and axis 1 of the kernel.
  * @see <a href="https://keras.io/api/layers/core_layers/dense/">https://keras.io/api/layers/core_layers/dense/</a>
  */
 public class Dense extends Layer {
 
+    private static final long serialVersionUID = 2503538020897130923L;
+
     /**
      * A tensor record the last input.
      */
-    protected Tensor inputs;
+    protected Tensor _input;
 
     /**
      * Constructor of Dense class.
@@ -29,12 +35,12 @@ public class Dense extends Layer {
     }
 
     public Tensor forward(Tensor input){
-        inputs = input;//not necessary to be clone
+        _input = input;//not necessary to be clone
         return input.cross_mul(paras.get("kernel")).add(paras.get("bias"));
     }
 
     public Tensor backward(Tensor grad){
-        grads.put("kernel", grads.get("kernel").add(inputs.transpose().cross_mul(grad)));
+        grads.put("kernel", grads.get("kernel").add(_input.transpose().cross_mul(grad)));
         grads.put("bias", grads.get("bias").add(grad));
         return grad.cross_mul(paras.get("kernel").transpose());
     }

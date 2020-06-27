@@ -519,7 +519,7 @@ public class Tensor1D extends Tensor {
                 res.darray.getData()[i] = -1;
             }
         }
-        return  res;
+        return res;
     }
 
     public Tensor softmax() {

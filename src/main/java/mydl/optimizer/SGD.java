@@ -8,7 +8,7 @@ import mydl.tensor.Tensor;
 /**
  * The {@code SGD} is Gradient descent optimizer. 
  * <p> The exact optimizer type of the class instance depends on the {@code batch_size} of {@code fit} method in {@link mydl.model.Model}. 
- * If {@code batch_size > 1} then it is a Stochastic GD optimizer, otherwise it is a Mini-Batch GD optimizer。
+ * If {@code batch_size > 1} then it is a Stochastic GD optimizer, otherwise it is a Mini-Batch GD optimizer.
  */
 public class SGD extends Optimizer {
     
@@ -49,6 +49,7 @@ public class SGD extends Optimizer {
         return para.subtract(grad.dot_mul(learning_rate));
     }
 
+    @Override
     public void step(Model model, int batch_size){
         for(int i=0;i<model.layers.size();i++){ 
             Iterator<String> itname = model.layers.get(i).iterator();

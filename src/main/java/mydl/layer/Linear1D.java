@@ -19,9 +19,10 @@ public class Linear1D extends Layer {
     protected Tensor inputs;
 
     /**
-     * incomplete
-     * @param input_size
-     * @param output_size
+     * Constructor of Linear1D. All the weights initially are random.
+     * Use {@link mydl.layer.Layer#set_para} to set the weights.
+     * @param input_size Size of the one-dimension input tensor.
+     * @param output_size Size of the one-dimension output tensor.
      */
     public Linear1D(int input_size, int output_size){
         paras.put("W", Tensor.random(new Tensor_size(input_size, output_size)));

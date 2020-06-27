@@ -7,6 +7,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -141,8 +142,8 @@ public abstract class Model implements Serializable{
      * @param inputs {@link ArrayList} of input tensor
      * @param targets {@link ArrayList} of target tensor
      * @param epochs Positive Integer. Number of epochs to train the model. An epoch is an iteration over the entire x and y data provided. 
-     * @param batch_size Positive Integer.
-     * @param shuffle Boolean. Whether to shuffle the training data before each epoch.
+     * @param batch_size Positive Integer. Number of samples in a mini-batch.
+     * @param shuffle Boolean. Whether to shuffle the training data before fitting.
      * @param verbose Boolean. Whether to show loss and epoch when fitting.
      * @throws IllegalArgumentException if the batch_size or epochs less than 1.
      * @throws IndexOutOfBoundsException if the input size does not match with the target size.
@@ -162,6 +163,31 @@ public abstract class Model implements Serializable{
         //load data
         ArrayList<Data> train = Data.to_data(inputs, targets, shuffle);
         //epoch
+        for(int epoch = 1; epoch <= epochs; epoch++){
+            double epoch_loss = 0;
+            for(int i = 0; i < train.size(); i += batch_size)
+                epoch_loss += train_on_batch(train.subList(i, Math.min(i+batch_size, train.size())));
+            if(verbose) System.out.println("epoch="+epoch+", loss="+epoch_loss);
+        }
+    }
+
+    /**
+     * Fit method with training set in the form of {@link ArrayList} of {@link Data}.
+     * @param train {@link ArrayList} of {@link Data}. The training set.
+     * @param epochs Positive Integer. Number of epochs to train the model. An epoch is an iteration over the entire input and target data provided. 
+     * @param batch_size Positive Integer. Number of samples in a mini-batch.
+     * @param shuffle Boolean. Whether to shuffle the training data before fitting.
+     * @param verbose Boolean. Whether to show loss and epoch when fitting.
+     * @throws IllegalArgumentException if the batch_size or epochs less than 1.
+     * @throws IllegalStateException if the model was never compiled.
+     */
+    public void fit(ArrayList<Data> train, int epochs, int batch_size, boolean shuffle, 
+    boolean verbose) throws IllegalArgumentException, IllegalStateException{
+        if(opt == null || loss == null)
+            throw new IllegalStateException("this model is not compiled");
+        if(batch_size < 1 || epochs < 1)
+            throw new IllegalArgumentException("batch size and epoch must be positive integers");
+        if(shuffle) Collections.shuffle(train);
         for(int epoch = 1; epoch <= epochs; epoch++){
             double epoch_loss = 0;
             for(int i = 0; i < train.size(); i += batch_size)
