@@ -93,16 +93,6 @@ public class Tensor1D extends Tensor {
     }
 
     /**
-     * Res_{i} = substract - t1_{i}
-     * @param t1
-     * @param subtract
-     * @return
-     */
-    public static Tensor subtracted (Tensor1D t1, double subtract) {
-        return t1.subtracted( subtract );
-    }
-
-    /**
      * Res_{i} = substract - this_{i}
      * @param subtract
      * @return

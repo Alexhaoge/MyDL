@@ -53,7 +53,7 @@ public abstract class Activation extends Layer{
      * @return gradient with activation
      */
     public Tensor backward(Tensor grad){
-        return (_df.apply(input)).cross_mul(grad);
+        return (_df.apply(input)).dot_mul(grad);
     }
 }
 

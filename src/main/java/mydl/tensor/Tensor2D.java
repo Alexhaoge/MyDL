@@ -201,18 +201,6 @@ public class Tensor2D extends Tensor {
     }
 
     /**
-     * Res_{i, j} = substract - t1_{i, j}
-     * @param t1
-     * @param substract
-     * @return
-     */
-    public static Tensor substracted (Tensor2D t1, double substract) {
-        Tensor2D res = new Tensor2D( t1 );
-        res.dot_mul( -1 );
-        return (Tensor2D) Tensor2D.add( res , substract );
-    }
-
-    /**
      * Res_{i, j} = substract - this_{i, j}
      * @param substract
      * @return

@@ -256,17 +256,7 @@ public class Tensor3D extends Tensor {
     public Tensor subtract (double minuend) {
         return this.add( (-1)*minuend );
     }
-
-    /**
-     * Res_{i, j, k} = subtract - t1_{i, j ,k}
-     * @param t1
-     * @param subtract
-     * @return
-     */
-    public static Tensor subtracted (Tensor3D t1, double subtract) {
-        return t1.subtracted( subtract );
-    }
-
+    
     /**
      * Res_{i, j, k} = subtract - this_{i, j ,k}
      * @param subtract

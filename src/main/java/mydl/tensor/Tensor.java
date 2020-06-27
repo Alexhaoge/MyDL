@@ -2,7 +2,6 @@ package mydl.tensor;
 import org.ejml.MatrixDimensionException;
 
 import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.util.Arrays;
 
 /**
