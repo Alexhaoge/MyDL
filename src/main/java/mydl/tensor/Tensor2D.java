@@ -576,4 +576,12 @@ public class Tensor2D extends Tensor {
         }
         return  res;
     }
+
+    public Tensor softmax() {
+        Tensor2D res = new Tensor2D( this );
+        CommonOps_DDRM.elementExp( this.darray, res.darray);
+        double sum = CommonOps_DDRM.elementSum( res.darray );
+        CommonOps_DDRM.scale( 1.0/sum, res.darray );
+        return res;
+    }
 }
