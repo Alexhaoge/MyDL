@@ -802,5 +802,13 @@ public class Tensor3D extends Tensor {
         }
         return  res;
     }
-
+    public Tensor softmax() {
+        Tensor3D res = new Tensor3D( this );
+        for (int i = 0; i < res.darray.size(); i++) {
+            CommonOps_DDRM.elementExp( this.darray.get( i ), res.darray.get( i ));
+            double sum = CommonOps_DDRM.elementSum( res.darray.get( i ) );
+            CommonOps_DDRM.scale( 1.0/sum, res.darray.get( i ) );
+        }
+        return res;
+    }
 }
