@@ -17,7 +17,6 @@ public class Sequential extends Model{
 
     /**
      * Forward propagation of Sequential model.
-     * 
      * @param inputs
      * @return output of sequential model
      */
@@ -48,16 +47,19 @@ public class Sequential extends Model{
      * @param _loss {@link Loss} function to add.
      * @throws RuntimeException if the tensor sizes of two adjacent layers do not fit.
      */
+    @Override
     public void compile(Optimizer _opt, Loss _loss) throws RuntimeException {
         super.compile(_opt, _loss);
         //check size
         Tensor_size lastsize = null;
-        for(int i=0; i < layers.size() - 1; i++){
+        int lastid = -1;
+        for(int i=0; i < layers.size(); i++){
             if(layers.get(i).getInputSize() == null) continue;
-            if(lastsize != null && lastsize.equals(layers.get(i+1).getInputSize()) != true)
-                throw new RuntimeException("The output size of Layer-"+Integer.toString(i)
-                    +" does not match with the input size of Layer-"+Integer.toString(i+1));
+            if(lastsize != null && lastsize.equals(layers.get(i).getInputSize()) != true)
+                throw new RuntimeException("The output size of Layer-"+Integer.toString(lastid)
+                    +" does not match with the input size of Layer-"+Integer.toString(i));
             lastsize = layers.get(i).getOutputSize();
+            lastid = i;
         }
     }
 
@@ -77,5 +79,13 @@ public class Sequential extends Model{
         if(layers.isEmpty())
             throw new IndexOutOfBoundsException("Empty model");
         else layers.remove(layers.size()-1);
+    }
+
+    /**
+     * Return true if this model has no layers.
+     * @return Boolean. True if the model is empty.
+     */
+    public boolean isEmptyModel(){
+        return layers.isEmpty();
     }
 }

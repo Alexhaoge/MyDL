@@ -21,8 +21,8 @@ public class Reshape extends Layer {
     public Reshape(Tensor_size input, Tensor_size output) throws MatrixDimensionException {
         if(input.total_size() != output.total_size())
             throw new MatrixDimensionException("Cannot reshape: total input size and total output size does not match");
-        this.inSize = input.clone();
-        this.outSize = output.clone();
+        this.inSize = input;
+        this.outSize = output;
     }
 
     @Override

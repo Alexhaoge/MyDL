@@ -29,7 +29,7 @@ public abstract class Model implements Serializable{
     /**
      * ArrayList of layers
      */
-    public ArrayList<Layer> layers;
+    public ArrayList<Layer> layers = new ArrayList<Layer>();
     
     /**
      * Optimizer of this model
