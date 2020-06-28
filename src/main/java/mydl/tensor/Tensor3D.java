@@ -17,7 +17,7 @@ public class Tensor3D extends Tensor {
      * ArrayList of DMatrixRMaj for storing data.
      * @see {@link org.ejml.data.DMatrixRMaj}, {@link ArrayList}
      */
-    ArrayList<DMatrixRMaj> darray = new ArrayList<DMatrixRMaj>();
+    public ArrayList<DMatrixRMaj> darray = new ArrayList<DMatrixRMaj>();
 
     public Tensor3D(ArrayList<double[][]> a, int N) {
         for (int i = 0; i < N; i++) {

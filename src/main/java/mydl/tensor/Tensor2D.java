@@ -13,7 +13,7 @@ public class Tensor2D extends Tensor {
      * DMatrixRMaj for storing data.
      * @see {@link org.ejml.data.DMatrixRMaj}
      */
-    DMatrixRMaj darray = new DMatrixRMaj();
+    public DMatrixRMaj darray = new DMatrixRMaj();
 
     /**
      * The default construction method gives a rownum*colnum matrix.

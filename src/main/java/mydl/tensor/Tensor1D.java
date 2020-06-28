@@ -16,7 +16,7 @@ public class Tensor1D extends Tensor {
      * DMatrixRMaj for storing data.
      * @see {@link org.ejml.data.DMatrixRMaj}
      */
-    DMatrixRMaj darray = new DMatrixRMaj();
+    public DMatrixRMaj darray = new DMatrixRMaj();
 
     /**
      * The default construction method gives a one-colums matrix(an array).
