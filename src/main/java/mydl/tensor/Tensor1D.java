@@ -129,6 +129,11 @@ public class Tensor1D extends Tensor {
 
     // 实际上，scale函数只有double 类型传入，所以...单独拿出int并不能优化 除非 调用ejml底层的代码
 
+    @Override
+    public Tensor subtract (int x) {
+        return super.subtract( x );
+    }
+
     /**
      * Res_{i} = t1_{i}*int_times
      * @param t1

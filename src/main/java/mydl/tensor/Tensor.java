@@ -18,19 +18,21 @@ public abstract class Tensor implements Serializable{
     public Tensor_size size;
 
     /**
-     * 根据size生成一个随机数的tensor
+     * 根据size生成一个均匀随机分布的tensor
      * @param _size A class contains dim and length[]
      *             dim 1,2,3 means tensor1d, tensor1d and tensor1d
      *             length[0],length[1],length[2] means rownum, colnum, N
+     * @param floor 均匀随机分布下确界
+     * @param ceil 均匀随机分布上确界
      * @return
      */
-    public static Tensor random(Tensor_size _size){
+    public static Tensor random_border(Tensor_size _size, double floor, double ceil){
         switch (_size.getSize()){
             case 1:{
                 int length = _size.getTensor_length()[0];
                 Tensor1D res = new Tensor1D( length );
                 for (int i = 0; i < res.darray.data.length; i++){
-                    res.darray.data[i] = Math.random();
+                    res.darray.data[i] = Math.random()*(ceil-floor)+floor;
                 }
                 return res;
             }
@@ -38,7 +40,7 @@ public abstract class Tensor implements Serializable{
                 int[] length = _size.getTensor_length();
                 Tensor2D res = new Tensor2D( length[0], length[1] );
                 for (int i = 0; i < res.darray.data.length; i++){
-                    res.darray.data[i] = Math.random();
+                    res.darray.data[i] = Math.random()*(ceil-floor)+floor;
                 }
                 return res;
             }
@@ -47,7 +49,64 @@ public abstract class Tensor implements Serializable{
                 Tensor3D res = new Tensor3D( length[0], length[1], length[2]);
                 for (int i = 0; i < res.darray.size(); i++){
                     for (int j = 0; j < res.darray.get( i ).data.length; j++){
-                        res.darray.get( i ).data[j] = Math.random();
+                        res.darray.get( i ).data[j] = Math.random()*(ceil-floor)+floor;
+                    }
+                }
+                return res;
+            }
+            default:
+                throw new MatrixDimensionException("Input tensor length error.");
+        }
+    }
+
+    /**
+     * 生成一个正态随机分布的Tensor
+     * @param _size A class contains dim and length[]
+     *      dim 1,2,3 means tensor1d, tensor1d and tensor1d
+     *      length[0],length[1],length[2] means rownum, colnum, N
+     * @param std
+     * @param mean
+     * @return
+     */
+    public static Tensor random_normdist(Tensor_size _size, double std, double mean){
+        switch (_size.getSize()){
+            case 1:{
+                int length = _size.getTensor_length()[0];
+                Tensor1D res = new Tensor1D( length );
+                for (int i = 0; i < res.darray.data.length; i=i+2){
+                    double temp_x = Math.random();
+                    double temp_y = Math.random();
+                    res.darray.data[i] = Math.cos(2*Math.PI*temp_x) * Math.sqrt(-2 * Math.log(1-temp_y)) * std + mean;
+                    if (i+1 < res.darray.data.length) {
+                        res.darray.data[i+1] = Math.sin(2*Math.PI*temp_x) * Math.sqrt(-2 * Math.log(1-temp_y)) * std + mean;
+                    }
+                }
+                return res;
+            }
+            case 2:{
+                int[] length = _size.getTensor_length();
+                Tensor2D res = new Tensor2D( length[0], length[1] );
+                for (int i = 0; i < res.darray.data.length; i = i+2){
+                    double temp_x = Math.random();
+                    double temp_y = Math.random();
+                    res.darray.data[i] = Math.cos(2*Math.PI*temp_x) * Math.sqrt(-2 * Math.log(1-temp_y)) * std + mean;
+                    if (i+1 < res.darray.data.length) {
+                        res.darray.data[i+1] = Math.sin(2*Math.PI*temp_x) * Math.sqrt(-2 * Math.log(1-temp_y)) * std + mean;
+                    }
+                }
+                return res;
+            }
+            case 3:{
+                int[] length = _size.getTensor_length();
+                Tensor3D res = new Tensor3D( length[0], length[1], length[2]);
+                for (int i = 0; i < res.darray.size(); i++){
+                    for (int j = 0; j < res.darray.get( i ).data.length; j=j+2){
+                        double temp_x = Math.random();
+                        double temp_y = Math.random();
+                        res.darray.get(i).data[j] = Math.cos(2*Math.PI*temp_x) * Math.sqrt(-2 * Math.log(1-temp_y)) * std + mean;
+                        if (i+1 < res.darray.get(i).data.length) {
+                            res.darray.get(i).data[i+1] = Math.sin(2*Math.PI*temp_x) * Math.sqrt(-2 * Math.log(1-temp_y)) * std + mean;
+                        }
                     }
                 }
                 return res;

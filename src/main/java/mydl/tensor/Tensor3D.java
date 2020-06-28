@@ -546,8 +546,38 @@ public class Tensor3D extends Tensor {
         return res;
     }
 
-    public Tensor reshape (int x) {
-        return null;
+    /** Return a slice as low-dim tensor.
+     * @param rownum dimselect = -1, rownum means the position of Tensor1D, dimselect=1, means len of Tensor1D.
+     * @param colnum dimselect = 1, colnum means the position of Tensor1D, dimselect=-1, means len of Tensor1D.
+     * @param N N decides which slice = Tensor3D[N]
+     * @param dimselect dimselect = +/- 1 res = tensor1d, = 2, res = Tensor3D[N].reshape(rownum, colnum)
+     * @return
+     */
+    public Tensor reshape (int rownum, int colnum, int N, int dimselect) {
+        switch (dimselect) {
+            case 1:{
+                Tensor1D res = new Tensor1D( this.darray.get( 0 ).getNumRows() );
+                for (int i = 0; i < this.darray.get( 0 ).getNumRows(); i++) {
+                    res.getData().data[i] =  this.darray.get( N ).get( i, colnum );
+                }
+                return res;
+            }
+            case 2:{
+                Tensor2D res = new Tensor2D( this.darray.get( N ));
+                res.reshape( rownum, colnum );
+                return res;
+            }
+            case -1:{
+                Tensor1D res = new Tensor1D( this.darray.get( 0 ).getNumCols() );
+                for (int i = 0; i < this.darray.get( 0 ).getNumCols(); i++) {
+                    res.getData().data[i] =  this.darray.get( N ).get( rownum, i );
+                }
+                return res;
+            }
+            default:{
+                throw new MatrixDimensionException("Tensor size error.");
+            }
+        }
     }
 
     /**
