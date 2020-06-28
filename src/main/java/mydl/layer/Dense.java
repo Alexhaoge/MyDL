@@ -28,8 +28,8 @@ public class Dense extends Layer {
      * @param units Positive integer. The number of units in the dense layer.
      */
     public Dense(Tensor_size input_size, int units){
-        this.inSize = input_size;
-        this.outSize = input_size.clone();
+        this.inSize = input_size.clone();
+        this.outSize = inSize.clone();
         this.outSize.Tensor_length[outSize.size-1] = units;
         paras.put("kernel", Tensor.random(new Tensor_size(inSize.Tensor_length[inSize.size-1],units)));
         paras.put("bias", Tensor.random(new Tensor_size(units)));

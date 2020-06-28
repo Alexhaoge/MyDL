@@ -49,6 +49,10 @@ public class Tensor3D extends Tensor {
         this.size = new Tensor_size( rowNum, colNum, N );
     }
 
+    /**
+     * Copy constructor.
+     * @param t1
+     */
     public Tensor3D(Tensor3D t1) {
         for (int i = 0; i < t1.darray.size(); i++) {
             this.darray.add(t1.darray.get( i ).copy());
