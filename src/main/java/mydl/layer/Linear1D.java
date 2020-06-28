@@ -37,8 +37,8 @@ public class Linear1D extends Layer {
      * @param units Positive integer. The number of units in the dense layer.
      */
     public Linear1D(Tensor_size input_size, int units){
-        this.inSize = input_size;
-        this.outSize = input_size.clone();
+        this.inSize = input_size.clone();
+        this.outSize = inSize.clone();
         outSize.Tensor_length[outSize.size-1] = units;
         paras.put("W", Tensor.random(new Tensor_size(inSize.Tensor_length[inSize.size-1],units)));
         paras.put("b", Tensor.random(new Tensor_size(units)));
