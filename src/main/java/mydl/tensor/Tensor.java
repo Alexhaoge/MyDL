@@ -3,6 +3,7 @@ import org.ejml.MatrixDimensionException;
 
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.Random;
 
 /**
  * The {@code Tensor} class is the basic datatype for neural network.
@@ -18,21 +19,21 @@ public abstract class Tensor implements Serializable{
     public Tensor_size size;
 
     /**
-     * 根据size生成一个均匀随机分布的tensor
-     * @param _size A class contains dim and length[]
-     *             dim 1,2,3 means tensor1d, tensor1d and tensor1d
-     *             length[0],length[1],length[2] means rownum, colnum, N
-     * @param floor 均匀随机分布下确界
+     * Generate a tensor with pseudorandom, uniformly distributed
+     * {@code double} value between {@code floor} and {@code cell}.
+     * @param _size {@link Tensor_size}. The shape of the tensor.
+     * @param floor Upper
      * @param ceil 均匀随机分布上确界
      * @return
      */
-    public static Tensor random_border(Tensor_size _size, double floor, double ceil){
+    public static Tensor random_uniform(Tensor_size _size, double floor, double ceil){
+        Random ran = new Random();
         switch (_size.getSize()){
             case 1:{
                 int length = _size.getTensor_length()[0];
                 Tensor1D res = new Tensor1D( length );
                 for (int i = 0; i < res.darray.data.length; i++){
-                    res.darray.data[i] = Math.random()*(ceil-floor)+floor;
+                    res.darray.data[i] = ran.nextDouble()*(ceil-floor)+floor;
                 }
                 return res;
             }
@@ -40,7 +41,7 @@ public abstract class Tensor implements Serializable{
                 int[] length = _size.getTensor_length();
                 Tensor2D res = new Tensor2D( length[0], length[1] );
                 for (int i = 0; i < res.darray.data.length; i++){
-                    res.darray.data[i] = Math.random()*(ceil-floor)+floor;
+                    res.darray.data[i] = ran.nextDouble()*(ceil-floor)+floor;
                 }
                 return res;
             }
@@ -49,7 +50,7 @@ public abstract class Tensor implements Serializable{
                 Tensor3D res = new Tensor3D( length[0], length[1], length[2]);
                 for (int i = 0; i < res.darray.size(); i++){
                     for (int j = 0; j < res.darray.get( i ).data.length; j++){
-                        res.darray.get( i ).data[j] = Math.random()*(ceil-floor)+floor;
+                        res.darray.get( i ).data[j] = ran.nextDouble()*(ceil-floor)+floor;
                     }
                 }
                 return res;
@@ -60,39 +61,27 @@ public abstract class Tensor implements Serializable{
     }
 
     /**
-     * 生成一个正态随机分布的Tensor
-     * @param _size A class contains dim and length[]
-     *      dim 1,2,3 means tensor1d, tensor1d and tensor1d
-     *      length[0],length[1],length[2] means rownum, colnum, N
-     * @param std
-     * @param mean
-     * @return
+     * Generate a tensor with pseudorandom, uniformly distributed
+     * {@code double} value between {@code 0.0} and {@code 1.0}.
+     * @param _size {@link Tensor_size}. The shape of the tensor.
+     * @return A random tensor.
      */
-    public static Tensor random_normdist(Tensor_size _size, double std, double mean){
+    public static Tensor random(Tensor_size _size){
+        Random ran = new Random();
         switch (_size.getSize()){
             case 1:{
                 int length = _size.getTensor_length()[0];
                 Tensor1D res = new Tensor1D( length );
-                for (int i = 0; i < res.darray.data.length; i=i+2){
-                    double temp_x = Math.random();
-                    double temp_y = Math.random();
-                    res.darray.data[i] = Math.cos(2*Math.PI*temp_x) * Math.sqrt(-2 * Math.log(1-temp_y)) * std + mean;
-                    if (i+1 < res.darray.data.length) {
-                        res.darray.data[i+1] = Math.sin(2*Math.PI*temp_x) * Math.sqrt(-2 * Math.log(1-temp_y)) * std + mean;
-                    }
+                for (int i = 0; i < res.darray.data.length; i++){
+                    res.darray.data[i] = ran.nextDouble();
                 }
                 return res;
             }
             case 2:{
                 int[] length = _size.getTensor_length();
                 Tensor2D res = new Tensor2D( length[0], length[1] );
-                for (int i = 0; i < res.darray.data.length; i = i+2){
-                    double temp_x = Math.random();
-                    double temp_y = Math.random();
-                    res.darray.data[i] = Math.cos(2*Math.PI*temp_x) * Math.sqrt(-2 * Math.log(1-temp_y)) * std + mean;
-                    if (i+1 < res.darray.data.length) {
-                        res.darray.data[i+1] = Math.sin(2*Math.PI*temp_x) * Math.sqrt(-2 * Math.log(1-temp_y)) * std + mean;
-                    }
+                for (int i = 0; i < res.darray.data.length; i++){
+                    res.darray.data[i] = ran.nextDouble();
                 }
                 return res;
             }
@@ -100,13 +89,8 @@ public abstract class Tensor implements Serializable{
                 int[] length = _size.getTensor_length();
                 Tensor3D res = new Tensor3D( length[0], length[1], length[2]);
                 for (int i = 0; i < res.darray.size(); i++){
-                    for (int j = 0; j < res.darray.get( i ).data.length; j=j+2){
-                        double temp_x = Math.random();
-                        double temp_y = Math.random();
-                        res.darray.get(i).data[j] = Math.cos(2*Math.PI*temp_x) * Math.sqrt(-2 * Math.log(1-temp_y)) * std + mean;
-                        if (i+1 < res.darray.get(i).data.length) {
-                            res.darray.get(i).data[i+1] = Math.sin(2*Math.PI*temp_x) * Math.sqrt(-2 * Math.log(1-temp_y)) * std + mean;
-                        }
+                    for (int j = 0; j < res.darray.get( i ).data.length; j++){
+                        res.darray.get( i ).data[j] = ran.nextDouble();
                     }
                 }
                 return res;
@@ -116,7 +100,61 @@ public abstract class Tensor implements Serializable{
         }
     }
 
-    //返回一个新的0张量
+    /**
+     * Generate a tensor with random number by normal distribution{@code N(mean,std)}.
+     * @param _size {@link Tensor_size}. The shape of the tensor.
+     * @param mean Mean of the normal distribution.
+     * @param std Standard deviation of the normal distribution.
+     * @return A random tensor.
+     */
+    public static Tensor random_normdist(Tensor_size _size, double mean, double std){
+        Random ran = new Random();
+        switch (_size.getSize()){
+            case 1:{
+                int length = _size.getTensor_length()[0];
+                Tensor1D res = new Tensor1D( length );
+                for (int i = 0; i < res.darray.data.length; i++){
+                    res.darray.data[i] = ran.nextGaussian() * std + mean;
+                }
+                return res;
+            }
+            case 2:{
+                int[] length = _size.getTensor_length();
+                Tensor2D res = new Tensor2D( length[0], length[1] );
+                for (int i = 0; i < res.darray.data.length; i++){
+                    res.darray.data[i] = ran.nextGaussian() * std + mean;
+                }
+                return res;
+            }
+            case 3:{
+                int[] length = _size.getTensor_length();
+                Tensor3D res = new Tensor3D( length[0], length[1], length[2]);
+                for (int i = 0; i < res.darray.size(); i++){
+                    for (int j = 0; j < res.darray.get(i).data.length; j++){
+                        res.darray.get(i).data[j] = ran.nextGaussian() * std + mean;
+                    }
+                }
+                return res;
+            }
+            default:
+                throw new MatrixDimensionException("Input tensor length error.");
+        }
+    }
+
+    /**
+     * Generate a tensor with random number by standard normal distribution{@code N(0,1)}.
+     * @param _size {@link Tensor_size}. The shape of the tensor.
+     * @return A random tensor.
+     */
+    public static Tensor random_normdist(Tensor_size _size){
+        return Tensor.random_normdist(_size, 0, 1);
+    }
+
+    /**
+     * Generate a zero tensor.
+     * @param _size {@link Tensor_size}. The shape of the tensor.
+     * @return A zero tensor.
+     */
     public static Tensor zero(Tensor_size _size){
         switch (_size.getSize()){
             case 1:{
@@ -252,7 +290,8 @@ public abstract class Tensor implements Serializable{
     }
 
     /**
-     * relu 我activation里没法写甩锅了,t是ReLU推广形式里>0的那个lambda
+     * Relu
+     * @param t 
      * @return
      */
     public abstract Tensor relu(double t);

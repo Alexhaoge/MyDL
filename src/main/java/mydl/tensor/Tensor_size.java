@@ -21,7 +21,7 @@ public class Tensor_size implements Serializable{
      * Constructor.
      * @param _Tensor_length
      */
-    public Tensor_size (int... _Tensor_length) {
+    public Tensor_size(int... _Tensor_length){
         if (_Tensor_length.length > 3 || _Tensor_length.length <= 0) {
             throw new MatrixDimensionException("Tensor size error");
         }
