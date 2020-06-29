@@ -45,6 +45,22 @@ public class Tensor1D extends Tensor {
         this.darray = new DMatrixRMaj(length);
     }
 
+    /**
+     * Constructor with a Tensor_size.
+     * @param _size Shape of this Tensor1D.
+     * @throws MatrixDimensionException if {@code Tensor_size.size != 1}.
+     */
+    public Tensor1D(Tensor_size _size) throws MatrixDimensionException{
+        if(_size.size != 1)
+            throw new MatrixDimensionException("Tensor_size must be 1 for Tensor1D");
+        this.size = new Tensor_size(_size);
+        this.darray = new DMatrixRMaj(this.size.Tensor_length[0]);
+    }
+
+    /**
+     * Copy constructor.
+     * @param t1
+     */
     public Tensor1D(Tensor1D t1) {
         this.size = new Tensor_size( t1.size.getTensor_length() );
         this.darray = new DMatrixRMaj(t1.darray);
@@ -185,18 +201,28 @@ public class Tensor1D extends Tensor {
         }
     }
 
-    /**
-     *The methond cross_mul means res = this*t2^{T}
-     * @param t2 (n*1 array and t2^{T} means 1*a array)
-     * @return gives a Tensor2D result.
-     */
     public Tensor cross_mul(Tensor t2) {
-        if (t2 instanceof Tensor1D){
-            Tensor2D res = new Tensor2D( this.darray.getNumElements(), this.darray.getNumElements() );
-            CommonOps_DDRM.multTransB(this.darray, ((Tensor1D) t2).darray, res.darray);
-            return res;
-        }else{
-            throw new MatrixDimensionException("Tensor sizes differ.");
+        try {
+            if (t2 instanceof Tensor1D){
+                Tensor1D res = new Tensor1D( this.darray.getNumElements());
+                CommonOps_DDRM.mult(this.darray, ((Tensor1D) t2).darray, res.darray);
+                return res;
+            } else if (t2 instanceof Tensor2D){
+                Tensor1D res = new Tensor1D( this.darray.getNumElements());
+                CommonOps_DDRM.mult(this.darray, ((Tensor2D) t2).darray, res.darray);
+                return res;
+            } else if (t2 instanceof Tensor3D){
+                Tensor3D _t2 = (Tensor3D) t2;
+                Tensor3D res = new Tensor3D(_t2.size.Tensor_length[0], 
+                    this.size.Tensor_length[0], _t2.size.Tensor_length[2]);
+                for(int i=0; i<_t2.size.Tensor_length[0]; i++)
+                    CommonOps_DDRM.mult(this.darray, _t2.darray.get(i), res.darray.get(i));
+                return res;
+            } else {
+                throw new MatrixDimensionException("Invalid tensor shape");
+            }
+        } catch (MatrixDimensionException e) {
+            throw new MatrixDimensionException("Tensor shapes not compatible");
         }
     }
 
@@ -208,18 +234,6 @@ public class Tensor1D extends Tensor {
     public Tensor divided (Tensor t1) {
         Tensor1D res = new Tensor1D(this);
         CommonOps_DDRM.elementDiv( res.darray, ((Tensor1D)t1).darray );
-        return res;
-    }
-
-    /**
-     * Res_{n1 x n2} = t1_{n1 x 1}*{t2_{n2 x 1}}^T
-     * @param t1
-     * @param t2
-     * @return
-     */
-    public static Tensor cross_mul(Tensor1D t1, Tensor1D t2) {
-        Tensor2D res = new Tensor2D( t1.darray.getNumElements(), t2.darray.getNumElements() );
-        CommonOps_DDRM.multTransB(t1.darray, t2.darray, res.darray);
         return res;
     }
 

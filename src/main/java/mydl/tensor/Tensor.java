@@ -246,9 +246,14 @@ public abstract class Tensor implements Serializable{
     public abstract Tensor dot_mul(int x);
 
     /**
-     * 矩阵乘法
+     * Matrix multiplication of {@code this} and {@code x}.
+     * @param x the tensor to be multiplied.
+     * @throws MatrixDimensionException if this tensor does not 
+     * have compactible shape for matrix multiply with {@code x}.
+     * @apiNote Matrix multiplication does not satisfy the commutative law, 
+     * so {@code a.cross_mul(b)} is different from {@code b.cross_mul(a)}.
      */
-    public abstract Tensor cross_mul(Tensor x);
+    public abstract Tensor cross_mul(Tensor x) throws MatrixDimensionException;
 
     /**
      * this / x 按位被除，请务必和divide区分开
