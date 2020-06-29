@@ -61,6 +61,18 @@ public class Tensor2D extends Tensor {
     }
 
     /**
+     * Constructor with a Tensor_size.
+     * @param _size Shape of this Tensor2D.
+     * @throws MatrixDimensionException if {@code Tensor_size.size != 2}.
+     */
+    public Tensor2D(Tensor_size _size) throws MatrixDimensionException{
+        if(_size.size != 2)
+            throw new MatrixDimensionException("Tensor_size must be 2 for Tensor2D");
+        this.size = new Tensor_size(_size);
+        this.darray = new DMatrixRMaj(this.size.Tensor_length[0], this.size.Tensor_length[1]);
+    }
+
+    /**
      * Construct a same Tensor2D(Deep clone).
      * @param t1
      */
@@ -281,18 +293,6 @@ public class Tensor2D extends Tensor {
     // 实际上，scale函数只有double 类型传入，所以...单独拿出int并不能优化 除非 调用ejml底层的代码
 
     /**
-     * Res_{i, j} = t1_{i, j}*int_times
-     * @param t1
-     * @param int_times
-     * @return
-     */
-    public static Tensor dot_mul(Tensor2D t1, int int_times) {
-        Tensor2D res = new Tensor2D( t1 );
-        CommonOps_DDRM.scale( int_times, res.darray );
-        return res;
-    }
-
-    /**
      * Res_{i, j} = this_{i, j}*int_times
      * @param int_times
      * @return
@@ -300,18 +300,6 @@ public class Tensor2D extends Tensor {
     public Tensor dot_mul(int int_times) {
         Tensor2D res = new Tensor2D( this );
         CommonOps_DDRM.scale( int_times, res.darray );
-        return res;
-    }
-
-    /**
-     * Res_{rownum1 x colnum2} = t1_{rownum1 x colnum1}*t2_{colnum1 x colnum2}
-     * @param t1
-     * @param t2
-     * @return
-     */
-    public static Tensor cross_mul(Tensor2D t1, Tensor2D t2) {
-        Tensor2D res = new Tensor2D( t1.darray.getNumRows(), t2.darray.getNumCols() );
-        CommonOps_DDRM.mult( t1.darray, t2.darray, res.darray );
         return res;
     }
 

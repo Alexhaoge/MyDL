@@ -50,8 +50,22 @@ public class Tensor3D extends Tensor {
     }
 
     /**
+     * Constructor with a Tensor_size.
+     * @param _size Shape of this Tensor3D.
+     * @throws MatrixDimensionException if {@code Tensor_size.size != 3}.
+     */
+    public Tensor3D(Tensor_size _size) throws MatrixDimensionException{
+        if (_size.size != 3)
+            throw new MatrixDimensionException("Tensor_size must be 3 for Tensor3D");
+        this.size = new Tensor_size(_size);
+        for (int i = 0; i < this.size.Tensor_length[0]; i++) {
+            this.darray.add(new DMatrixRMaj(this.size.Tensor_length[1], this.size.Tensor_length[2]));
+        }
+    }    
+
+    /**
      * Copy constructor.
-     * @param t1
+     * @param t1 Tensor3D to copy.
      */
     public Tensor3D(Tensor3D t1) {
         for (int i = 0; i < t1.darray.size(); i++) {
@@ -60,6 +74,10 @@ public class Tensor3D extends Tensor {
         this.size = new Tensor_size( t1.size.Tensor_length );
     }
 
+    /**
+     * 
+     * @param data
+     */
     public Tensor3D(double[][][]data) {
         int N = data.length;
         int colnum = data[0].length;
