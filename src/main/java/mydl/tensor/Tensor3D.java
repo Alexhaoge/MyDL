@@ -4,6 +4,7 @@ import org.ejml.MatrixDimensionException;
 import org.ejml.data.DMatrixRMaj;
 import org.ejml.dense.row.CommonOps_DDRM;
 
+import javax.sound.midi.Soundbank;
 import java.util.ArrayList;
 
 /**
@@ -138,19 +139,20 @@ public class Tensor3D extends Tensor {
         }
         switch (new_size.size){
             case 1: {
-                Tensor1D res = new Tensor1D( new_size.total_size() );
+                DMatrixRMaj d1 = new DMatrixRMaj(new_size.total_size(), 1);
                 for (int i = 0; i < this.darray.size(); i++) {
                     for (int j = 0; j < this.darray.get( 0 ).getNumElements(); j++) {
-                        res.darray.data[i*this.darray.size()+j] = this.darray.get( i ).data[j];
+                        d1.data[ i * this.darray.get(0).getNumElements() + j ] = this.darray.get( i ).data[j];
                     }
                 }
+                Tensor1D res = new Tensor1D( d1 );
                 return res;
             }
             case 2:{
                 DMatrixRMaj d1 = new DMatrixRMaj(new_size.getTensor_length()[0], new_size.getTensor_length()[1]);
                 for (int i = 0; i < this.darray.size(); i++) {
                     for (int j = 0; j < this.darray.get( 0 ).getNumElements(); j++) {
-                        d1.data[i*this.darray.size()+j] = this.darray.get( i ).data[j];
+                        d1.data[i*this.darray.get( 0 ).getNumElements()+j] = this.darray.get( i ).data[j];
                     }
                 }
                 Tensor2D res = new Tensor2D( d1 );
