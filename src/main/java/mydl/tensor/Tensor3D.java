@@ -65,15 +65,10 @@ public class Tensor3D extends Tensor {
         int colnum = data[0].length;
         int rownum = data[0][0].length;
         for (int i = 0; i < N; i++) {
-            DMatrixRMaj d_temp = new DMatrixRMaj(rownum, colnum);
-            for (int j = 0; j < colnum; j++) {
-                for (int k = 0; k < rownum; k++) {
-                    d_temp.set( k, j, data[i][j][k] );
-                }
-            }
-            this.darray.add(d_temp);
+            DMatrixRMaj d1 = new DMatrixRMaj(data[i]);
+            this.darray.add( d1 );
         }
-        this.size = new Tensor_size( rownum, colnum, N );
+        this.size = new Tensor_size( N, colnum, rownum );
     }
     /**
      * Res_{i, j, k} = t1_{i, j, k} + addtion
@@ -138,11 +133,55 @@ public class Tensor3D extends Tensor {
      * @return
      */
     public Tensor reshape (Tensor_size new_size) {
-        Tensor3D res = new Tensor3D( this );
-        for (int i = 0; i < new_size.getTensor_length()[0]; i++){
-            res.darray.get( i ).reshape( new_size.getTensor_length()[1], new_size.getTensor_length()[2], true );
+        if (new_size.total_size() != this.size().total_size()) {
+            throw new MatrixDimensionException( "Reshape tensor size error." );
         }
-        return res;
+        switch (new_size.size){
+            case 1: {
+                Tensor1D res = new Tensor1D( new_size.total_size() );
+                for (int i = 0; i < this.darray.size(); i++) {
+                    for (int j = 0; j < this.darray.get( 0 ).getNumElements(); j++) {
+                        res.darray.data[i*this.darray.size()+j] = this.darray.get( i ).data[j];
+                    }
+                }
+                return res;
+            }
+            case 2:{
+                DMatrixRMaj d1 = new DMatrixRMaj(new_size.getTensor_length()[0], new_size.getTensor_length()[1]);
+                for (int i = 0; i < this.darray.size(); i++) {
+                    for (int j = 0; j < this.darray.get( 0 ).getNumElements(); j++) {
+                        d1.data[i*this.darray.size()+j] = this.darray.get( i ).data[j];
+                    }
+                }
+                Tensor2D res = new Tensor2D( d1 );
+                return res;
+            }
+            case 3:{
+                int temp_num1 = 0, temp_num2 = 0;
+                double[][][] data = new double[new_size.getTensor_length()[0]][new_size.getTensor_length()[1]][new_size.getTensor_length()[2]];
+                double[] temp_data = new double[this.darray.size()*this.darray.get( 0 ).getNumElements()];
+                for (int i = 0; i < this.darray.size(); i++) {
+                    for(int j = 0; j < this.darray.get( 0 ).getNumElements(); j++) {
+                        temp_data[temp_num1] = this.darray.get( i ).data[j];
+                        temp_num1 ++;
+                    }
+                }
+                for (int i = 0; i < new_size.getTensor_length()[0]; i++) {
+                    for (int j = 0; j < new_size.getTensor_length()[1]; j++) {
+                        for (int k = 0; k < new_size.getTensor_length()[2]; k++) {
+                            data[i][j][k] = temp_data[temp_num2];
+                            temp_num2 ++;
+                        }
+                    }
+                }
+
+                Tensor3D res = new Tensor3D( data );
+                return res;
+            }
+            default:{
+                throw new MatrixDimensionException("Dimension errors");
+            }
+        }
     }
 
     /**
