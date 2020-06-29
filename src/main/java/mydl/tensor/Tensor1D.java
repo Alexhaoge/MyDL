@@ -345,6 +345,9 @@ public class Tensor1D extends Tensor {
      * @return
      */
     public Tensor reshape (Tensor_size new_size) {
+        if (new_size.total_size() != this.size().total_size()) {
+            throw new MatrixDimensionException( "Reshape tensor size error." );
+        }
         switch (new_size.size){
             case 1: {
                 Tensor1D res = new Tensor1D( this );
@@ -359,9 +362,18 @@ public class Tensor1D extends Tensor {
                 return res;
             }
             case 3:{
-                ArrayList<DMatrixRMaj> d1 = new ArrayList<>();
-                d1.add(this.darray);
-                Tensor3D res = new Tensor3D( d1 );
+                int temp_num = 0;
+                double[][][] data = new double[new_size.getTensor_length()[0]][new_size.getTensor_length()[1]][new_size.getTensor_length()[2]];
+                for (int i = 0; i < new_size.getTensor_length()[0]; i++) {
+                    for (int j = 0; j < new_size.getTensor_length()[1]; j++) {
+                        for (int k = 0; k < new_size.getTensor_length()[2]; k++) {
+                            data[i][j][k] = this.darray.data[temp_num];
+                            temp_num ++;
+                        }
+                    }
+                }
+
+                Tensor3D res = new Tensor3D( data );
                 return res;
             }
             default:{

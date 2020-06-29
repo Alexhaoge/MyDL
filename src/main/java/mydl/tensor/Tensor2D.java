@@ -138,9 +138,37 @@ public class Tensor2D extends Tensor {
      * @return
      */
     public Tensor reshape (Tensor_size new_size) {
-        Tensor2D res = new Tensor2D( this );
-        res.darray.reshape( new_size.getTensor_length()[0],new_size.getTensor_length()[1],true );
-        return res;
+        if (new_size.total_size() != this.size().total_size()) {
+            throw new MatrixDimensionException( "Reshape tensor size error." );
+        }
+        switch (new_size.getSize()) {
+            case 1:{
+                Tensor1D res = new Tensor1D( this.darray );
+                return res;
+            }
+            case 2:{
+                return this.reshape( new_size.getTensor_length()[0], new_size.getTensor_length()[1] );
+            }
+            case 3:{
+                double[][][]data = new double[new_size.getTensor_length()[0]][new_size.getTensor_length()[1]][new_size.getTensor_length()[2]];
+                int temp_num = 0;
+                DMatrixRMaj d2 = new DMatrixRMaj(this.darray.numCols, this.darray.numRows);
+                CommonOps_DDRM.transpose( this.darray, d2 );
+                for (int i = 0; i < new_size.getTensor_length()[0]; i++) {
+                    for (int j = 0; j < new_size.getTensor_length()[1]; j++) {
+                        for (int k = 0; k < new_size.getTensor_length()[2]; k++) {
+                            data[i][j][k] = d2.data[temp_num];
+                            temp_num ++;
+                        }
+                    }
+                }
+                Tensor3D res = new Tensor3D( data );
+                return res;
+            }
+            default:{
+                throw new MatrixDimensionException("Dimension errors");
+            }
+        }
     }
 
     /**
@@ -480,6 +508,9 @@ public class Tensor2D extends Tensor {
      * @return
      */
     public Tensor reshape (int rownum, int colnum) {
+        if (rownum*colnum != this.size().total_size()) {
+            throw new MatrixDimensionException( "Reshape tensor size error." );
+        }
         Tensor2D res = new Tensor2D( this );
         res.darray.reshape( rownum, colnum, true );
         res.size().Tensor_length[0] = rownum;
@@ -487,37 +518,6 @@ public class Tensor2D extends Tensor {
         return res;
     }
 
-    /** Return a slice as low-dim tensor.
-     * @param rownum rownum dimselect = -1, rownum means the position of Tensor1D, dimselect=1, means len of Tensor1D.
-     * @param colnum dimselect = 1, colnum means the position of Tensor1D, dimselect=-1, means len of Tensor1D,
-     * @param dimselect dimselect = +/- 1 res = tensor1d, = 2, res = Tensor3D[N].reshape(rownum, colnum)
-     * @return
-     */
-    public Tensor reshape (int rownum, int colnum, int dimselect) {
-        switch (dimselect){
-            case 1:{
-                Tensor1D res = new Tensor1D( this.darray.getNumRows() );
-                for (int i = 0; i < res.darray.getNumElements(); i++) {
-                    res.darray.data[i] = this.darray.get( i, colnum );
-                }
-            }
-            case -1:{
-                Tensor1D res = new Tensor1D( this.darray.getNumCols() );
-                for (int i = 0; i < res.darray.getNumElements(); i++) {
-                    res.darray.data[i] = this.darray.get( colnum, i );
-                }
-            }
-            case 2:{
-                Tensor2D res = new Tensor2D( rownum, colnum );
-                res.size().Tensor_length[0] = rownum;
-                res.size().Tensor_length[1] = colnum;
-                return res;
-            }
-            default:{
-                throw new MatrixDimensionException("Tensor size error.");
-            }
-        }
-    }
 
     /**
      * Res = (DMatrixRMaj) this
