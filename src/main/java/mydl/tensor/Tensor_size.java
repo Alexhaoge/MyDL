@@ -26,8 +26,10 @@ public class Tensor_size implements Serializable{
             throw new MatrixDimensionException("Tensor size error");
         }
         size = _Tensor_length.length;
-        for(int i=0;i<size;i++)
+
+        for(int i=0;i<size;i++) {
             this.Tensor_length[i] = _Tensor_length[i];
+        }
     }
     
     /**
@@ -36,8 +38,9 @@ public class Tensor_size implements Serializable{
      */
     public Tensor_size(Tensor_size _Tensor_size){
         this.size = _Tensor_size.size;
-        for(int i=0;i<3;i++)
+        for(int i = 0; i < size; i++) {
             this.Tensor_length[i] = _Tensor_size.Tensor_length[i];
+        }
     }
 
     /**

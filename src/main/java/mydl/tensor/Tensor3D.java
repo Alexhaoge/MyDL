@@ -139,8 +139,8 @@ public class Tensor3D extends Tensor {
      */
     public Tensor reshape (Tensor_size new_size) {
         Tensor3D res = new Tensor3D( this );
-        for (int i = 0; i < new_size.getTensor_length()[2]; i++){
-            res.darray.get( i ).reshape( new_size.getTensor_length()[0], new_size.getTensor_length()[1], true );
+        for (int i = 0; i < new_size.getTensor_length()[0]; i++){
+            res.darray.get( i ).reshape( new_size.getTensor_length()[1], new_size.getTensor_length()[2], true );
         }
         return res;
     }
@@ -150,7 +150,7 @@ public class Tensor3D extends Tensor {
      * @return
      */
     public Tensor_size size () {
-        Tensor_size res = new Tensor_size( this.darray.get( 0 ).getNumRows(), this.darray.get( 0 ).getNumCols(), this.darray.size() );
+        Tensor_size res = new Tensor_size(  this.darray.size(), this.darray.get( 0 ).getNumRows(), this.darray.get( 0 ).getNumCols() );
         return res;
     }
 
@@ -557,7 +557,7 @@ public class Tensor3D extends Tensor {
      * @param dimselect dimselect = +/- 1 res = tensor1d, = 2, res = Tensor3D[N].reshape(rownum, colnum)
      * @return
      */
-    public Tensor reshape (int rownum, int colnum, int N, int dimselect) {
+    public Tensor reshape (int N, int rownum, int colnum, int dimselect) {
         switch (dimselect) {
             case 1:{
                 Tensor1D res = new Tensor1D( this.darray.get( 0 ).getNumRows() );
