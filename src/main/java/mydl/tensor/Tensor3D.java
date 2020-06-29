@@ -4,7 +4,6 @@ import org.ejml.MatrixDimensionException;
 import org.ejml.data.DMatrixRMaj;
 import org.ejml.dense.row.CommonOps_DDRM;
 
-import javax.sound.midi.Soundbank;
 import java.util.ArrayList;
 
 /**
@@ -790,18 +789,6 @@ public class Tensor3D extends Tensor {
      */
     public Tensor divide (double x) {
         return this.dot_mul( 1.0/x );
-    }
-
-    /**
-     * Res_{rownum1 x colnum2, k} = t1_{rownum1 x colnum1, k}*t2_{colnum1 x colnum2, k}(dim(t2) = 3)
-     * Res_{rownum1 x colnum2, k} = t1_{rownum1 x colnum1, k}*t2_{colnum1 x colnum2}(dim(t2) = 2)
-     * Res_{rownum1 x 1, k} = t1_{rownum1 x colnum1, k}*t2_{colnum1 x 1}(dim(t2) = 1)
-     * @param t1
-     * @param t2
-     * @return
-     */
-    public static Tensor cross_mul(Tensor3D t1, Tensor3D t2) {
-        return t1.dot_mul( t2 );
     }
 
     /**

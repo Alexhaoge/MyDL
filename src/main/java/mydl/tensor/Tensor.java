@@ -30,24 +30,23 @@ public abstract class Tensor implements Serializable{
         Random ran = new Random();
         switch (_size.getSize()){
             case 1:{
-                int length = _size.getTensor_length()[0];
-                Tensor1D res = new Tensor1D( length );
+                Tensor1D res = new Tensor1D( _size.Tensor_length[0] );
                 for (int i = 0; i < res.darray.data.length; i++){
                     res.darray.data[i] = ran.nextDouble()*(ceil-floor)+floor;
                 }
                 return res;
             }
             case 2:{
-                int[] length = _size.getTensor_length();
-                Tensor2D res = new Tensor2D( length[0], length[1] );
+                Tensor2D res = new Tensor2D( _size.Tensor_length[0], 
+                    _size.Tensor_length[1] );
                 for (int i = 0; i < res.darray.data.length; i++){
                     res.darray.data[i] = ran.nextDouble()*(ceil-floor)+floor;
                 }
                 return res;
             }
             case 3:{
-                int[] length = _size.getTensor_length();
-                Tensor3D res = new Tensor3D( length[0], length[1], length[2]);
+                Tensor3D res = new Tensor3D( _size.Tensor_length[0], 
+                    _size.Tensor_length[1], _size.Tensor_length[2]);
                 for (int i = 0; i < res.darray.size(); i++){
                     for (int j = 0; j < res.darray.get( i ).data.length; j++){
                         res.darray.get( i ).data[j] = ran.nextDouble()*(ceil-floor)+floor;
@@ -70,24 +69,23 @@ public abstract class Tensor implements Serializable{
         Random ran = new Random();
         switch (_size.getSize()){
             case 1:{
-                int length = _size.getTensor_length()[0];
-                Tensor1D res = new Tensor1D( length );
+                Tensor1D res = new Tensor1D( _size.Tensor_length[0] );
                 for (int i = 0; i < res.darray.data.length; i++){
                     res.darray.data[i] = ran.nextDouble();
                 }
                 return res;
             }
             case 2:{
-                int[] length = _size.getTensor_length();
-                Tensor2D res = new Tensor2D( length[0], length[1] );
+                Tensor2D res = new Tensor2D( _size.Tensor_length[0], 
+                    _size.Tensor_length[1] );
                 for (int i = 0; i < res.darray.data.length; i++){
                     res.darray.data[i] = ran.nextDouble();
                 }
                 return res;
             }
             case 3:{
-                int[] length = _size.getTensor_length();
-                Tensor3D res = new Tensor3D( length[0], length[1], length[2]);
+                Tensor3D res = new Tensor3D( _size.Tensor_length[0], 
+                    _size.Tensor_length[1], _size.Tensor_length[2]);
                 for (int i = 0; i < res.darray.size(); i++){
                     for (int j = 0; j < res.darray.get( i ).data.length; j++){
                         res.darray.get( i ).data[j] = ran.nextDouble();
@@ -111,24 +109,23 @@ public abstract class Tensor implements Serializable{
         Random ran = new Random();
         switch (_size.getSize()){
             case 1:{
-                int length = _size.getTensor_length()[0];
-                Tensor1D res = new Tensor1D( length );
+                Tensor1D res = new Tensor1D( _size.Tensor_length[0] );
                 for (int i = 0; i < res.darray.data.length; i++){
                     res.darray.data[i] = ran.nextGaussian() * std + mean;
                 }
                 return res;
             }
             case 2:{
-                int[] length = _size.getTensor_length();
-                Tensor2D res = new Tensor2D( length[0], length[1] );
+                Tensor2D res = new Tensor2D( _size.Tensor_length[0], 
+                    _size.Tensor_length[1] );
                 for (int i = 0; i < res.darray.data.length; i++){
                     res.darray.data[i] = ran.nextGaussian() * std + mean;
                 }
                 return res;
             }
             case 3:{
-                int[] length = _size.getTensor_length();
-                Tensor3D res = new Tensor3D( length[0], length[1], length[2]);
+                Tensor3D res = new Tensor3D( _size.Tensor_length[0], 
+                    _size.Tensor_length[1], _size.Tensor_length[2]);
                 for (int i = 0; i < res.darray.size(); i++){
                     for (int j = 0; j < res.darray.get(i).data.length; j++){
                         res.darray.get(i).data[j] = ran.nextGaussian() * std + mean;
@@ -158,20 +155,19 @@ public abstract class Tensor implements Serializable{
     public static Tensor zero(Tensor_size _size){
         switch (_size.getSize()){
             case 1:{
-                int length = _size.getTensor_length()[0];
-                Tensor1D res = new Tensor1D( length );
+                Tensor1D res = new Tensor1D( _size.Tensor_length[0] );
                 res.darray.zero();
                 return res;
             }
             case 2:{
-                int[] length = _size.getTensor_length();
-                Tensor2D res = new Tensor2D( length[0], length[1] );
+                Tensor2D res = new Tensor2D( _size.Tensor_length[0], 
+                    _size.Tensor_length[1] );
                 res.darray.zero();
                 return res;
             }
             case 3:{
-                int[] length = _size.getTensor_length();
-                Tensor3D res = new Tensor3D( length[0], length[1], length[2]);
+                Tensor3D res = new Tensor3D( _size.Tensor_length[0], 
+                    _size.Tensor_length[1], _size.Tensor_length[2]);
                 for (int i = 0; i < res.darray.size(); i++){
                     res.darray.get(i).zero();
                 }

@@ -3,8 +3,6 @@ import org.ejml.MatrixDimensionException;
 import org.ejml.data.DMatrixRMaj;
 import org.ejml.dense.row.CommonOps_DDRM;
 
-import java.util.ArrayList;
-
 /**
  * One-dimension Tensor.
  */
@@ -20,17 +18,28 @@ public class Tensor1D extends Tensor {
 
     /**
      * The default construction method gives a one-colums matrix(an array).
+     * @apiNote If the input is not an array, the result may be strange!
      */
     public Tensor1D(double[] data) {
         this.size = new Tensor_size( data.length );
-        this.darray = new DMatrixRMaj(data);
+        this.darray = new DMatrixRMaj(1, data.length, false, data);
+        
     }
 
     /**
-     * Cations! If the input is not an array, the result may be strange.
+     * 
      * @see {@link Tensor}
+     * @throws MatrixDimensionException 
      */
-    public Tensor1D(DMatrixRMaj darray) {
+
+    /**
+     * Constructor with the {@link org.ejml.data.DMatrixRMaj} data form.
+     * @param darray
+     * @throws MatrixDimensionException if {@darray}
+     */
+    public Tensor1D(DMatrixRMaj darray) throws MatrixDimensionException{
+        if(darray.numCols != 1 && darray.numCols != 1)
+            throw new MatrixDimensionException("DMatrixRMaj given for new Tensor1D is not one-dimension");
         this.size = new Tensor_size( darray.data.length );
         this.darray = new DMatrixRMaj(darray.data);
     }
@@ -42,7 +51,7 @@ public class Tensor1D extends Tensor {
      */
     public Tensor1D(int length) {
         this.size = new Tensor_size( length );
-        this.darray = new DMatrixRMaj(length);
+        this.darray = new DMatrixRMaj(1, length);
     }
 
     /**
@@ -54,7 +63,7 @@ public class Tensor1D extends Tensor {
         if(_size.size != 1)
             throw new MatrixDimensionException("Tensor_size must be 1 for Tensor1D");
         this.size = new Tensor_size(_size);
-        this.darray = new DMatrixRMaj(this.size.Tensor_length[0]);
+        this.darray = new DMatrixRMaj(1, this.size.Tensor_length[0]);
     }
 
     /**
@@ -144,7 +153,6 @@ public class Tensor1D extends Tensor {
     }
 
     // 实际上，scale函数只有double 类型传入，所以...单独拿出int并不能优化 除非 调用ejml底层的代码
-
     @Override
     public Tensor subtract (int x) {
         return super.subtract( x );

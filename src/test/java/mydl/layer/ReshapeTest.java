@@ -24,7 +24,7 @@ public class ReshapeTest {
         Reshape layer = new Reshape(x.size, y.size);
         EjmlUnitTests.assertEquals(((Tensor1D)layer.forward(x)).darray, y.darray);
         ArrayList<DMatrixRMaj> c1 = ((Tensor3D)layer.backward(y)).darray;
-        for(int i=0;i<3;i++)
+        for(int i=0;i<2;i++)
             EjmlUnitTests.assertEquals(c1.get(i), x.darray.get(i));
     }
 }
