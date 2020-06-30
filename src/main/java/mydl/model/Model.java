@@ -8,7 +8,6 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
 import mydl.layer.Layer;
@@ -111,11 +110,7 @@ public abstract class Model implements Serializable{
      */
     protected void clean_grad(){
         for(int i = 0; i < layers.size(); i++){
-            Iterator<String> itname = layers.get(i).iterator();
-            while(itname.hasNext()){
-                String name = itname.next();
-                layers.get(i).set_para(name, layers.get(i).get_para(name).set_zero());
-            }
+            layers.get(i).clean_grads();
         }
     }
 

@@ -19,12 +19,17 @@ public class Tensor3D extends Tensor {
      */
     public ArrayList<DMatrixRMaj> darray = new ArrayList<DMatrixRMaj>();
 
+    /**
+     * 
+     * @param a
+     * @param N
+     */
     public Tensor3D(ArrayList<double[][]> a, int N) {
         for (int i = 0; i < N; i++) {
             DMatrixRMaj temp = new DMatrixRMaj(a.get( i ));
             this.darray.add( temp );
         }
-        this.size = new Tensor_size( a.get( 0 ).length,1, N);
+        this.size = new Tensor_size(N, a.get(0).length, a.get(0)[0].length);
 
     }
 
@@ -33,20 +38,20 @@ public class Tensor3D extends Tensor {
         for (int i = 0; i < d.size(); i++) {
             this.darray.add( d.get( i ).copy() );
         }
-        this.size = new Tensor_size(d.get( 0 ).getNumRows(), d.get( 0 ).getNumCols());
+        this.size = new Tensor_size(d.size(), d.get(0).getNumRows(), d.get(0).getNumCols());
     }
 
     /**
-     * dim means the length of Square matrix(len*len)
+     * Constructor with shape in three-integer form
      * @param rowNum
      * @param colNum
      * @param N
      */
-    public Tensor3D(int rowNum, int colNum, int N) {
+    public Tensor3D(int N, int rowNum, int colNum) {
         for (int i = 0; i < N; i++) {
             this.darray.add(new DMatrixRMaj(rowNum, colNum));
         }
-        this.size = new Tensor_size( rowNum, colNum, N );
+        this.size = new Tensor_size(N, rowNum, colNum);
     }
 
     /**
@@ -69,9 +74,9 @@ public class Tensor3D extends Tensor {
      */
     public Tensor3D(Tensor3D t1) {
         for (int i = 0; i < t1.darray.size(); i++) {
-            this.darray.add(t1.darray.get( i ).copy());
+            this.darray.add(t1.darray.get(i).copy());
         }
-        this.size = new Tensor_size( t1.size.Tensor_length );
+        this.size = new Tensor_size(t1.size);
     }
 
     /**
@@ -88,41 +93,18 @@ public class Tensor3D extends Tensor {
         }
         this.size = new Tensor_size( N, colnum, rownum );
     }
-    /**
-     * Res_{i, j, k} = t1_{i, j, k} + addtion
-     * @param t1
-     * @param addtion
-     * @return
-     */
-    public static Tensor add (Tensor3D t1, double addtion) {
-        Tensor3D res = new Tensor3D(t1);
-        for (int i = 0; i < t1.darray.size(); i++) {
-            CommonOps_DDRM.add( res.darray.get( i ), addtion );
-        }
-        return res;
-    }
 
     /**
-     * Res_{i, j, k} = this_{i, j, k} + addtion
-     * @param addtion
+     * Res_{i, j, k} = this_{i, j, k} + x
+     * @param x
      * @return
      */
-    public Tensor add (double addtion) {
+    public Tensor add (double x) {
         Tensor3D res = new Tensor3D( this );
         for (int i = 0; i < this.darray.size(); i++) {
-            CommonOps_DDRM.add( res.darray.get( i ), addtion );
+            CommonOps_DDRM.add( res.darray.get( i ), x );
         }
         return res;
-    }
-
-    /**
-     * Res_{i, j, k} = t1_{i, j, k} - minuend
-     * @param t1
-     * @param minuend
-     * @return
-     */
-    public static Tensor subtract (Tensor3D t1, double minuend) {
-        return Tensor3D.add( t1, (-1)*minuend );
     }
 
     /**
@@ -166,7 +148,7 @@ public class Tensor3D extends Tensor {
                 return res;
             }
             case 2:{
-                DMatrixRMaj d1 = new DMatrixRMaj(new_size.getTensor_length()[0], new_size.getTensor_length()[1]);
+                DMatrixRMaj d1 = new DMatrixRMaj(new_size.Tensor_length[0], new_size.Tensor_length[1]);
                 for (int i = 0; i < this.darray.size(); i++) {
                     for (int j = 0; j < this.darray.get( 0 ).getNumElements(); j++) {
                         d1.data[i*this.darray.get( 0 ).getNumElements()+j] = this.darray.get( i ).data[j];
@@ -177,7 +159,7 @@ public class Tensor3D extends Tensor {
             }
             case 3:{
                 int temp_num1 = 0, temp_num2 = 0;
-                double[][][] data = new double[new_size.getTensor_length()[0]][new_size.getTensor_length()[1]][new_size.getTensor_length()[2]];
+                double[][][] data = new double[new_size.Tensor_length[0]][new_size.Tensor_length[1]][new_size.Tensor_length[2]];
                 double[] temp_data = new double[this.darray.size()*this.darray.get( 0 ).getNumElements()];
                 for (int i = 0; i < this.darray.size(); i++) {
                     for(int j = 0; j < this.darray.get( 0 ).getNumElements(); j++) {
@@ -311,24 +293,24 @@ public class Tensor3D extends Tensor {
     }
 
     /**
-     * Res_{i, j, k} = this_{i, j ,k} - minuend
-     * @param minuend
+     * Res_{i, j, k} = this_{i, j ,k} - x
+     * @param x
      * @return
      */
-    public Tensor subtract (double minuend) {
-        return this.add( (-1)*minuend );
+    public Tensor subtract (double x) {
+        return this.add( (-1)*x );
     }
     
     /**
-     * Res_{i, j, k} = subtract - this_{i, j ,k}
-     * @param subtract
+     * Res_{i, j, k} = x - this_{i, j ,k}
+     * @param x
      * @return
      */
-    public Tensor subtracted (double subtract) {
+    public Tensor subtracted (double x) {
         Tensor3D res = new Tensor3D( this );
         for (int i = 0; i < res.darray.size(); i++) {
             CommonOps_DDRM.scale( -1, res.darray.get( i ) );
-            CommonOps_DDRM.add( res.darray.get( i ), subtract );
+            CommonOps_DDRM.add( res.darray.get( i ), x );
         }
         return res;
     }
@@ -384,20 +366,6 @@ public class Tensor3D extends Tensor {
      * @param times
      * @return
      */
-    public static Tensor dot_mul (Tensor3D t1, double times) {
-        Tensor3D res = new Tensor3D( t1 );
-        for (int i = 0; i < t1.darray.size(); i++) {
-            CommonOps_DDRM.scale( times, res.darray.get( i ) );
-        }
-        return res;
-    }
-
-    /**
-     * Res_{i, j, k} = t1_{i, j, k}*times
-     * @param t1
-     * @param times
-     * @return
-     */
     public Tensor dot_mul (double times) {
         Tensor3D res = new Tensor3D( this );
         for (int i = 0; i < this.darray.size(); i++) {
@@ -408,20 +376,6 @@ public class Tensor3D extends Tensor {
 
 
     // 实际上，scale函数只有double 类型传入，所以...单独拿出int并不能优化 除非 调用ejml底层的代码
-    /**
-     * Res_{i, j, k} = t1_{i, j, k}*int_times
-     * @param t1
-     * @param int_times
-     * @return
-     */
-    public static Tensor dot_mul(Tensor3D t1, int int_times) {
-        Tensor3D res = new Tensor3D( t1 );
-        for (int i = 0; i < t1.darray.size(); i++) {
-            CommonOps_DDRM.scale( int_times, res.darray.get( i ) );
-        }
-        return res;
-    }
-
     /**
      * Res_{i, j, k} = this_{i, j, k}*int_times
      * @param int_times
@@ -486,15 +440,6 @@ public class Tensor3D extends Tensor {
             CommonOps_DDRM.divide( 1, res.darray.get( i ) );
         }
         return res;
-    }
-
-    /**
-     * Res_{i, j, k} = sigmoid(t1_{i, j, k})
-     * @param t1
-     * @return
-     */
-    public static Tensor sigmoid(Tensor3D t1) {
-        return t1.sigmoid();
     }
 
     /**
@@ -659,19 +604,6 @@ public class Tensor3D extends Tensor {
         Tensor3D res = new Tensor3D(this);
         for (int i = 0; i < this.darray.size(); i++) {
             CommonOps_DDRM.divide( dividend, res.darray.get( i ));
-        }
-        return res;
-    }
-
-    /**
-     * Res_{i, j, k} = dividend/t1_{i, j, k}
-     * @param dividend
-     * @return
-     */
-    public static Tensor devide(double dividend, Tensor3D t1) {
-        Tensor3D res = new Tensor3D( t1);
-        for (int i = 0; i < t1.darray.size(); i++) {
-            CommonOps_DDRM.divide( dividend, t1.darray.get( i ), res.darray.get( i ) );
         }
         return res;
     }
@@ -845,6 +777,7 @@ public class Tensor3D extends Tensor {
         }
         return  res;
     }
+    
     public Tensor softmax() {
         Tensor3D res = new Tensor3D( this );
         for (int i = 0; i < res.darray.size(); i++) {

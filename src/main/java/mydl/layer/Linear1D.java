@@ -27,8 +27,11 @@ public class Linear1D extends Layer {
     public Linear1D(int input_size, int output_size){
         this.inSize = new Tensor_size(input_size);
         this.outSize = new Tensor_size(output_size);
-        paras.put("W", Tensor.random(new Tensor_size(input_size, output_size)));
-        paras.put("b", Tensor.random(new Tensor_size(output_size)));
+        Tensor_size Ws = new Tensor_size(input_size, output_size);
+        paras.put("W", Tensor.random(Ws));
+        paras.put("b", Tensor.random(outSize));
+        grads.put("W", Tensor.zero(Ws));
+        grads.put("b", Tensor.zero(outSize));
     }
 
     /**
@@ -40,13 +43,16 @@ public class Linear1D extends Layer {
         this.inSize = input_size.clone();
         this.outSize = inSize.clone();
         outSize.Tensor_length[outSize.size-1] = units;
-        paras.put("W", Tensor.random(new Tensor_size(inSize.Tensor_length[inSize.size-1],units)));
-        paras.put("b", Tensor.random(new Tensor_size(units)));
+        Tensor_size Ws = new Tensor_size(inSize.Tensor_length[inSize.size-1],units);
+        paras.put("W", Tensor.random(Ws));
+        paras.put("b", Tensor.random(outSize));
+        grads.put("W", Tensor.zero(Ws));
+        grads.put("b", Tensor.zero(outSize));
     }
 
 
     public Tensor forward(Tensor input){
-        inputs = input;//must it be clone?
+        inputs = input.clone();
         return input.cross_mul(paras.get("W")).add(paras.get("b"));
     }
 

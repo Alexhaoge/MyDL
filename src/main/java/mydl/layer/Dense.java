@@ -47,11 +47,13 @@ public class Dense extends Layer {
             kernel.Tensor_length[kernel.size-1] = units;
         }
         paras.put("kernel", Tensor.random(kernel));
-        paras.put("bias", Tensor.random(new Tensor_size(outSize)));
+        paras.put("bias", Tensor.random(outSize));
+        grads.put("kernel", Tensor.zero(kernel));
+        grads.put("bias", Tensor.zero(outSize));
     }
 
     public Tensor forward(Tensor input){
-        _input = input;//not necessary to be clone
+        _input = input.clone();
         return input.cross_mul(paras.get("kernel")).add(paras.get("bias"));
     }
 
