@@ -77,5 +77,18 @@
         </plugin>
       </plugins>
     </pluginManagement>
+
+    <resources>
+      <resource>
+        <directory>${basedir}/src/main/resources/MNIST</directory>
+          <includes>
+            <include>t10k-images.idx3-ubyte</include>
+            <include>t10k-labels.idx1-ubyte</include>
+            <include>train-images.idx3-ubyte</include>
+            <include>train-labels.idx1-ubyte</include>
+          </includes>
+      </resource>
+    </resources>
+
   </build>
 </project>
