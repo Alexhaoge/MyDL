@@ -66,17 +66,6 @@ public class Tensor3D extends Tensor {
         for (int i = 0; i < this.size.Tensor_length[0]; i++) {
             this.darray.add(new DMatrixRMaj(this.size.Tensor_length[1], this.size.Tensor_length[2]));
         }
-    }    
-
-    /**
-     * Copy constructor.
-     * @param t1 Tensor3D to copy.
-     */
-    public Tensor3D(Tensor3D t1) {
-        for (int i = 0; i < t1.darray.size(); i++) {
-            this.darray.add(t1.darray.get(i).copy());
-        }
-        this.size = new Tensor_size(t1.size);
     }
 
     /**
@@ -92,6 +81,26 @@ public class Tensor3D extends Tensor {
             this.darray.add( d1 );
         }
         this.size = new Tensor_size( N, colnum, rownum );
+    }    
+
+    /**
+     * Copy constructor.
+     * @param t1 Tensor3D to copy.
+     */
+    public Tensor3D(Tensor3D t3) {
+        for (int i = 0; i < t3.darray.size(); i++) {
+            this.darray.add(t3.darray.get(i).copy());
+        }
+        this.size = new Tensor_size(t3.size);
+    }
+
+    /**
+     * Constructor that convert a Tensor2D to Tensor3D.
+     * @param t2
+     */
+    public Tensor3D(Tensor2D t2){
+        this.size = new Tensor_size(1, t2.size.Tensor_length[0], t2.size.Tensor_length[1]);
+        this.darray.add(new DMatrixRMaj(t2.darray));
     }
 
     /**

@@ -77,9 +77,35 @@ public class Tensor2D extends Tensor {
      * Construct a same Tensor2D(Deep clone).
      * @param t1
      */
-    public Tensor2D(Tensor2D t1) {
-        this.size = new Tensor_size( t1.size.getTensor_length() );
+    public Tensor2D(Tensor2D t2) {
+        this.size = new Tensor_size( t2.size.getTensor_length() );
+        this.darray = new DMatrixRMaj(t2.darray);
+    }
+
+    /**
+     * Constructor that convert a Tensor1D to Tensor2D.
+     * @param t1
+     */
+    public Tensor2D(Tensor1D t1){
+        this.size = new Tensor_size(t1.darray.numRows, t1.darray.numCols);
         this.darray = new DMatrixRMaj(t1.darray);
+    }
+
+    /**
+     * Constructor that convert a Tensor3D to Tensor2D. Note this Tensor3D
+     * must have a shape of {@code 1 x N x M}.
+     * @param t3
+     * @throws MatrixDimensionException If the shape of Tensor3D is not
+     * {@code 1 x N x M} 
+     */
+    public Tensor2D(Tensor3D t3) throws MatrixDimensionException{
+        if (t3.darray.size() == 1) {
+            this.size = new Tensor_size(t3.size.Tensor_length[1], t3.size.Tensor_length[2]);
+            this.darray = new DMatrixRMaj(t3.darray.get(0));
+        } else {
+            throw new MatrixDimensionException(
+                "This 3D tensor cannot be converted to 2D Tensor");
+        }
     }
 
     /**

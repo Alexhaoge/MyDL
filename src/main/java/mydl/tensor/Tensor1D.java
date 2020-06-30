@@ -78,6 +78,26 @@ public class Tensor1D extends Tensor {
     }
 
     /**
+     * Constructor that convert a Tensor2D to Tensor1D. Note this Tensor2D
+     * must have a shape of {@code 1xN} or {@code Nx1}. 
+     * @param t2
+     * @throws MatrixDimensionException If the shape of Tensor2D is not
+     * {@code 1xN} or {@code Nx1}. 
+     */
+    public Tensor1D(Tensor2D t2) throws MatrixDimensionException{
+        if (t2.darray.numRows == 1) {
+            this.size = new Tensor_size(t2.darray.numCols);
+            this.darray = new DMatrixRMaj(t2.darray);
+        } else if (t2.darray.numCols == 1) {
+            this.size = new Tensor_size(t2.darray.numRows);
+            this.darray = new DMatrixRMaj(t2.darray);
+        } else {
+            throw new MatrixDimensionException(
+                "This 2D tensor cannot be converted to 1D Tensor");
+        }
+    }
+
+    /**
      * Res_{i} = this_{i} + x
      * @param x
      * @return
