@@ -1,5 +1,5 @@
 # MyDL
-A lightweight deep learning libary entirely based on Java.  
+A lightweight deep learning framework entirely based on Java.  
 **Note: This project is still under construction!**   
 ![MyDL_logo.png](https://i.loli.net/2020/06/20/EV83WbDZXSqHzAe.png)
 
