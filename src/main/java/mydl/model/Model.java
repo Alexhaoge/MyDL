@@ -51,7 +51,7 @@ public abstract class Model implements Serializable{
 
     /**
      * Get the loss function of this model.
-     * @return A {@link Lost} instance.
+     * @return A {@link Loss} instance.
      * Note that it is not a copy but a reference.
      */
     public Loss get_loss(){
@@ -91,12 +91,12 @@ public abstract class Model implements Serializable{
     protected abstract Tensor backward(Tensor grad);
 
     /**
-     * Compile this model. 
-     * <p> Optimizer and loss function will be added.
+     * Compile this model. Optimizer and loss function will be added.
+     * <p><b>Note:</b> Tensor size check is not implemented in {@link Model} but in {@link Sequential}.
      * @param _opt opimizer to add
      * @param _loss loss function to add
      * @throws RuntimeException if the tensor sizes of two adjacent layers do not fit.
-     * @apiNote Tensor size check is not implemented in {@link Model} but in {@link Sequential}.
+     * @see Sequential
      */
     public void compile(Optimizer _opt, Loss _loss) throws RuntimeException{
         opt = _opt;
@@ -232,8 +232,8 @@ public abstract class Model implements Serializable{
     /**
      * Load a model by {@link Serializable} interface.
      * @param filepath String. Relative or absolute path of the model file.
-     * @return {@code} Model class.
-     * @throws ClassNotFoundException
+     * @return {@code Model}  class.
+     * @throws ClassNotFoundException if any component of this model is not serializable. 
      * @throws IOException if the file path is incorrect.
      */
     public static Model loadModel(String filepath) throws ClassNotFoundException, IOException {

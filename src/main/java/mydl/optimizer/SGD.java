@@ -40,10 +40,10 @@ public class SGD extends Optimizer {
 
     /**
      * step method in function form
-     * @param para
-     * @param grad
-     * @return
-     * @deprecated not sure if used
+     * @param para Parameter tensor.
+     * @param grad Gradient tensor.
+     * @return New parameter tensor.
+     * @deprecated experimental.
      */
     public Tensor step(Tensor para, Tensor grad){
         return para.subtract(grad.dot_mul(learning_rate));

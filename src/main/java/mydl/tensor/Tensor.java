@@ -24,7 +24,7 @@ public abstract class Tensor implements Serializable{
      * @param _size {@link Tensor_size}. The shape of the tensor.
      * @param floor Upper
      * @param ceil 均匀随机分布上确界
-     * @return
+     * @return An uniformly distributed tensor.
      */
     public static Tensor random_uniform(Tensor_size _size, double floor, double ceil){
         Random ran = new Random();
@@ -184,8 +184,8 @@ public abstract class Tensor implements Serializable{
     }
 
     /**
-     * 把一个tensor清零，且不新建tensor直接返回当前的
-     * @return this tensor
+     * Set this tensor to zero.
+     * @return This tensor. Modified
      */
     public abstract Tensor set_zero();
 
@@ -194,13 +194,20 @@ public abstract class Tensor implements Serializable{
      */
     public abstract Tensor clone();
 
+    /**
+     * Reshape this tensor.
+     * @param new_size The new {@code Tensor_size} of this tensor. 
+     * @return a new Tensor.
+     */
     public abstract Tensor reshape(Tensor_size new_size);
 
     /**
      * Get the shape of this tensor.
-     * @return A {@link Tensor_size} object indicating the shape of tensor.
+     * @return A <b>copy</b> of {@link Tensor_size} indicating the shape of tensor.
      */
-    public abstract Tensor_size size();
+    public Tensor_size size(){
+        return this.size.clone();
+    }
 
     public int total_size(){
         int _total = 1;
@@ -216,16 +223,23 @@ public abstract class Tensor implements Serializable{
     public abstract Tensor transpose();
 
     /**
-     * Res_{i} = this_{i} + t2_{i}
-     * @param t2 addend, tensor
-     * @return tensor Res
+     * {@code this_i + t2_i}
+     * @param t2 Tensor to add.
+     * @return A new tensor.
      */
     public abstract Tensor add(Tensor t2);
 
     /**
-     * Res_{i} = this_{i} - t2_{i}
-     * @param t2 s sbtracted, tensor
-     * @return tensor Res
+     * {@code this_i + x}
+     * @param x Double to add.
+     * @return A new tensor.
+     */
+    public abstract Tensor add(double x);
+
+    /**
+     * {@code this_i - t2_i}
+     * @param t2 Tensor.
+     * @return A new tensor.
      */
     public abstract Tensor subtract(Tensor t2);
 
@@ -237,7 +251,7 @@ public abstract class Tensor implements Serializable{
     public abstract Tensor subtract(double x);
 
     /**
-     * Res_{i} = this_{i} - x
+     * {@code res_i = this_i * x}
      * @param x minus, int variable
      * @return tensor Res
      */
@@ -246,14 +260,14 @@ public abstract class Tensor implements Serializable{
     }
 
     /**
-     * Res = x - this_{i}
+     * {@code Res_i = x- this_i}
      * @param x subtracted, double variable
      * @return tensor Res
      */
     public abstract Tensor subtracted(double x);
 
     /**
-     * Res = x - this_{i}
+     * {@code Res_i = x - this_i}
      * @param x subtracted, int variable
      * @return tensor res
      */
@@ -262,155 +276,172 @@ public abstract class Tensor implements Serializable{
     }
 
     /**
-     * Res_{i} = this_{i}*t1_{i}
-     * @param t1 multiplier, tensor
-     * @return tensor Res
+     * Element-wise multiplication. {@code this_i * t_i}
+     * @param t Tensor to multiply.
+     * @return A new tensor.
      */
-    public abstract Tensor dot_mul(Tensor t1);
+    public abstract Tensor dot_mul(Tensor t);
 
 
     /**
-     * Res_{i} = this_{i}*x
-     * @param x multiplier, double
-     * @return tensor
+     * {@code Res_i = this_i * x}
+     * @param x Double to multiply.
+     * @return A new tensor.
      */
     public abstract Tensor dot_mul(double x);
 
     /**
-     * Res_{i} = this_{i}*x
-     * @param x multiplier, int
-     * @return tensor
+     * {@code Res_i = this_i * x}
+     * @param x Integer to multiply.
+     * @return A new tensor.
      */
     public abstract Tensor dot_mul(int x);
 
     /**
      * Matrix multiplication of {@code this} and {@code x}.
+     * <p><b>Note</b>: Matrix multiplication does not satisfy the commutative law,
+     * so {@code a.cross_mul(b)} is different from {@code b.cross_mul(a)}.
      * @param x the tensor to be multiplied.
+     * @return A new tensor. Result of the multiplication.
      * @throws MatrixDimensionException if this tensor does not
      * have compactible shape for matrix multiply with {@code x}.
-     * @apiNote Matrix multiplication does not satisfy the commutative law,
-     * so {@code a.cross_mul(b)} is different from {@code b.cross_mul(a)}.
      */
     public abstract Tensor cross_mul(Tensor x) throws MatrixDimensionException;
 
     /**
-     * Res_{i} = this_{i} / x
-     * @param x divisor, double
-     * @return tensor
+     * {@code Res_i = this_i / x}
+     * @param x Double. Divisor.
+     * @return A new tensor.
      */
     public Tensor divided(double x){ return dot_mul( 1.0/x ); };
 
     /**
-     * Res_{i} = this_{i} / x
+     * {@code Res_i = this_i / x}
      * @param x divisor, int
-     * @return tensor
+     * @return A new tensor.
      */
     public Tensor divided(int x){
         return divided((double)x);
     }
 
     /**
-     * Res_{i} = this_{i} / x_{i}
+     * {@code Res_i = this_i / x_i}
      * @param x divisor, tensor
-     * @return tensor
+     * @return A new tensor.
      */
     public abstract Tensor divided(Tensor x);
 
     /**
-     * Res_{i} = x / this_{i}
+     * {@code Res_i = x / this_i}
+     * <p><b>Note:</b> Please note the difference with {@link Tensor#divided}.
      * @param x dividend, double
-     * @return tensor
+     * @return A new tensor.
      */
     public abstract Tensor divide(double x);
 
     /**
-     * Res_{i} = x / this_{i}
+     * {@code Res_i = x / this_i}
      * @param x dividend, int
-     * @return ternsor
+     * @return A new tensor.
      */
     public Tensor divide(int x){
         return divide((double)x);
     }
 
     /**
-     * Res_{i} = sigmoid(this_{i})
-     * @return tensor
+     * {@code sigmoid(this_i)}
+     * @return A new tensor.
      */
     public abstract Tensor sigmoid();
 
     /**
-     * Res_{i} = tanh(this_{i})
-     * @return tensor
+     * {@code tanh(this_i)}
+     * @return A new tensor.
      */
     public abstract Tensor tanh();
 
+    
     /**
-     * Res_{i} = Relu(this_{i}, lambda = t)
-     * @param t lambda, double
-     * @return tensor
+     * {@code ReLU(x) = t(x > 0)}
+     * {@code ReLU(x) = 0(x <= 0)}
+     * @param t Double.
+     * @return A new tensor.
      */
     public abstract Tensor relu(double t);
 
     /**
-     * Res_{i} = Relu(this_{i}, lambda = 1)
-     * @return tensor
+     * {@code ReLU(x) = 1(x > 0)}
+     * {@code ReLU(x) = 0(x <= 0)}
+     * @return A new tensor.
      */
     public Tensor relu(){
         return this.relu(1.0);
     }
 
     /**
-     * Res_{i} = sgn(this_{i})
-     * @return tensor
+     * {@code sgn(this_i)}
+     * @return A new tensor.
      */
     public abstract Tensor sgn();
 
     /**
-     * Res_{i} = t(this_{i} > 0)
-     * Res_{i} = 0(this_{i} <= 0)
-     * @param t double
-     * @return
+     * {@code Res_i = t (this_i < 0)}
+     * {@code Res_i = 0 (this_i >= 0)}
+     * @param t Double.
+     * @return A new Tensor. The derivative of ReLU(t).
      */
     public abstract Tensor DiffReLU(double t);
+
+
     public Tensor DiffReLU(){
         return this.DiffReLU(1.0);
     }
 
     /**
-     * Res_{i} = this_{i}^x
-     * @param x, double
-     * @return tensor
+     * {@code Res_i = softmax(this_i)}
+     * @return A new tensor.
+     */
+    public abstract Tensor softmax();
+
+    /**
+     * {@code Res_i = this_i ^ x}
+     * @param x Double.
+     * @return A new tensor.
      */
     public abstract Tensor pow(double x);
 
     /**
-     * Res_{i} = this_{i}^x
-     * @param x, int
-     * @return tensor
+     * {@code Res_i = this_i ^ x}
+     * @param x Integer.
+     * @return A new tensor.
      */
     public abstract Tensor pow(int x);
 
     /**
-     * Res_{i} = log_e (this_{i})
-     * @return tensor
+     * {@code Res_i = ln(this_i)}
+     * @return A new tensor.
      */
     public abstract Tensor ln();
 
     /**
-     * Res = \sum{Res_{i}}
-     * @return double, sum of every dimesion of this tensor
+     * Return the sum of all elements in this tensor.
+     * @return Double. Sum of all elements in this tensor.
      */
     public abstract double sum();
 
+    // /**
+    //  * Sum over the axis.
+    //  * @param axis Integer. The dimension to be sum up.
+    //  * @return A new tensor.
+    //  */
+    // public abstract Tensor sum(int axis);
+    // public abstract Tensor sum(int axis, int... _axis);//压缩某些维，先不用实现
+
     /**
-     * 求和，压缩第axis维
-     * @param axis
-     * @return
+     * Get the maximum element in this tensor.
+     * @return Double. The maximum element.
      */
-    public abstract Tensor sum(int axis);
-    public abstract Tensor sum(int axis, int... _axis);//压缩某些维，先不用实现
-    
-    public abstract Tensor softmax();
+    public abstract double elementMax();
 
     public boolean equals(Object obj) {
         if (obj instanceof Tensor) {
@@ -435,5 +466,4 @@ public abstract class Tensor implements Serializable{
         return false;
     }
     
-    public abstract double elementMax();
 }

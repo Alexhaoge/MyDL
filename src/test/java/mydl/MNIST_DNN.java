@@ -31,8 +31,8 @@ public class MNIST_DNN {
     public static void main(String[] args) {
         ArrayList<Tensor> tx = MNIST.readTrainImage1D();
         ArrayList<Tensor> ty = convert(MNIST.readTrainLabel());
-        tx = new ArrayList<Tensor>(tx.subList(0, 10));
-        ty = new ArrayList<Tensor>(ty.subList(0, 10));
+        tx = new ArrayList<Tensor>(tx.subList(0, 1));
+        ty = new ArrayList<Tensor>(ty.subList(0, 1));
         Sequential model = new Sequential();
         model.add(new Dense(tx.get(0).size, 784));
         model.add(new Sigmoid());

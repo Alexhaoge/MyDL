@@ -24,7 +24,7 @@ public class ReLU extends Activation{
     /**
      * {@code ReLU(x) = t(x > 0)}<p>
      * {@code ReLU(x) = 0(x <= 0)}
-     * @param _t
+     * @param _t Double. The {@code t} in the formula above. 
      */
     public ReLU(double _t) {
         t = _t;

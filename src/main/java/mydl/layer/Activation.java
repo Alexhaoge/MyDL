@@ -4,7 +4,7 @@ import mydl.tensor.Tensor;
 
 /**
  * The {@code Activation} class is the abstract of all activation function.
- * <p>All activation function should implement {@code func} and {@derivative} method for forward and backward propagation.
+ * <p>All activation function should implement {@code func} and {@code derivative} method for forward and backward propagation.
  */
 public abstract class Activation extends Layer{
     
@@ -24,16 +24,17 @@ public abstract class Activation extends Layer{
     
     /**
      * The derivative of this function.
-     * @param x
-     * @return
+     * @param x Input tensor.
+     * @return Output tensor. The derivative.
      */
     protected abstract Tensor derivative(Tensor x);
 
     /**
      * forward propagation
-     * @param input input tensor
+     * @param inputs input tensor
      * @return output tensor
      */
+    @Override
     public Tensor forward(Tensor inputs){
         input = inputs;
         return func(inputs);
@@ -45,6 +46,7 @@ public abstract class Activation extends Layer{
      * @param grad input gradient
      * @return gradient with activation
      */
+    @Override
     public Tensor backward(Tensor grad){
         return derivative(input).dot_mul(grad);
     }

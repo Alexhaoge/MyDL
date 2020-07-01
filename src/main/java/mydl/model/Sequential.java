@@ -17,7 +17,7 @@ public class Sequential extends Model{
 
     /**
      * Forward propagation of Sequential model.
-     * @param inputs
+     * @param inputs Input tensor.
      * @return output of sequential model
      */
     protected Tensor forward(Tensor inputs){
@@ -29,7 +29,7 @@ public class Sequential extends Model{
 
     /**
      * Backward propagation of Sequential model.
-     * @param grad 
+     * @param grad Input gradient.
      * @return total grad
      */
     protected Tensor backward(Tensor grad){

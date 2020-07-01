@@ -12,7 +12,7 @@ import mydl.tensor.Tensor_size;
  * The {@code Layer} class defines the abstract of all layer class.
  * <p> Because our {@link Tensor} is not as flexible as those Tensor class in Python,
  * in model training, during a single mini-batch training, the gradient inside the layers 
- * will accumulate and be set to zero after the {@link Optimizer} update the parameters.
+ * will accumulate and be set to zero after the {@link mydl.optimizer.Optimizer} update the parameters.
  * Therefore during the backward propagation, the new gradients of the parameters in
  * this layer will be added to the old gradients, not replace them. 
  */
@@ -53,14 +53,14 @@ public abstract class Layer implements Iterable<String>, Serializable{
      * Backward propagation, produce the gradient through this layer.
      * <p> Because our {@link Tensor} is not as flexible as those Tensor class in Python,
      * in model training, during a single mini-batch training, the gradient inside the layers 
-     * will accumulate and be set to zero after the {@link Optimizer} update the parameters.
+     * will accumulate and be set to zero after the {@link mydl.optimizer.Optimizer} update the parameters.
      * Therefore during the backward propagation, the new gradients of the parameters in
+     * this layer will be added to the old gradients, not replace them. 
+     * <p><b>Note</b>: During the backward propagation, the new gradients of the parameters in
      * this layer will be added to the old gradients, not replace them. 
      * @param grad the gradient tensor from last layer
      * @return the gradient tensor of this layer
      * @see mydl.model.Model#train_on_batch
-     * @apiNote During the backward propagation, the new gradients of the parameters in
-     * this layer will be added to the old gradients, not replace them. 
      */
     public abstract Tensor backward(Tensor grad); 
 
@@ -94,7 +94,7 @@ public abstract class Layer implements Iterable<String>, Serializable{
     /**
      * Set a specific gradient of this layer.
      * @param name {@link String}. The name of gradient.
-     * @param para {@link Tensor}. New gradient value.
+     * @param grad {@link Tensor}. New gradient value.
      */
     public void set_grad(String name, Tensor grad){
         grads.put(name, grad);
@@ -103,7 +103,7 @@ public abstract class Layer implements Iterable<String>, Serializable{
     /**
      * Set all the gradients in this layer to zero tensor.
      * This is used after the optimization of a single batch.
-     * @see Model#train_on_batch
+     * @see mydl.model.Model#train_on_batch
      */
     public void clean_grads(){
         Iterator<String> itname = grads.keySet().iterator();

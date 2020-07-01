@@ -11,12 +11,14 @@ import mydl.tensor.Tensor2D;
 /**
  * The {@code MNIST} class contains methods for processing MNIST
  * dataset.
- * @see MNIST dataset<a href="http://yann.lecun.com/exdb/mnist/">http://yann.lecun.com/exdb/mnist//</a>
- * @see This class take reference from <i>INotWant</i>'s blog on <i>blog.csdn.net</i>
- * <a href="https://blog.csdn.net/kiss_xiaojie/article/details/83627698">
- * https://blog.csdn.net/kiss_xiaojie/article/details/83627698</a>
- * @apiNote Loading dataset takes time, so it is better to call loading methods only
+ * <p>This class take reference from <i>INotWant</i>'s blog on <i>blog.csdn.net</i>
+ * <p><b>Note:</b> Loading dataset takes time, so it is better to call loading methods only 
  * once and save them for further use.
+ * <p>See <a href="http://yann.lecun.com/exdb/mnist//">http://yann.lecun.com/exdb/mnist//</a>
+ *  for details about this dataset.
+ * <p>See <a href="https://blog.csdn.net/kiss_xiaojie/article/details/83627698">
+ * https://blog.csdn.net/kiss_xiaojie/article/details/83627698</a> for reference about
+ * methods in this class.
  */
 public class MNIST {
 

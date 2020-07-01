@@ -13,8 +13,7 @@ import mydl.tensor.Tensor_size;
  * <p>For example, if the {@code input} tensor shape is {@code Tensor_size(3, 4, 5)} and 
  * {@code units=2}, then the {@code kernel} tensor shape is {@code Tensor_size(3, 5, 2)}
  * and the {@code bias} and the {@code output} tensor shape is {@code Tensor_size(3, 4, 2)}.
- * 
- * @apiNote The rules for caculating high dimension tensor is different from keras, 
+ * <p><b>Note</b>: The rules for caculating high dimension tensor is different from keras, 
  * which is more rather like Pytorch. It is awful for mixing up different styles, 
  * but this is only a pre-release. We will decide a more stable api in formal release.
  * @version v1.0-alpha 

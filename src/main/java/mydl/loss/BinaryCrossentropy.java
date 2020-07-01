@@ -20,7 +20,7 @@ public class BinaryCrossentropy extends Loss {
      * @exception IndexOutOfBoundsException if the output size of model does not
      *                                      match with the target size.
      * @exception IndexOutOfBoundsException if the output is not Tensor1D of size 2.
-     * @see {@link Loss#loss}
+     * @see Loss#loss
      */
     public double loss(Tensor predicted, Tensor actual){
         if(!predicted.size().equals(actual.size()))
@@ -39,7 +39,7 @@ public class BinaryCrossentropy extends Loss {
      * @return the gradient of the loss function
      * @exception IndexOutOfBoundsException if the output size of model does not match with the target size.
      * @exception IndexOutOfBoundsException if the output is not Tensor1D of size 2.
-     * @see {@link Loss#grad}
+     * @see Loss#grad
      */
     public Tensor grad(Tensor predicted, Tensor actual){
         if(!predicted.size().equals(actual.size()))

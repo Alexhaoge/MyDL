@@ -19,7 +19,7 @@ public class CategoricalCrossentropy extends Loss{
      * @exception IndexOutOfBoundsException if the output size of model does not
      *                                      match with the target size.
      * @exception IndexOutOfBoundsException if the output is Tensor of size 1.
-     * @see {@link Loss#loss}
+     * @see Loss#loss
      */
     public double loss(Tensor predicted, Tensor actual){
         if(predicted.total_size() == 1)
@@ -37,7 +37,7 @@ public class CategoricalCrossentropy extends Loss{
      * @return the gradient of the loss function
      * @exception IndexOutOfBoundsException if the output size of model does not match with the target size.
      * @exception IndexOutOfBoundsException if the output is Tensor of size 1.
-     * @see {@link Loss#grad}
+     * @see Loss#grad
      */
     public Tensor grad(Tensor predicted, Tensor actual){
         if(predicted.total_size() == 1)

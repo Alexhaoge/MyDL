@@ -15,14 +15,15 @@ public class Tensor3D extends Tensor {
 
     /**
      * ArrayList of DMatrixRMaj for storing data.
-     * @see {@link org.ejml.data.DMatrixRMaj}, {@link ArrayList}
+     * @see org.ejml.data.DMatrixRMaj
+     * @see ArrayList
      */
     public ArrayList<DMatrixRMaj> darray = new ArrayList<DMatrixRMaj>();
 
     /**
-     * 
-     * @param a
-     * @param N
+     * Construct a Tensor3D with ArrayList of 2D double arrays.
+     * @param a The arraylist of 2D double arrays.
+     * @param N the number of 2D double array in {@code a}
      */
     public Tensor3D(ArrayList<double[][]> a, int N) {
         for (int i = 0; i < N; i++) {
@@ -43,9 +44,9 @@ public class Tensor3D extends Tensor {
 
     /**
      * Constructor with shape in three-integer form
-     * @param rowNum
-     * @param colNum
-     * @param N
+     * @param rowNum Number of rows.
+     * @param colNum Number of columns.
+     * @param N Number of matrix.
      */
     public Tensor3D(int N, int rowNum, int colNum) {
         for (int i = 0; i < N; i++) {
@@ -69,8 +70,8 @@ public class Tensor3D extends Tensor {
     }
 
     /**
-     * 
-     * @param data
+     * Construct a Tensor3D from a 3D double array.
+     * @param data The 3D double array, data of this tensor3D.
      */
     public Tensor3D(double[][][]data) {
         int N = data.length;
@@ -95,6 +96,7 @@ public class Tensor3D extends Tensor {
         this.darray.add(new DMatrixRMaj(t2.darray));
     }
 
+    @Override
     public Tensor add (double x) {
         Tensor3D res = new Tensor3D( this );
         for (int i = 0; i < this.darray.size(); i++) {
@@ -103,18 +105,19 @@ public class Tensor3D extends Tensor {
         return res;
     }
 
+    @Override
     public Tensor set_zero () {
-        Tensor3D res = new Tensor3D( this );
-        for (int i = 0; i < res.darray.size(); i++){
-            res.darray.get( i ).zero();
+        for (int i = 0; i < this.darray.size(); i++){
+            this.darray.get( i ).zero();
         }
-        return res;
+        return this;
     }
 
     public Tensor clone () {
         return new Tensor3D( this );
     }
 
+    @Override
     public Tensor reshape (Tensor_size new_size) {
         if (new_size.total_size() != this.size().total_size()) {
             throw new MatrixDimensionException( "Reshape tensor size error." );
@@ -168,11 +171,7 @@ public class Tensor3D extends Tensor {
         }
     }
 
-    public Tensor_size size () {
-        Tensor_size res = new Tensor_size(  this.darray.size(), this.darray.get( 0 ).getNumRows(), this.darray.get( 0 ).getNumCols() );
-        return res;
-    }
-
+    @Override
     public Tensor transpose () {
         Tensor3D res = new Tensor3D( this.darray.get( 0 ).getNumCols(), this.darray.get( 0 ).getNumRows(), this.darray.size());
         for (int i = 0; i < this.darray.size(); i++) {
@@ -183,6 +182,7 @@ public class Tensor3D extends Tensor {
         return res;
     }
 
+    @Override
     public Tensor add (Tensor t2) {
         if (t2 instanceof Tensor3D) {
             if (((Tensor3D) t2).darray.size() != this.darray.size()) {
@@ -213,6 +213,7 @@ public class Tensor3D extends Tensor {
         }
     }
 
+    @Override
     public Tensor subtract (Tensor t2) {
         if (t2 instanceof Tensor3D) {
             if (((Tensor3D) t2).darray.size() != this.darray.size()) {
@@ -253,10 +254,12 @@ public class Tensor3D extends Tensor {
         }
     }
 
+    @Override
     public Tensor subtract (double x) {
         return this.add( (-1)*x );
     }
     
+    @Override
     public Tensor subtracted (double x) {
         Tensor3D res = new Tensor3D( this );
         for (int i = 0; i < res.darray.size(); i++) {
@@ -266,6 +269,7 @@ public class Tensor3D extends Tensor {
         return res;
     }
 
+    @Override
     public Tensor dot_mul (Tensor t2) {
         if (t2 instanceof Tensor3D){
             if (((Tensor3D) t2).darray.size() != this.darray.size()) {
@@ -304,6 +308,7 @@ public class Tensor3D extends Tensor {
 
     }
 
+    @Override
     public Tensor dot_mul (double times) {
         Tensor3D res = new Tensor3D( this );
         for (int i = 0; i < this.darray.size(); i++) {
@@ -312,7 +317,7 @@ public class Tensor3D extends Tensor {
         return res;
     }
 
-
+    @Override
     public Tensor dot_mul(int int_times) {
         Tensor3D res = new Tensor3D( this );
         for (int i = 0; i < res.darray.size(); i++) {
@@ -321,6 +326,7 @@ public class Tensor3D extends Tensor {
         return res;
     }
 
+    @Override
     public Tensor pow(double pow) {
         Tensor3D res = new Tensor3D( this );
         for (int i = 0; i < this.darray.size(); i++) {
@@ -329,6 +335,7 @@ public class Tensor3D extends Tensor {
         return res;
     }
 
+    @Override
     public Tensor pow(int pow) {
         Tensor3D res = new Tensor3D( this );
         for (int i = 0; i < this.darray.size(); i++) {
@@ -337,6 +344,7 @@ public class Tensor3D extends Tensor {
         return res;
     }
 
+    @Override
     public Tensor ln () {
         Tensor3D res = new Tensor3D( this );
         for (int i = 0; i < res.darray.size(); i++) {
@@ -345,6 +353,7 @@ public class Tensor3D extends Tensor {
         return res;
     }
 
+    @Override
     public Tensor sigmoid() {
         Tensor3D res = new Tensor3D( this );
         for (int i = 0; i < res.darray.size(); i++) {
@@ -401,18 +410,6 @@ public class Tensor3D extends Tensor {
     }
 
     @Override
-    public Tensor sum (int axis, int... _axis) {
-        return null;
-    }
-
-    public static double sum(Tensor3D t1) {
-        double tempsum = 0;
-        for (int i = 0; i < t1.darray.size(); i++) {
-            tempsum += CommonOps_DDRM.elementSum( t1.darray.get( i ) );
-        }
-        return tempsum;
-    }
-
     public double sum() {
         double tempsum = 0;
         for (int i = 0; i < this.darray.size(); i++) {
@@ -421,6 +418,7 @@ public class Tensor3D extends Tensor {
         return tempsum;
     }
 
+    @Deprecated
     public Tensor reshape (int rownum, int colnum, int N) {
         Tensor3D res = new Tensor3D( this );
         for (int i = 0; i < N; i++) {
@@ -430,6 +428,7 @@ public class Tensor3D extends Tensor {
         return res;
     }
 
+    @Deprecated
     public Tensor reshape (int rownum, int colnum) {
         Tensor3D res = new Tensor3D( this );
         for (int i = 0; i < this.darray.size(); i++) {
@@ -439,7 +438,8 @@ public class Tensor3D extends Tensor {
         return res;
     }
 
-   public Tensor reshape (int N, int rownum, int colnum, int dimselect) {
+    @Deprecated
+    public Tensor reshape (int N, int rownum, int colnum, int dimselect) {
         switch (dimselect) {
             case 1:{
                 Tensor1D res = new Tensor1D( this.darray.get( 0 ).getNumRows() );
@@ -470,14 +470,16 @@ public class Tensor3D extends Tensor {
         return this.darray;
     }
 
-    public Tensor devide (double dividend) {
+    @Override
+    public Tensor divide (double x) {
         Tensor3D res = new Tensor3D(this);
         for (int i = 0; i < this.darray.size(); i++) {
-            CommonOps_DDRM.divide( dividend, res.darray.get( i ));
+            CommonOps_DDRM.divide( x, res.darray.get( i ));
         }
         return res;
     }
 
+    @Override
     public Tensor tanh() {
         Tensor3D res1 = new Tensor3D( this );
         for (int i = 0; i < res1.darray.size(); i++) {
@@ -491,6 +493,7 @@ public class Tensor3D extends Tensor {
 
     }
 
+    @Override
     public Tensor cross_mul(Tensor t2) {
         if (t2 instanceof Tensor3D){
             if (((Tensor3D) t2).darray.size() != this.darray.size()) {
@@ -528,6 +531,7 @@ public class Tensor3D extends Tensor {
         }
     }
 
+    @Override
     public Tensor divided (Tensor t2) {
         if (t2 instanceof Tensor3D){
             if (((Tensor3D) t2).darray.size() != this.darray.size()) {
@@ -565,10 +569,7 @@ public class Tensor3D extends Tensor {
         }
     }
 
-    public Tensor divide (double x) {
-        return this.dot_mul( 1.0/x );
-    }
-
+    @Override
     public Tensor relu(double t) {
         Tensor3D res = new Tensor3D( this );
         for (int i = 0; i < res.darray.size(); i++) {
@@ -578,6 +579,7 @@ public class Tensor3D extends Tensor {
         return res;
     }
 
+    @Override
     public Tensor DiffReLU(double t) {
         Tensor3D res = new Tensor3D( this );
         for (int i = 0; i < res.darray.size(); i++) {
@@ -592,6 +594,7 @@ public class Tensor3D extends Tensor {
         return res;
     }
 
+    @Override
     public Tensor sgn() {
         Tensor3D res = new Tensor3D( this );
         for (int i = 0; i < res.darray.size(); i++) {
@@ -606,6 +609,7 @@ public class Tensor3D extends Tensor {
         return  res;
     }
     
+    @Override
     public Tensor softmax() {
         Tensor3D res = new Tensor3D( this );
         for (int i = 0; i < res.darray.size(); i++) {
@@ -618,6 +622,7 @@ public class Tensor3D extends Tensor {
         return res;
     }
 
+    @Override
     public double elementMax () {
         double max = CommonOps_DDRM.elementMax( this.darray.get( 0 ) );
         for (int i = 0; i < this.darray.size(); i++) {
