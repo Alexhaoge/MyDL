@@ -439,4 +439,5 @@ public abstract class Tensor implements Serializable{
         }
         return false;
     }
+    public abstract double elementMax();
 }
