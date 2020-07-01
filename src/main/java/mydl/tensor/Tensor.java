@@ -325,7 +325,9 @@ public abstract class Tensor implements Serializable{
     public Tensor DiffReLU(){
         return this.DiffReLU(1.0);
     }
+    
     public abstract Tensor softmax();
+
     public boolean equals(Object obj) {
         if (obj instanceof Tensor) {
             if (obj instanceof Tensor1D && this instanceof Tensor1D) {

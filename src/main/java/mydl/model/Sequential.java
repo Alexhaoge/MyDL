@@ -34,7 +34,7 @@ public class Sequential extends Model{
      */
     protected Tensor backward(Tensor grad){
         int size = layers.size();
-        for(int i = size - 1; i >= 0 ; i++)
+        for(int i = size - 1; i >= 0 ; i--)
             grad = layers.get(i).backward(grad);
         return grad;
     }

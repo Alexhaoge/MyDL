@@ -485,7 +485,7 @@ public class Tensor1D extends Tensor {
         Tensor1D res = new Tensor1D( this );
         CommonOps_DDRM.elementExp( this.darray, res.darray);
         double sum = CommonOps_DDRM.elementSum( res.darray );
-        CommonOps_DDRM.divide( 1.0/sum, res.darray );
+        CommonOps_DDRM.divide( res.darray, sum );
         return res;
     }
 
