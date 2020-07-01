@@ -204,12 +204,12 @@ public class Tensor2D extends Tensor {
      */
     public Tensor add (Tensor t2) {
         if (t2 instanceof Tensor1D) {
-            DMatrixRMaj d1 = new DMatrixRMaj(this.darray );
+            DMatrixRMaj d1 = new DMatrixRMaj( this.darray );
             CommonOps_DDRM.add(d1, ((Tensor1D) t2).darray, d1);
             return new Tensor2D( d1 );
         }
         else if(t2 instanceof Tensor2D) {
-            DMatrixRMaj d1 = new DMatrixRMaj(this.darray );
+            DMatrixRMaj d1 = new DMatrixRMaj( this.darray );
             CommonOps_DDRM.add(d1, ((Tensor2D) t2).darray, d1);
             return new Tensor2D( d1 );
         }
@@ -385,10 +385,10 @@ public class Tensor2D extends Tensor {
      * @return
      */
     public Tensor sigmoid() {
-        CommonOps_DDRM.scale( -1, this.darray );
-        CommonOps_DDRM.elementPower( Math.E, this.darray, this.darray );
-        CommonOps_DDRM.add(this.darray, 1);
         Tensor2D res = new Tensor2D( this );
+        CommonOps_DDRM.scale( -1, res.darray );
+        CommonOps_DDRM.elementPower( Math.E, res.darray, res.darray );
+        CommonOps_DDRM.add(res.darray, 1);
         CommonOps_DDRM.divide( 1, res.darray );
         return res;
     }
@@ -486,14 +486,14 @@ public class Tensor2D extends Tensor {
      * Res_{i, j} = tanh(this_{i, j})
      * @return
      */
+
     public Tensor tanh() {
         Tensor2D res1 = new Tensor2D ( this );
-        CommonOps_DDRM.scale(2, res1.darray );
+        CommonOps_DDRM.scale(-2, res1.darray );
         CommonOps_DDRM.elementPower( Math.E, res1.darray, res1.darray );
-        DMatrixRMaj d2 = new DMatrixRMaj(res1.darray);
-        CommonOps_DDRM.add(res1.darray, 1);
-        CommonOps_DDRM.add(d2, -1);
-        CommonOps_DDRM.elementDiv( d2, res1.darray, res1.darray );
+        CommonOps_DDRM.add(  res1.darray, 1 );
+        CommonOps_DDRM.divide(2, res1.darray);
+        CommonOps_DDRM.add(  res1.darray, -1 );
         return res1;
     }
 

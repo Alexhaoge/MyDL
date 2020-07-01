@@ -481,12 +481,11 @@ public class Tensor3D extends Tensor {
     public Tensor tanh() {
         Tensor3D res1 = new Tensor3D( this );
         for (int i = 0; i < res1.darray.size(); i++) {
-            CommonOps_DDRM.scale(2, res1.darray.get( i ) );
+            CommonOps_DDRM.scale(-2, res1.darray.get( i ) );
             CommonOps_DDRM.elementPower( Math.E, res1.darray.get( i ), res1.darray.get( i ) );
-            DMatrixRMaj d2 = new DMatrixRMaj(res1.darray.get( i ));
-            CommonOps_DDRM.add(res1.darray.get( i ), 1);
-            CommonOps_DDRM.add(d2, -1);
-            CommonOps_DDRM.elementDiv( d2, res1.darray.get( i ), res1.darray.get( i ) );
+            CommonOps_DDRM.add(  res1.darray.get( i ), 1 );
+            CommonOps_DDRM.divide(2, res1.darray.get( i ));
+            CommonOps_DDRM.add(  res1.darray.get( i ), -1 );
         }
         return res1;
 
@@ -615,7 +614,6 @@ public class Tensor3D extends Tensor {
             CommonOps_DDRM.elementExp( res.darray.get( i ), res.darray.get( i ));
             double sum = CommonOps_DDRM.elementSum( res.darray.get( i ) );
             CommonOps_DDRM.scale( 1.0/sum, res.darray.get( i ) );
-            return res;
         }
         return res;
     }
