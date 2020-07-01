@@ -40,7 +40,7 @@ public class Tensor1D extends Tensor {
      * @throws MatrixDimensionException if {@darray}
      */
     public Tensor1D(DMatrixRMaj darray) throws MatrixDimensionException{
-        if(darray.numCols != 1 && darray.numCols != 1)
+        if(darray.numCols != 1 && darray.numRows != 1)
             throw new MatrixDimensionException("DMatrixRMaj given for new Tensor1D is not one-dimension");
         this.size = new Tensor_size( darray.data.length );
         this.darray = new DMatrixRMaj(darray);
