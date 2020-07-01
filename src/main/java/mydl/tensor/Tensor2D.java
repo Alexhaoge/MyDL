@@ -149,7 +149,7 @@ public class Tensor2D extends Tensor {
         }
         switch (new_size.getSize()) {
             case 1:{
-                Tensor1D res = new Tensor1D( this.darray );
+                Tensor1D res = new Tensor1D( this.darray.data );
                 return res;
             }
             case 2:{

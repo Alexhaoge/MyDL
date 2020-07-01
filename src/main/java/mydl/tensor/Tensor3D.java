@@ -121,7 +121,7 @@ public class Tensor3D extends Tensor {
         }
         switch (new_size.size){
             case 1: {
-                DMatrixRMaj d1 = new DMatrixRMaj(new_size.total_size(), 1);
+                DMatrixRMaj d1 = new DMatrixRMaj(1, new_size.total_size());
                 for (int i = 0; i < this.darray.size(); i++) {
                     for (int j = 0; j < this.darray.get( 0 ).getNumElements(); j++) {
                         d1.data[ i * this.darray.get(0).getNumElements() + j ] = this.darray.get( i ).data[j];
