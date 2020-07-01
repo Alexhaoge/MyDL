@@ -233,7 +233,7 @@ public class Tensor2D extends Tensor {
     public Tensor subtract (Tensor t2) {
         if (t2 instanceof Tensor2D){
             Tensor2D res = new Tensor2D( this );
-            CommonOps_DDRM.subtract(res.darray, ((Tensor1D) t2).darray, res.darray);
+            CommonOps_DDRM.subtract(res.darray, ((Tensor2D) t2).darray, res.darray);
             return res;
         }
         else {
@@ -270,7 +270,7 @@ public class Tensor2D extends Tensor {
     public Tensor dot_mul (Tensor t2) {
         if(t2 instanceof Tensor2D){
             Tensor2D res = new Tensor2D( this );
-            CommonOps_DDRM.elementMult( res.darray, ((Tensor1D) t2).darray, res.darray );
+            CommonOps_DDRM.elementMult( res.darray, ((Tensor2D) t2).darray, res.darray );
             return res;
         }
         else {

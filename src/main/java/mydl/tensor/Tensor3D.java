@@ -276,8 +276,8 @@ public class Tensor3D extends Tensor {
         }
         else if (t2 instanceof Tensor2D) {
             Tensor3D res = new Tensor3D( this );
+            DMatrixRMaj minuend = new DMatrixRMaj( ((Tensor2D) t2).darray);
             for (int i = 0; i < this.darray.size(); i++){
-                DMatrixRMaj minuend = new DMatrixRMaj( ((Tensor2D) t2).darray);
                 CommonOps_DDRM.scale( -1, minuend );
                 CommonOps_DDRM.add( res.darray.get( i ), minuend, res.darray.get( i ) );
             }

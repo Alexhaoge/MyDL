@@ -411,12 +411,17 @@ public abstract class Tensor implements Serializable{
     public Tensor DiffReLU(){
         return this.DiffReLU(1.0);
     }
+<<<<<<< HEAD
 
     /**
      * Res_{i} = softmax(this_{i})
      * @return tensor
      */
+=======
+    
+>>>>>>> e291db525e0f04777813ead7d6fad80f1fcbfb61
     public abstract Tensor softmax();
+
     public boolean equals(Object obj) {
         if (obj instanceof Tensor) {
             if (obj instanceof Tensor1D && this instanceof Tensor1D) {
