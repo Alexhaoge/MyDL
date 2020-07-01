@@ -362,6 +362,23 @@ public abstract class Tensor implements Serializable{
     }
 
     /**
+     * Res_{i} = sgn(this_{i})
+     * @return tensor
+     */
+    public abstract Tensor sgn();
+
+    /**
+     * Res_{i} = t(this_{i} > 0)
+     * Res_{i} = 0(this_{i} <= 0)
+     * @param t double
+     * @return
+     */
+    public abstract Tensor DiffReLU(double t);
+    public Tensor DiffReLU(){
+        return this.DiffReLU(1.0);
+    }
+
+    /**
      * Res_{i} = this_{i}^x
      * @param x, double
      * @return tensor
@@ -394,28 +411,7 @@ public abstract class Tensor implements Serializable{
      */
     public abstract Tensor sum(int axis);
     public abstract Tensor sum(int axis, int... _axis);//压缩某些维，先不用实现
-
-    /**
-     * Res_{i} = sgn(this_{i})
-     * @return tensor
-     */
-    public abstract Tensor sgn();
-
-    /**
-     * Res_{i} = t(this_{i} > 0)
-     * Res_{i} = 0(this_{i} <= 0)
-     * @param t double
-     * @return
-     */
-    public abstract Tensor DiffReLU(double t);
-    public Tensor DiffReLU(){
-        return this.DiffReLU(1.0);
-    }
-
-    /**
-     * Res_{i} = softmax(this_{i})
-     * @return tensor
-     */
+    
     public abstract Tensor softmax();
 
     public boolean equals(Object obj) {
@@ -440,5 +436,6 @@ public abstract class Tensor implements Serializable{
         }
         return false;
     }
+    
     public abstract double elementMax();
 }

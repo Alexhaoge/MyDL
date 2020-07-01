@@ -204,6 +204,20 @@ public abstract class Model implements Serializable{
     }
 
     /**
+     * Validate the model. Return the average loss of samples in the given dataset.
+     * @param _validate ArrayList of {@link Data}.
+     * @return Double. The average loss.
+     */
+    public double validate(ArrayList<Data> _validate){
+        double loss_total = 0;
+        for(int i=0;i<_validate.size();i++){
+            Tensor predict = this.forward(_validate.get(i).input);
+            loss_total += this.loss.loss(predict, _validate.get(i).target);
+        }
+        return loss_total / _validate.size();
+    }
+
+    /**
      * Save a model by {@link Serializable} interface.
      * @param filepath String. Relative or absolute path of the model file.
      */
@@ -215,6 +229,13 @@ public abstract class Model implements Serializable{
         }
     }
 
+    /**
+     * Load a model by {@link Serializable} interface.
+     * @param filepath String. Relative or absolute path of the model file.
+     * @return {@code} Model class.
+     * @throws ClassNotFoundException
+     * @throws IOException if the file path is incorrect.
+     */
     public static Model loadModel(String filepath) throws ClassNotFoundException, IOException {
         ObjectInputStream in = new ObjectInputStream(new FileInputStream(filepath));
         Model model = (Model) in.readObject();
