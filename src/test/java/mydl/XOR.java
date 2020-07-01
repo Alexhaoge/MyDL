@@ -47,7 +47,7 @@ public class XOR {
         model.add(new Linear1D(2, 2));
         model.add(new Softmax());
         model.compile(new SGD(), new BinaryCrossentropy());
-        model.fit(inputs, targets, 200, 2, true, true);
+        model.fit(inputs, targets, 5, 2, true, true);
     }
 
     public void validate(){

@@ -300,6 +300,14 @@ public abstract class Tensor implements Serializable{
         return this.relu(1.0);
     }
 
+    public abstract Tensor sgn();
+
+    public abstract Tensor DiffReLU(double t);
+    
+    public Tensor DiffReLU(){
+        return this.DiffReLU(1.0);
+    }
+
     public abstract Tensor pow(double x);
 
     public abstract Tensor pow(int x);
@@ -320,12 +328,11 @@ public abstract class Tensor implements Serializable{
      */
     public abstract Tensor sum(int axis);
     public abstract Tensor sum(int axis, int... _axis);//压缩某些维，先不用实现
-    public abstract Tensor sgn();
-    public abstract Tensor DiffReLU(double t);
-    public Tensor DiffReLU(){
-        return this.DiffReLU(1.0);
-    }
     
+    public abstract double max();
+
+    public abstract double min();
+
     public abstract Tensor softmax();
 
     public boolean equals(Object obj) {
