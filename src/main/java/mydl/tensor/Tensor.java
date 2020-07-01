@@ -30,23 +30,24 @@ public abstract class Tensor implements Serializable{
         Random ran = new Random();
         switch (_size.getSize()){
             case 1:{
-                Tensor1D res = new Tensor1D( _size.Tensor_length[0] );
+                int length = _size.getTensor_length()[0];
+                Tensor1D res = new Tensor1D( length );
                 for (int i = 0; i < res.darray.data.length; i++){
                     res.darray.data[i] = ran.nextDouble()*(ceil-floor)+floor;
                 }
                 return res;
             }
             case 2:{
-                Tensor2D res = new Tensor2D( _size.Tensor_length[0], 
-                    _size.Tensor_length[1] );
+                int[] length = _size.getTensor_length();
+                Tensor2D res = new Tensor2D( length[0], length[1] );
                 for (int i = 0; i < res.darray.data.length; i++){
                     res.darray.data[i] = ran.nextDouble()*(ceil-floor)+floor;
                 }
                 return res;
             }
             case 3:{
-                Tensor3D res = new Tensor3D( _size.Tensor_length[0], 
-                    _size.Tensor_length[1], _size.Tensor_length[2]);
+                int[] length = _size.getTensor_length();
+                Tensor3D res = new Tensor3D( length[0], length[1], length[2]);
                 for (int i = 0; i < res.darray.size(); i++){
                     for (int j = 0; j < res.darray.get( i ).data.length; j++){
                         res.darray.get( i ).data[j] = ran.nextDouble()*(ceil-floor)+floor;
@@ -69,23 +70,24 @@ public abstract class Tensor implements Serializable{
         Random ran = new Random();
         switch (_size.getSize()){
             case 1:{
-                Tensor1D res = new Tensor1D( _size.Tensor_length[0] );
+                int length = _size.getTensor_length()[0];
+                Tensor1D res = new Tensor1D( length );
                 for (int i = 0; i < res.darray.data.length; i++){
                     res.darray.data[i] = ran.nextDouble();
                 }
                 return res;
             }
             case 2:{
-                Tensor2D res = new Tensor2D( _size.Tensor_length[0], 
-                    _size.Tensor_length[1] );
+                int[] length = _size.getTensor_length();
+                Tensor2D res = new Tensor2D( length[0], length[1] );
                 for (int i = 0; i < res.darray.data.length; i++){
                     res.darray.data[i] = ran.nextDouble();
                 }
                 return res;
             }
             case 3:{
-                Tensor3D res = new Tensor3D( _size.Tensor_length[0], 
-                    _size.Tensor_length[1], _size.Tensor_length[2]);
+                int[] length = _size.getTensor_length();
+                Tensor3D res = new Tensor3D( length[0], length[1], length[2]);
                 for (int i = 0; i < res.darray.size(); i++){
                     for (int j = 0; j < res.darray.get( i ).data.length; j++){
                         res.darray.get( i ).data[j] = ran.nextDouble();
@@ -109,23 +111,24 @@ public abstract class Tensor implements Serializable{
         Random ran = new Random();
         switch (_size.getSize()){
             case 1:{
-                Tensor1D res = new Tensor1D( _size.Tensor_length[0] );
+                int length = _size.getTensor_length()[0];
+                Tensor1D res = new Tensor1D( length );
                 for (int i = 0; i < res.darray.data.length; i++){
                     res.darray.data[i] = ran.nextGaussian() * std + mean;
                 }
                 return res;
             }
             case 2:{
-                Tensor2D res = new Tensor2D( _size.Tensor_length[0], 
-                    _size.Tensor_length[1] );
+                int[] length = _size.getTensor_length();
+                Tensor2D res = new Tensor2D( length[0], length[1] );
                 for (int i = 0; i < res.darray.data.length; i++){
                     res.darray.data[i] = ran.nextGaussian() * std + mean;
                 }
                 return res;
             }
             case 3:{
-                Tensor3D res = new Tensor3D( _size.Tensor_length[0], 
-                    _size.Tensor_length[1], _size.Tensor_length[2]);
+                int[] length = _size.getTensor_length();
+                Tensor3D res = new Tensor3D( length[0], length[1], length[2]);
                 for (int i = 0; i < res.darray.size(); i++){
                     for (int j = 0; j < res.darray.get(i).data.length; j++){
                         res.darray.get(i).data[j] = ran.nextGaussian() * std + mean;
@@ -155,19 +158,20 @@ public abstract class Tensor implements Serializable{
     public static Tensor zero(Tensor_size _size){
         switch (_size.getSize()){
             case 1:{
-                Tensor1D res = new Tensor1D( _size.Tensor_length[0] );
+                int length = _size.getTensor_length()[0];
+                Tensor1D res = new Tensor1D( length );
                 res.darray.zero();
                 return res;
             }
             case 2:{
-                Tensor2D res = new Tensor2D( _size.Tensor_length[0], 
-                    _size.Tensor_length[1] );
+                int[] length = _size.getTensor_length();
+                Tensor2D res = new Tensor2D( length[0], length[1] );
                 res.darray.zero();
                 return res;
             }
             case 3:{
-                Tensor3D res = new Tensor3D( _size.Tensor_length[0], 
-                    _size.Tensor_length[1], _size.Tensor_length[2]);
+                int[] length = _size.getTensor_length();
+                Tensor3D res = new Tensor3D( length[0], length[1], length[2]);
                 for (int i = 0; i < res.darray.size(); i++){
                     res.darray.get(i).zero();
                 }
@@ -205,110 +209,180 @@ public abstract class Tensor implements Serializable{
         return _total;
     }
 
-    // 矩阵转置
+    /**
+     * Res = this^T
+     * @return tensor
+     */
     public abstract Tensor transpose();
 
-    public abstract Tensor add(Tensor x);
-
-    public abstract Tensor subtract(Tensor x);
+    /**
+     * Res_{i} = this_{i} + t2_{i}
+     * @param t2 addend, tensor
+     * @return tensor Res
+     */
+    public abstract Tensor add(Tensor t2);
 
     /**
-     * this - x
-     * @param x
-     * @return
+     * Res_{i} = this_{i} - t2_{i}
+     * @param t2 s sbtracted, tensor
+     * @return tensor Res
+     */
+    public abstract Tensor subtract(Tensor t2);
+
+    /**
+     * Res_{i} = this_{i} - x
+     * @param x minus, double variable
+     * @return tensor Res
      */
     public abstract Tensor subtract(double x);
 
+    /**
+     * Res_{i} = this_{i} - x
+     * @param x minus, int variable
+     * @return tensor Res
+     */
     public Tensor subtract(int x){
         return subtract((double)x);
     }
 
     /**
-     * x - this
+     * Res = x - this_{i}
+     * @param x subtracted, double variable
+     * @return tensor Res
      */
     public abstract Tensor subtracted(double x);
 
+    /**
+     * Res = x - this_{i}
+     * @param x subtracted, int variable
+     * @return tensor res
+     */
     public Tensor subtracted(int x){
         return subtracted((double)x);
     }
 
-    public abstract Tensor dot_mul(Tensor x);
+    /**
+     * Res_{i} = this_{i}*t1_{i}
+     * @param t1 multiplier, tensor
+     * @return tensor Res
+     */
+    public abstract Tensor dot_mul(Tensor t1);
 
+
+    /**
+     * Res_{i} = this_{i}*x
+     * @param x multiplier, double
+     * @return tensor
+     */
     public abstract Tensor dot_mul(double x);
 
     /**
-     * 感觉这里单独实现不复用double对效率和精度更好一些
+     * Res_{i} = this_{i}*x
+     * @param x multiplier, int
+     * @return tensor
      */
     public abstract Tensor dot_mul(int x);
 
     /**
      * Matrix multiplication of {@code this} and {@code x}.
      * @param x the tensor to be multiplied.
-     * @throws MatrixDimensionException if this tensor does not 
+     * @throws MatrixDimensionException if this tensor does not
      * have compactible shape for matrix multiply with {@code x}.
-     * @apiNote Matrix multiplication does not satisfy the commutative law, 
+     * @apiNote Matrix multiplication does not satisfy the commutative law,
      * so {@code a.cross_mul(b)} is different from {@code b.cross_mul(a)}.
      */
     public abstract Tensor cross_mul(Tensor x) throws MatrixDimensionException;
 
     /**
-     * this / x 按位被除，请务必和divide区分开
-     * @param x
-     * @return
+     * Res_{i} = this_{i} / x
+     * @param x divisor, double
+     * @return tensor
      */
     public Tensor divided(double x){ return dot_mul( 1.0/x ); };
 
+    /**
+     * Res_{i} = this_{i} / x
+     * @param x divisor, int
+     * @return tensor
+     */
     public Tensor divided(int x){
         return divided((double)x);
     }
 
     /**
-     * this / x 按位除法，注意是两个tensor每一位做除法，请务必和divide区分开
-     * @param x
-     * @return
+     * Res_{i} = this_{i} / x_{i}
+     * @param x divisor, tensor
+     * @return tensor
      */
     public abstract Tensor divided(Tensor x);
 
     /**
-     * x / this 按位除，请务必和divided区分开
-     * @param x
-     * @return
+     * Res_{i} = x / this_{i}
+     * @param x dividend, double
+     * @return tensor
      */
     public abstract Tensor divide(double x);
 
+    /**
+     * Res_{i} = x / this_{i}
+     * @param x dividend, int
+     * @return ternsor
+     */
     public Tensor divide(int x){
         return divide((double)x);
     }
 
     /**
-     * sigmoid函数，按位求
-     * @return
+     * Res_{i} = sigmoid(this_{i})
+     * @return tensor
      */
     public abstract Tensor sigmoid();
 
+    /**
+     * Res_{i} = tanh(this_{i})
+     * @return tensor
+     */
     public Tensor tanh(){
         return sigmoid().dot_mul(2).subtract(1);
     }
 
     /**
-     * Relu
-     * @param t 
-     * @return
+     * Res_{i} = Relu(this_{i}, lambda = t)
+     * @param t lambda, double
+     * @return tensor
      */
     public abstract Tensor relu(double t);
+
+    /**
+     * Res_{i} = Relu(this_{i}, lambda = 1)
+     * @return tensor
+     */
     public Tensor relu(){
         return this.relu(1.0);
     }
 
+    /**
+     * Res_{i} = this_{i}^x
+     * @param x, double
+     * @return tensor
+     */
     public abstract Tensor pow(double x);
 
+    /**
+     * Res_{i} = this_{i}^x
+     * @param x, int
+     * @return tensor
+     */
     public abstract Tensor pow(int x);
 
-    //ln(this),自然对数
+    /**
+     * Res_{i} = log_e (this_{i})
+     * @return tensor
+     */
     public abstract Tensor ln();
 
     /**
-     * 所有数的和
+     * Res = \sum{Res_{i}}
      * @return double, sum of every dimesion of this tensor
      */
     public abstract double sum();
@@ -320,11 +394,28 @@ public abstract class Tensor implements Serializable{
      */
     public abstract Tensor sum(int axis);
     public abstract Tensor sum(int axis, int... _axis);//压缩某些维，先不用实现
+
+    /**
+     * Res_{i} = sgn(this_{i})
+     * @return tensor
+     */
     public abstract Tensor sgn();
+
+    /**
+     * Res_{i} = t(this_{i} > 0)
+     * Res_{i} = 0(this_{i} <= 0)
+     * @param t double
+     * @return
+     */
     public abstract Tensor DiffReLU(double t);
     public Tensor DiffReLU(){
         return this.DiffReLU(1.0);
     }
+
+    /**
+     * Res_{i} = softmax(this_{i})
+     * @return tensor
+     */
     public abstract Tensor softmax();
     public boolean equals(Object obj) {
         if (obj instanceof Tensor) {

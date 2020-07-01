@@ -483,9 +483,11 @@ public class Tensor1D extends Tensor {
 
     public Tensor softmax() {
         Tensor1D res = new Tensor1D( this );
-        CommonOps_DDRM.elementExp( this.darray, res.darray);
+        double elementMax = CommonOps_DDRM.elementMax( res.darray );;
+        CommonOps_DDRM.subtract( res.darray, elementMax, res.darray );
+        CommonOps_DDRM.elementExp( res.darray, res.darray);
         double sum = CommonOps_DDRM.elementSum( res.darray );
-        CommonOps_DDRM.divide( 1.0/sum, res.darray );
+        CommonOps_DDRM.scale( 1.0/sum, res.darray );
         return res;
     }
 
