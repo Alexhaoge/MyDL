@@ -6,7 +6,7 @@
 
   <groupId>io.github.alexhaoge.mydl</groupId>
   <artifactId>mydl</artifactId>
-  <version>1.0</version>
+  <version>1.0-alpha</version>
 
   <name>mydl</name>
   <!-- FIXME change it to the project's website -->
@@ -57,6 +57,22 @@
         <plugin>
           <artifactId>maven-jar-plugin</artifactId>
           <version>3.0.2</version>
+          <configuration>
+            <archive>
+              <manifest>
+                <addClasspath>true</addClasspath>
+                <classpathPrefix>lib/</classpathPrefix>
+                <!-- <mainClass>com.yourpakagename.mainClassName</mainClass> -->
+                <!-- 打包时 MANIFEST.MF文件不记录的时间戳版本 -->  
+                <useUniqueVersions>true</useUniqueVersions>  
+                <addClasspath>true</addClasspath>  
+                <classpathPrefix>lib/</classpathPrefix>  
+              </manifest>
+              <manifestEntries>  
+                <Class-Path>.</Class-Path>  
+              </manifestEntries>  
+            </archive>
+          </configuration>
         </plugin>
         <plugin>
           <artifactId>maven-install-plugin</artifactId>
@@ -75,6 +91,19 @@
           <artifactId>maven-project-info-reports-plugin</artifactId>
           <version>3.0.0</version>
         </plugin>
+        <plugin>
+          <artifactId>maven-assembly-plugin</artifactId>  
+          <version>3.2.0</version>  
+          <configuration>  
+              <archive>  
+                  <manifest>  
+                  </manifest>  
+              </archive>  
+              <descriptorRefs>  
+                  <descriptorRef>jar-with-dependencies</descriptorRef>  
+              </descriptorRefs>  
+          </configuration>  
+        </plugin> 
       </plugins>
     </pluginManagement>
 
