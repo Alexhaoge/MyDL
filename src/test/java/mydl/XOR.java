@@ -2,8 +2,6 @@ package mydl;
 
 import java.util.ArrayList;
 
-import org.junit.Test;
-
 import mydl.layer.Linear1D;
 import mydl.layer.ReLU;
 import mydl.layer.Softmax;
