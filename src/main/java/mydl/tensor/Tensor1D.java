@@ -422,13 +422,12 @@ public class Tensor1D extends Tensor {
      * @return
      */
     public Tensor tanh() {
-        Tensor1D res1 = new Tensor1D( this );
-        CommonOps_DDRM.scale(2, res1.darray );
+        Tensor1D res1 = new Tensor1D ( this );
+        CommonOps_DDRM.scale(-2, res1.darray );
         CommonOps_DDRM.elementPower( Math.E, res1.darray, res1.darray );
-        DMatrixRMaj d2 = new DMatrixRMaj(res1.darray);
-        CommonOps_DDRM.add(res1.darray, 1);
-        CommonOps_DDRM.add(d2, -1);
-        CommonOps_DDRM.elementDiv( d2, res1.darray, res1.darray );
+        CommonOps_DDRM.add(  res1.darray, 1 );
+        CommonOps_DDRM.divide(2, res1.darray);
+        CommonOps_DDRM.add(  res1.darray, -1 );
         return res1;
     }
 
