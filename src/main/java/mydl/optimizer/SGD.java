@@ -58,7 +58,7 @@ public class SGD extends Optimizer {
                 model.layers.get(i).set_para(name, 
                     model.layers.get(i).get_para(name).subtract(
                         model.layers.get(i).get_grad(name)
-                        .dot_mul(learning_rate).divided(batch_size)
+                        .dot_mul(learning_rate).divided(batch_size*1.0)
                     )
                 );
             }

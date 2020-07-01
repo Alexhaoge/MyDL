@@ -5,9 +5,12 @@ import java.util.ArrayList;
 import org.junit.Test;
 
 import mydl.layer.Linear1D;
+import mydl.layer.ReLU;
+import mydl.layer.Sigmoid;
 import mydl.layer.Softmax;
 import mydl.layer.Tanh;
 import mydl.loss.BinaryCrossentropy;
+import mydl.loss.MSE;
 import mydl.model.Sequential;
 import mydl.optimizer.SGD;
 import mydl.tensor.Tensor;
@@ -35,19 +38,25 @@ public class XOR {
                 double[] x = new double[2];
                 x[0]=i; x[1]=j;
                 inputs.add(new Tensor1D(x));
-                x[i^j]=1; x[i^j^1]=0;
+                if((i^j) == 1){
+                    x[1]=1;x[0]=0;
+                } else {
+                    x[0]=1;x[1]=0;
+                }
                 targets.add(new Tensor1D(x));
             }
-        model = new Sequential();
     }
 
     public void train(){
-        model.add(new Linear1D(2, 2));
-        model.add(new Tanh());
+        model = new Sequential();
+        model.add(new Linear1D(2, 8));
+        model.add(new Sigmoid());
+        model.add(new Linear1D(8, 2));
+        model.add(new Sigmoid());
         model.add(new Linear1D(2, 2));
         model.add(new Softmax());
-        model.compile(new SGD(), new BinaryCrossentropy());
-        model.fit(inputs, targets, 5, 2, true, true);
+        model.compile(new SGD(0.0000001), new MSE());
+        model.fit(inputs, targets, 20, 4, true, true);
     }
 
     public void validate(){

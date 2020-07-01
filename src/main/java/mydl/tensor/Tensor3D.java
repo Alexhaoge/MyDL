@@ -615,7 +615,6 @@ public class Tensor3D extends Tensor {
             CommonOps_DDRM.elementExp( res.darray.get( i ), res.darray.get( i ));
             double sum = CommonOps_DDRM.elementSum( res.darray.get( i ) );
             CommonOps_DDRM.scale( 1.0/sum, res.darray.get( i ) );
-            return res;
         }
         return res;
     }
