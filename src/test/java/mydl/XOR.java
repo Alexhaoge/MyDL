@@ -6,10 +6,7 @@ import org.junit.Test;
 
 import mydl.layer.Linear1D;
 import mydl.layer.ReLU;
-import mydl.layer.Sigmoid;
 import mydl.layer.Softmax;
-import mydl.layer.Tanh;
-import mydl.loss.BinaryCrossentropy;
 import mydl.loss.MSE;
 import mydl.model.Sequential;
 import mydl.optimizer.SGD;
@@ -50,13 +47,15 @@ public class XOR {
     public void train(){
         model = new Sequential();
         model.add(new Linear1D(2, 8));
-        model.add(new Sigmoid());
-        model.add(new Linear1D(8, 2));
-        model.add(new Sigmoid());
+        model.add(new ReLU());
+        model.add(new Linear1D(8, 4));
+        model.add(new ReLU());
+        model.add(new Linear1D(4, 2));
+        model.add(new ReLU());
         model.add(new Linear1D(2, 2));
         model.add(new Softmax());
         model.compile(new SGD(0.0000001), new MSE());
-        model.fit(inputs, targets, 20, 4, true, true);
+        model.fit(inputs, targets, 1000, 4, true, true);
     }
 
     public void validate(){
@@ -66,11 +65,6 @@ public class XOR {
             System.out.println("predict:"+((Tensor1D)predicts.get(i)).darray);
             System.out.println("real:"+((Tensor1D)targets.get(i)).darray);
         }
-    }
-
-    @Test
-    public static void xorTest(){
-
     }
 
     public static void main(String[] args) {

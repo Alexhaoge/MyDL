@@ -1,40 +1,33 @@
 package mydl.layer;
 
-import java.util.function.Function;
-
 import mydl.tensor.Tensor;
 
 /**
  * The {@code Activation} class is the abstract of all activation function.
- * <p>All activation function should implement forward and backward propagation with the {@link Function} interface of Tensor.
+ * <p>All activation function should implement {@code func} and {@derivative} method for forward and backward propagation.
  */
 public abstract class Activation extends Layer{
     
     private static final long serialVersionUID = -7903859352154021415L;
-    
-    /**
-     * _f is the exact function
-     */
-    protected Function<Tensor, Tensor> _f;
-    /**
-     * _df is the derivative of {@link _f}
-     */
-    protected Function<Tensor, Tensor> _df;
-    
+
     /**
      * record the input of this 
      */
     protected Tensor input;
 
     /**
-     * intial constructor of activation
-     * @param __f activation function, implementing {@link java.util.function.Function}
-     * @param __df gradient function, implementing {@link java.util.function.Function}
+     * The exact function of this activation.
+     * @param x Input tensor.
+     * @return Output tensor of this function.
      */
-    public Activation(Function<Tensor, Tensor> __f, Function<Tensor, Tensor> __df){
-        _f = __f;
-        _df = __df;
-    }
+    protected abstract Tensor func(Tensor x);
+    
+    /**
+     * The derivative of this function.
+     * @param x
+     * @return
+     */
+    protected abstract Tensor derivative(Tensor x);
 
     /**
      * forward propagation
@@ -43,7 +36,7 @@ public abstract class Activation extends Layer{
      */
     public Tensor forward(Tensor inputs){
         input = inputs;
-        return _f.apply(inputs);
+        return func(inputs);
     }
 
     /**
@@ -53,7 +46,8 @@ public abstract class Activation extends Layer{
      * @return gradient with activation
      */
     public Tensor backward(Tensor grad){
-        return (_df.apply(input)).dot_mul(grad);
+        return derivative(input).dot_mul(grad);
     }
+
 }
 

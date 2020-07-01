@@ -9,9 +9,13 @@ public class Sigmoid extends Activation{
 
     private static final long serialVersionUID = 7217291702514777349L;
 
-    public Sigmoid() {
-        super((Tensor x) -> x.sigmoid(), 
-            (Tensor x) -> x.sigmoid().dot_mul(x.sigmoid().subtracted(1))
-        );
+    @Override
+    protected Tensor func(Tensor x) {
+        return x.sigmoid();
+    }
+
+    @Override
+    protected Tensor derivative(Tensor x) {
+        return x.sigmoid().dot_mul(x.sigmoid().subtracted(1));
     }
 }

@@ -342,9 +342,7 @@ public abstract class Tensor implements Serializable{
      * Res_{i} = tanh(this_{i})
      * @return tensor
      */
-    public Tensor tanh(){
-        return sigmoid().dot_mul(2).subtract(1);
-    }
+    public abstract Tensor tanh();
 
     /**
      * Res_{i} = Relu(this_{i}, lambda = t)

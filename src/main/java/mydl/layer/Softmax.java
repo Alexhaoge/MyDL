@@ -8,10 +8,14 @@ import mydl.tensor.Tensor;
 public class Softmax extends Activation{
 
     private static final long serialVersionUID = 4879347903969095269L;
-    
-    public Softmax() {
-        super((Tensor x) -> x.softmax(),
-            (Tensor x) -> x.softmax().subtract(1)
-        );
+
+    @Override
+    protected Tensor func(Tensor x) {
+        return x.softmax();
+    }
+
+    @Override
+    protected Tensor derivative(Tensor x) {
+        return x.softmax().subtracted(1).dot_mul(x.softmax());
     }
 }
