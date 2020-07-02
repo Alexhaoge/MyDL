@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>MyDL</title>
+        <style>
+</style>
+        
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item { list-style-type: none; } .task-list-item-checkbox { margin-left: -20px; vertical-align: middle; }
+</style>
+        
+        
+        
+    </head>
+    <body class="vscode-light">
+        <h1 id="mydl">MyDL</h1>
+<p>A lightweight deep learning framework entirely based on Java.</p>
+<p><img src="https://i.loli.net/2020/06/20/EV83WbDZXSqHzAe.png" alt="MyDL_logo.png"></p>
+<p>Note: <strong>This project is still under construction and we welcome anyone who wants to participate in!</strong></p>
+<p><img src="https://github.com/Alexhaoge/MyDL/workflows/Java%20CI%20with%20Maven/badge.svg" alt="Java CI with Maven"></p>
+<h2 id="introduction">Introduction</h2>
+<p>MyDL (simply stands for &quot;my deep learning&quot;) is a simple deep learning libary base on java. Its matrix operations are based on <a href="https://github.com/lessthanoptimal/ejml">EJML</a>(Efficient Java Matrix Library) and its part of APIs design learns from Keras.</p>
+<h3 id="features">Features</h3>
+<ul>
+<li>A 100% Java framework</li>
+</ul>
+<h2 id="getting-started">Getting Started</h2>
+<h3 id="maven-with-github-packages">Maven with GitHub Packages</h3>
+<p>MyDL has been published to GitHub Packages. If you have <a href="https://docs.github.com/en/packages/using-github-packages-with-your-projects-ecosystem/configuring-apache-maven-for-use-with-github-packages">configured Apache Maven for use with GitHub Packages</a>, all you need is to add this to pom.xml:</p>
+<pre><code><code><div>&lt;dependency&gt;
+  &lt;groupId&gt;io.github.alexhaoge.mydl&lt;/groupId&gt;
+  &lt;artifactId&gt;mydl&lt;/artifactId&gt;
+  &lt;version&gt;1.0-alpha&lt;/version&gt;
+&lt;/dependency&gt;
+</div></code></code></pre>
+<h3 id="jar-with-depedencies">JAR with depedencies</h3>
+<p>We also published a pre-release in this repository packing all the classes and dependencies in a single JAR.</p>
+<h2 id="support">Support</h2>
+<p>The project website is still under construction.</p>
+<p><strong>Javadoc</strong>: <a href="https://apidoc.gitee.com/lda31415/MyDL">https://apidoc.gitee.com/lda31415/MyDL</a></p>
+<h2 id="whats-next">What's next?</h2>
+<h3 id="future-works">Future works</h3>
+<ul>
+<li>Although 100%-Java feature give MyDL a very good cross-platform compatibility, the performance of this framework sometimes is unsatisfying. In the future, we will find</li>
+<li>Add more components like convolution and pooling layers, regularizer, model checkpoint, visualization tools, etc.</li>
+</ul>
+<h3 id="contribution">Contribution</h3>
+<p>Due to limited time, this framework is actually far from complete, so the current release may be unstable. If you meet any problems, <strong>please feel free to raise an issue or contact us</strong> and we will fix it as soon as possible.</p>
+<p>The initial contributors are undergraduates in Nankai Univ and honesty their skills and time is limited, so we warmly welcome anyone who wants to contribute to this project. You can:</p>
+<ul>
+<li>Raise an issue of suggestion for improvement.</li>
+<li>Create a pull request and provide description if you implement something new for this project.</li>
+<li>Contact <a href="https://github.com/Alexhaoge">Alexhaoge</a> and become a collaborator of this repository for long term contribution.</li>
+</ul>
+<h2 id="acknowlegde">Acknowlegde</h2>
+<ol>
+<li>We wrote the initial version of this libary as a course project under the guidance of <em>Prof. Bing Xiang</em> in JAVA2760, School of Maths Sciences, NanKai University.</li>
+<li>Special thanks to <em><a href="https://github.com/Shiien">SaucerHi</a></em> who gave us inspiration on some key points in project desgin.</li>
+<li>Part of APIs refer to <em><a href="https://github.com/joelgrus/joelnet">joelnet</a></em> and <em><a href="https://github.com/keras-team/keras">Keras</a></em>.</li>
+</ol>
+<h2 id="license">License</h2>
+<p>MyDL is is GPL-3.0 licensed.</p>
+
+    </body>
+    </html>
