@@ -158,7 +158,7 @@ public class Tensor1D extends Tensor {
                     return res;
                 }
             } else if (t2 instanceof Tensor2D){
-                Tensor1D res = new Tensor1D( this.darray.getNumElements());
+                Tensor1D res = new Tensor1D( t2.size.Tensor_length[1] );
                 CommonOps_DDRM.mult(this.darray, ((Tensor2D) t2).darray, res.darray);
                 return res;
             } else if (t2 instanceof Tensor3D){

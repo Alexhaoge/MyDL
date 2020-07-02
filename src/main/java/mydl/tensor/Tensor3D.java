@@ -497,37 +497,40 @@ public class Tensor3D extends Tensor {
     public Tensor cross_mul(Tensor t2) {
         if (t2 instanceof Tensor3D){
             if (((Tensor3D) t2).darray.size() != this.darray.size()) {
-                throw new MatrixDimensionException("Tensor sizes differ.");
+                throw new MatrixDimensionException("Tensor3D axis 0 shape differ for cross_mul.");
             }else {
-                Tensor3D res = new Tensor3D( this );
+                Tensor3D res = new Tensor3D( this.size.Tensor_length[0], this.size.Tensor_length[1], this.size.Tensor_length[2] );
                 for (int i = 0; i<this.darray.size(); i++) {
-                    CommonOps_DDRM.mult(res.darray.get( i ), ((Tensor3D) t2).darray.get(i), res.darray.get( i ));
+                    CommonOps_DDRM.mult(this.darray.get( i ), ((Tensor3D) t2).darray.get(i), res.darray.get( i ));
                 }
                 return res;
             }
         }
         else if(t2 instanceof Tensor2D){
-            Tensor3D res = new Tensor3D( this );
+            Tensor3D res = new Tensor3D( this.size.Tensor_length[0], this.size.Tensor_length[1], this.size.Tensor_length[1] );
             for (int i = 0; i<this.darray.size(); i++) {
-                CommonOps_DDRM.mult(res.darray.get( i ), ((Tensor2D) t2).darray, res.darray.get( i ));
+                CommonOps_DDRM.mult(this.darray.get( i ), ((Tensor2D) t2).darray, res.darray.get( i ));
             }
             return res;
         }
         else if(t2 instanceof Tensor1D){
-            Tensor3D res = new Tensor3D( this );
-            DMatrixRMaj mul = new DMatrixRMaj(res.getData().get( 0 ).getNumRows(), res.getData().get( 0 ).getNumCols());
-            DMatrixRMaj Unitvector = new DMatrixRMaj(1, res.getData().get( 0 ).getNumCols());
-            for( int j = 0; j < Unitvector.getData().length; j++) {
-                Unitvector.getData()[j] = 1;
-            }
-            CommonOps_DDRM.mult(mul, Unitvector, mul);
-            for (int i = 0; i<this.darray.size(); i++) {
-                CommonOps_DDRM.mult(res.darray.get( i ), mul, res.darray.get( i ));
+            Tensor1D _t2 = (Tensor1D)t2;
+            if(_t2.darray.numCols != 1)
+                throw new MatrixDimensionException("Tensor size error, Tensor3D cannot right cross_mul with a row Tensor1D");
+            Tensor3D res = new Tensor3D( this.size.Tensor_length[0], this.size.Tensor_length[1], 1);
+            // DMatrixRMaj mul = new DMatrixRMaj(res.getData().get( 0 ).getNumRows(), res.getData().get( 0 ).getNumCols());
+            // DMatrixRMaj Unitvector = new DMatrixRMaj(1, res.getData().get( 0 ).getNumCols());
+            // for( int j = 0; j < Unitvector.getData().length; j++) {
+            //     Unitvector.getData()[j] = 1;
+            // }
+            // CommonOps_DDRM.mult(mul, Unitvector, mul);
+            for (int i = 0; i< this.darray.size(); i++) {
+                CommonOps_DDRM.mult(this.darray.get( i ), _t2.darray, res.darray.get( i ));
             }
             return res;
         }
         else{
-            throw new MatrixDimensionException("cross_mul Tensor input error.");
+            throw new MatrixDimensionException("Cross_mul tensor input error.");
         }
     }
 
@@ -565,7 +568,7 @@ public class Tensor3D extends Tensor {
             return res;
         }
         else{
-            throw new MatrixDimensionException("cross_mul Tensor input error.");
+            throw new MatrixDimensionException("Divide tensor input error.");
         }
     }
 

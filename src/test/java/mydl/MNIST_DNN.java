@@ -28,11 +28,12 @@ public class MNIST_DNN {
         }
         return y;
     }
+    
     public static void main(String[] args) {
         ArrayList<Tensor> tx = MNIST.readTrainImage1D();
         ArrayList<Tensor> ty = convert(MNIST.readTrainLabel());
-        tx = new ArrayList<Tensor>(tx.subList(0, 1));
-        ty = new ArrayList<Tensor>(ty.subList(0, 1));
+        tx = new ArrayList<Tensor>(tx.subList(0, 2));
+        ty = new ArrayList<Tensor>(ty.subList(0, 2));
         Sequential model = new Sequential();
         model.add(new Dense(tx.get(0).size, 784));
         model.add(new Sigmoid());
@@ -40,8 +41,8 @@ public class MNIST_DNN {
         model.add(new Tanh());
         model.add(new Dense(new Tensor_size(800), 10));
         model.add(new Softmax());
-        model.compile(new SGD(0.000001), new MSE());
-        model.fit(tx, ty, 500, 32, true, true);
+        model.compile(new SGD(0.01), new MSE());
+        model.fit(tx, ty, 5000, 32, true, true);
         
         tx = MNIST.readTestImage1D();
         ty = MNIST.readTestLabel();

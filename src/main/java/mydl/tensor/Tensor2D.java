@@ -264,17 +264,20 @@ public class Tensor2D extends Tensor {
     @Override
     public Tensor cross_mul(Tensor t2) {
         if(t2 instanceof Tensor2D){
-            Tensor2D res = new Tensor2D( this );
-            CommonOps_DDRM.mult( res.darray, ((Tensor2D) t2).darray, res.darray );
+            Tensor2D res = new Tensor2D( this.size.Tensor_length[0], this.size.Tensor_length[1] );
+            CommonOps_DDRM.mult( this.darray, ((Tensor2D) t2).darray, res.darray );
             return res;
         }else if(t2 instanceof Tensor1D){
-            Tensor2D res = new Tensor2D( this );
-            CommonOps_DDRM.mult( res.darray, ((Tensor2D) t2).darray, res.darray );
+            if(((Tensor1D)t2).darray.numCols != 1)
+                throw new MatrixDimensionException("Tensor size error, Tensor2D cannot right cross_mul with a row Tensor1D");
+            Tensor2D res = new Tensor2D( this.size.Tensor_length[0], 1 );
+            CommonOps_DDRM.mult( this.darray, ((Tensor2D) t2).darray, res.darray );
             return res;
         }else if(t2 instanceof Tensor3D){
-            Tensor3D res = new Tensor3D( (Tensor3D) t2 );
+            Tensor3D _t2 = (Tensor3D)t2;
+            Tensor3D res = new Tensor3D( t2.size.Tensor_length[0], this.size.Tensor_length[0], _t2.size.Tensor_length[2]);
             for (int i = 0; i < res.darray.size(); i++) {
-                CommonOps_DDRM.mult(this.darray, res.darray.get( i ), res.darray.get( i ));
+                CommonOps_DDRM.mult(this.darray, _t2.darray.get( i ), res.darray.get( i ));
             }
             return res;
         }else {
