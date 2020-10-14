@@ -5,7 +5,7 @@ A lightweight deep learning framework entirely based on Java.
 
 Note: **This project is still under construction and we welcome anyone who wants to participate in!**   
 
-![Java CI with Maven](https://github.com/Alexhaoge/MyDL/workflows/Java%20CI%20with%20Maven/badge.svg)
+![Java CI with Maven](https://github.com/Alexhaoge/MyDL/workflows/Java%20CI%20with%20Maven/badge.svg) ![CodeQL](https://github.com/Alexhaoge/MyDL/workflows/CodeQL/badge.svg)
 
 ## Introduction
 MyDL (simply stands for "my deep learning") is a simple deep learning libary base on java. Its matrix operations are based on [EJML](https://github.com/lessthanoptimal/ejml)(Efficient Java Matrix Library) and its part of APIs design learns from Keras.
