@@ -1,5 +1,5 @@
 # MyDL
-A lightweight deep learning framework entirely based on Java.  
+A lightweight deep learning library entirely based on Java.  
 
 ![MyDL_logo.png](https://i.loli.net/2020/06/20/EV83WbDZXSqHzAe.png)
 
@@ -12,8 +12,8 @@ MyDL (simply stands for "my deep learning") is a simple deep learning libary bas
 ### Features
 * **100% Java.** It is written in Java without any native methods and its dependency, EJML, is also fully written in Java. This provides a completely cross-platform compatibility. No matter what platform, as long as it support Java, you can use MyDL on it.
 * **New implementation for tensor.** We build a set of tensor classes and operations based on EJML to establish a data type friendly to deep learning on Java.
-* **A lightweight framework.** It is easy to deploy, all you need is a single JAR.
-* **Minimalist design.** Components of this framework are easy and clear. Many API designs take reference from Keras, making it easy for users to get started.
+* **A lightweight library.** It is easy to deploy, all you need is a single JAR.
+* **Minimalist design.** Components of this library are easy and clear. Many API designs take reference from Keras, making it easy for users to get started.
 ### Compents implemented
 * Model: abstract model, sequential  
 * Layer: abstract layer 
